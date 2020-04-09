@@ -1,0 +1,716 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.5" />
+<title>aws_lambda_powertools.logging.logger API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>aws_lambda_powertools.logging.logger</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import functools
+import itertools
+import logging
+import os
+import random
+import warnings
+from distutils.util import strtobool
+from typing import Any, Callable, Dict
+
+from ..helper.models import MetricUnit, build_lambda_context_model, build_metric_unit_from_str
+from . import aws_lambda_logging
+
+logger = logging.getLogger(__name__)
+logger.setLevel(os.getenv(&#34;LOG_LEVEL&#34;, &#34;INFO&#34;))
+
+is_cold_start = True
+
+
+def logger_setup(service: str = &#34;service_undefined&#34;, level: str = &#34;INFO&#34;, sampling_rate: float = 0.0, **kwargs):
+    &#34;&#34;&#34;Setups root logger to format statements in JSON.
+
+    Includes service name and any additional key=value into logs
+    It also accepts both service name or level explicitly via env vars
+
+    Environment variables
+    ---------------------
+    POWERTOOLS_SERVICE_NAME : str
+        service name
+    LOG_LEVEL: str
+        logging level (e.g. INFO, DEBUG)
+    POWERTOOLS_LOGGER_SAMPLE_RATE: float
+        samping rate ranging from 0 to 1, 1 being 100% sampling
+
+    Parameters
+    ----------
+    service : str, optional
+        service name to be appended in logs, by default &#34;service_undefined&#34;
+    level : str, optional
+        logging.level, by default &#34;INFO&#34;
+    sample_rate: float, optional
+        sample rate for debug calls within execution context defaults to 0
+
+    Example
+    -------
+    Setups structured logging in JSON for Lambda functions with explicit service name
+
+        &gt;&gt;&gt; from aws_lambda_powertools.logging import logger_setup
+        &gt;&gt;&gt; logger = logger_setup(service=&#34;payment&#34;)
+        &gt;&gt;&gt;
+        &gt;&gt;&gt; def handler(event, context):
+                logger.info(&#34;Hello&#34;)
+
+    Setups structured logging in JSON for Lambda functions using env vars
+
+        $ export POWERTOOLS_SERVICE_NAME=&#34;payment&#34;
+        $ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
+        &gt;&gt;&gt; from aws_lambda_powertools.logging import logger_setup
+        &gt;&gt;&gt; logger = logger_setup()
+        &gt;&gt;&gt;
+        &gt;&gt;&gt; def handler(event, context):
+                logger.info(&#34;Hello&#34;)
+
+    &#34;&#34;&#34;
+    service = os.getenv(&#34;POWERTOOLS_SERVICE_NAME&#34;) or service
+    sampling_rate = os.getenv(&#34;POWERTOOLS_LOGGER_SAMPLE_RATE&#34;) or sampling_rate
+    log_level = os.getenv(&#34;LOG_LEVEL&#34;) or level
+    logger = logging.getLogger(name=service)
+
+    try:
+        if sampling_rate and random.random() &lt;= float(sampling_rate):
+            log_level = logging.DEBUG
+    except ValueError:
+        raise ValueError(
+            &#34;fExpected a float value ranging 0 to 1, but received {sampling_rate} instead. Please review POWERTOOLS_LOGGER_SAMPLE_RATE environment variable.&#34;  # noqa E501
+        )
+
+    logger.setLevel(log_level)
+
+    # Patch logger by structuring its outputs as JSON
+    aws_lambda_logging.setup(level=log_level, service=service, sampling_rate=sampling_rate, **kwargs)
+
+    return logger
+
+
+def logger_inject_lambda_context(lambda_handler: Callable[[Dict, Any], Any] = None, log_event: bool = False):
+    &#34;&#34;&#34;Decorator to capture Lambda contextual info and inject into struct logging
+
+    Parameters
+    ----------
+    log_event : bool, optional
+        Instructs logger to log Lambda Event, by default False
+
+    Environment variables
+    ---------------------
+    POWERTOOLS_LOGGER_LOG_EVENT : str
+        instruct logger to log Lambda Event (e.g. &#34;true&#34;, &#34;True&#34;, &#34;TRUE&#34;)
+
+    Example
+    -------
+    Captures Lambda contextual runtime info (e.g memory, arn, req_id)
+        &gt;&gt;&gt; from aws_lambda_powertools.logging import logger_setup, logger_inject_lambda_context
+        &gt;&gt;&gt; import logging
+        &gt;&gt;&gt;
+        &gt;&gt;&gt; logger = logging.getLogger(__name__)
+        &gt;&gt;&gt; logging.setLevel(logging.INFO)
+        &gt;&gt;&gt; logger_setup()
+        &gt;&gt;&gt;
+        &gt;&gt;&gt; @logger_inject_lambda_context
+        &gt;&gt;&gt; def handler(event, context):
+                logger.info(&#34;Hello&#34;)
+
+    Captures Lambda contextual runtime info and logs incoming request
+        &gt;&gt;&gt; from aws_lambda_powertools.logging import logger_setup, logger_inject_lambda_context
+        &gt;&gt;&gt; import logging
+        &gt;&gt;&gt;
+        &gt;&gt;&gt; logger = logging.getLogger(__name__)
+        &gt;&gt;&gt; logging.setLevel(logging.INFO)
+        &gt;&gt;&gt; logger_setup()
+        &gt;&gt;&gt;
+        &gt;&gt;&gt; @logger_inject_lambda_context(log_event=True)
+        &gt;&gt;&gt; def handler(event, context):
+                logger.info(&#34;Hello&#34;)
+
+    Returns
+    -------
+    decorate : Callable
+        Decorated lambda handler
+    &#34;&#34;&#34;
+
+    # If handler is None we&#39;ve been called with parameters
+    # We then return a partial function with args filled
+    # Next time we&#39;re called we&#39;ll call our Lambda
+    # This allows us to avoid writing wrapper_wrapper type of fn
+    if lambda_handler is None:
+        logger.debug(&#34;Decorator called with parameters&#34;)
+        return functools.partial(logger_inject_lambda_context, log_event=log_event)
+
+    log_event_env_option = str(os.getenv(&#34;POWERTOOLS_LOGGER_LOG_EVENT&#34;, &#34;false&#34;))
+    log_event = strtobool(log_event_env_option) or log_event
+
+    @functools.wraps(lambda_handler)
+    def decorate(event, context):
+        if log_event:
+            logger.debug(&#34;Event received&#34;)
+            logger.info(event)
+
+        lambda_context = build_lambda_context_model(context)
+        cold_start = __is_cold_start()
+
+        logger_setup(cold_start=cold_start, **lambda_context.__dict__)
+
+        return lambda_handler(event, context)
+
+    return decorate
+
+
+def __is_cold_start() -&gt; str:
+    &#34;&#34;&#34;Verifies whether is cold start and return a string used for struct logging
+
+    Returns
+    -------
+    str
+        lower case bool as a string
+        aws_lambda_logging doesn&#39;t support bool; cast cold start value to string
+    &#34;&#34;&#34;
+    cold_start = &#34;false&#34;
+
+    global is_cold_start
+    if is_cold_start:
+        cold_start = str(is_cold_start).lower()
+        is_cold_start = False
+
+    return cold_start
+
+
+def log_metric(
+    name: str, namespace: str, unit: MetricUnit, value: float = 0, service: str = &#34;service_undefined&#34;, **dimensions,
+):
+    &#34;&#34;&#34;Logs a custom metric in a statsD-esque format to stdout.
+
+    Creating Custom Metrics synchronously impact on performance/execution time.
+    Instead, log_metric prints a metric to CloudWatch Logs.
+    That allows us to pick them up asynchronously via another Lambda function and create them as a metric.
+
+    NOTE: It takes up to 9 dimensions by default, and Metric units are conveniently available via MetricUnit Enum.
+    If service is not passed as arg or via env var, &#34;service_undefined&#34; will be used as dimension instead.
+
+    Output in CloudWatch Logs: MONITORING|&lt;metric_value&gt;|&lt;metric_unit&gt;|&lt;metric_name&gt;|&lt;namespace&gt;|&lt;dimensions&gt;
+
+    Serverless Application Repository App that creates custom metric from this log output:
+    https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:374852340823:applications~async-custom-metrics
+
+    Environment variables
+    ---------------------
+    POWERTOOLS_SERVICE_NAME: str
+        service name
+
+    Example
+    -------
+    Log metric to count number of successful payments; define service via env var
+
+        $ export POWERTOOLS_SERVICE_NAME=&#34;payment&#34;
+        &gt;&gt;&gt; from aws_lambda_powertools.logging import MetricUnit, log_metric
+        &gt;&gt;&gt; log_metric(
+            name=&#34;SuccessfulPayments&#34;,
+            unit=MetricUnit.Count,
+            value=1,
+            namespace=&#34;DemoApp&#34;
+        )
+
+    Log metric to count number of successful payments per campaign &amp; customer
+
+        &gt;&gt;&gt; from aws_lambda_powertools.logging import MetricUnit, log_metric
+        &gt;&gt;&gt; log_metric(
+            name=&#34;SuccessfulPayments&#34;,
+            service=&#34;payment&#34;,
+            unit=MetricUnit.Count,
+            value=1,
+            namespace=&#34;DemoApp&#34;,
+            campaign=campaign_id,
+            customer=customer_id
+        )
+
+    Parameters
+    ----------
+    name : str
+        metric name, by default None
+    namespace : str
+        metric namespace (e.g. application name), by default None
+    unit : MetricUnit, by default MetricUnit.Count
+        metric unit enum value (e.g. MetricUnit.Seconds), by default None
+        API Info: https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_MetricDatum.html
+    value : float, optional
+        metric value, by default 0
+    service : str, optional
+        service name used as dimension, by default &#34;service_undefined&#34;
+    dimensions: dict, optional
+        keyword arguments as additional dimensions (e.g. customer=customerId)
+    &#34;&#34;&#34;
+
+    warnings.warn(message=&#34;This method will be removed in GA; use Metrics instead&#34;, category=DeprecationWarning)
+    logger.debug(f&#34;Building new custom metric. Name: {name}, Unit: {unit}, Value: {value}, Dimensions: {dimensions}&#34;)
+    service = os.getenv(&#34;POWERTOOLS_SERVICE_NAME&#34;) or service
+    dimensions = __build_dimensions(**dimensions)
+    unit = build_metric_unit_from_str(unit)
+
+    metric = f&#34;MONITORING|{value}|{unit.name}|{name}|{namespace}|service={service}&#34;
+    if dimensions:
+        metric = f&#34;MONITORING|{value}|{unit.name}|{name}|{namespace}|service={service},{dimensions}&#34;
+
+    print(metric)
+
+
+def __build_dimensions(**dimensions) -&gt; str:
+    &#34;&#34;&#34;Builds correct format for custom metric dimensions from kwargs
+
+    Parameters
+    ----------
+    dimensions: dict, optional
+        additional dimensions
+
+    Returns
+    -------
+    str
+        Dimensions in the form of &#34;key=value,key2=value2&#34;
+    &#34;&#34;&#34;
+    MAX_DIMENSIONS = 10
+    dimension = &#34;&#34;
+
+    # CloudWatch accepts a max of 10 dimensions per metric
+    # We include service name as a dimension
+    # so we take up to 9 values as additional dimensions
+    # before we convert everything to a string of key=value
+    dimensions_partition = dict(itertools.islice(dimensions.items(), MAX_DIMENSIONS))
+    dimensions_list = [dimension + &#34;=&#34; + value for dimension, value in dimensions_partition.items() if value]
+    dimension = &#34;,&#34;.join(dimensions_list)
+
+    return dimension</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="aws_lambda_powertools.logging.logger.log_metric"><code class="name flex">
+<span>def <span class="ident">log_metric</span></span>(<span>name, namespace, unit, value=0, service='service_undefined', **dimensions)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Logs a custom metric in a statsD-esque format to stdout.</p>
+<p>Creating Custom Metrics synchronously impact on performance/execution time.
+Instead, log_metric prints a metric to CloudWatch Logs.
+That allows us to pick them up asynchronously via another Lambda function and create them as a metric.</p>
+<p>NOTE: It takes up to 9 dimensions by default, and Metric units are conveniently available via MetricUnit Enum.
+If service is not passed as arg or via env var, "service_undefined" will be used as dimension instead.</p>
+<p>Output in CloudWatch Logs: MONITORING|<metric_value>|<metric_unit>|<metric_name>|<namespace>|<dimensions></p>
+<p>Serverless Application Repository App that creates custom metric from this log output:
+<a href="https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:374852340823:applications~async-custom-metrics">https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:374852340823:applications~async-custom-metrics</a></p>
+<h2 id="environment-variables">Environment variables</h2>
+<dl>
+<dt><strong><code>POWERTOOLS_SERVICE_NAME</code></strong> :&ensp;<code>str</code></dt>
+<dd>service name</dd>
+</dl>
+<h2 id="example">Example</h2>
+<p>Log metric to count number of successful payments; define service via env var</p>
+<pre><code>$ export POWERTOOLS_SERVICE_NAME="payment"
+&gt;&gt;&gt; from aws_lambda_powertools.logging import MetricUnit, log_metric
+&gt;&gt;&gt; log_metric(
+    name="SuccessfulPayments",
+    unit=MetricUnit.Count,
+    value=1,
+    namespace="DemoApp"
+)
+</code></pre>
+<p>Log metric to count number of successful payments per campaign &amp; customer</p>
+<pre><code>&gt;&gt;&gt; from aws_lambda_powertools.logging import MetricUnit, log_metric
+&gt;&gt;&gt; log_metric(
+    name="SuccessfulPayments",
+    service="payment",
+    unit=MetricUnit.Count,
+    value=1,
+    namespace="DemoApp",
+    campaign=campaign_id,
+    customer=customer_id
+)
+</code></pre>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>metric name, by default None</dd>
+<dt><strong><code>namespace</code></strong> :&ensp;<code>str</code></dt>
+<dd>metric namespace (e.g. application name), by default None</dd>
+<dt><strong><code>unit</code></strong> :&ensp;<code>MetricUnit</code>, <code>by</code> default <code>MetricUnit.Count</code></dt>
+<dd>metric unit enum value (e.g. MetricUnit.Seconds), by default None
+API Info: <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_MetricDatum.html">https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_MetricDatum.html</a></dd>
+<dt><strong><code>value</code></strong> :&ensp;<code>float</code>, optional</dt>
+<dd>metric value, by default 0</dd>
+<dt><strong><code>service</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>service name used as dimension, by default "service_undefined"</dd>
+<dt><strong><code>dimensions</code></strong> :&ensp;<code>dict</code>, optional</dt>
+<dd>keyword arguments as additional dimensions (e.g. customer=customerId)</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def log_metric(
+    name: str, namespace: str, unit: MetricUnit, value: float = 0, service: str = &#34;service_undefined&#34;, **dimensions,
+):
+    &#34;&#34;&#34;Logs a custom metric in a statsD-esque format to stdout.
+
+    Creating Custom Metrics synchronously impact on performance/execution time.
+    Instead, log_metric prints a metric to CloudWatch Logs.
+    That allows us to pick them up asynchronously via another Lambda function and create them as a metric.
+
+    NOTE: It takes up to 9 dimensions by default, and Metric units are conveniently available via MetricUnit Enum.
+    If service is not passed as arg or via env var, &#34;service_undefined&#34; will be used as dimension instead.
+
+    Output in CloudWatch Logs: MONITORING|&lt;metric_value&gt;|&lt;metric_unit&gt;|&lt;metric_name&gt;|&lt;namespace&gt;|&lt;dimensions&gt;
+
+    Serverless Application Repository App that creates custom metric from this log output:
+    https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:374852340823:applications~async-custom-metrics
+
+    Environment variables
+    ---------------------
+    POWERTOOLS_SERVICE_NAME: str
+        service name
+
+    Example
+    -------
+    Log metric to count number of successful payments; define service via env var
+
+        $ export POWERTOOLS_SERVICE_NAME=&#34;payment&#34;
+        &gt;&gt;&gt; from aws_lambda_powertools.logging import MetricUnit, log_metric
+        &gt;&gt;&gt; log_metric(
+            name=&#34;SuccessfulPayments&#34;,
+            unit=MetricUnit.Count,
+            value=1,
+            namespace=&#34;DemoApp&#34;
+        )
+
+    Log metric to count number of successful payments per campaign &amp; customer
+
+        &gt;&gt;&gt; from aws_lambda_powertools.logging import MetricUnit, log_metric
+        &gt;&gt;&gt; log_metric(
+            name=&#34;SuccessfulPayments&#34;,
+            service=&#34;payment&#34;,
+            unit=MetricUnit.Count,
+            value=1,
+            namespace=&#34;DemoApp&#34;,
+            campaign=campaign_id,
+            customer=customer_id
+        )
+
+    Parameters
+    ----------
+    name : str
+        metric name, by default None
+    namespace : str
+        metric namespace (e.g. application name), by default None
+    unit : MetricUnit, by default MetricUnit.Count
+        metric unit enum value (e.g. MetricUnit.Seconds), by default None
+        API Info: https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_MetricDatum.html
+    value : float, optional
+        metric value, by default 0
+    service : str, optional
+        service name used as dimension, by default &#34;service_undefined&#34;
+    dimensions: dict, optional
+        keyword arguments as additional dimensions (e.g. customer=customerId)
+    &#34;&#34;&#34;
+
+    warnings.warn(message=&#34;This method will be removed in GA; use Metrics instead&#34;, category=DeprecationWarning)
+    logger.debug(f&#34;Building new custom metric. Name: {name}, Unit: {unit}, Value: {value}, Dimensions: {dimensions}&#34;)
+    service = os.getenv(&#34;POWERTOOLS_SERVICE_NAME&#34;) or service
+    dimensions = __build_dimensions(**dimensions)
+    unit = build_metric_unit_from_str(unit)
+
+    metric = f&#34;MONITORING|{value}|{unit.name}|{name}|{namespace}|service={service}&#34;
+    if dimensions:
+        metric = f&#34;MONITORING|{value}|{unit.name}|{name}|{namespace}|service={service},{dimensions}&#34;
+
+    print(metric)</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.logging.logger.logger_inject_lambda_context"><code class="name flex">
+<span>def <span class="ident">logger_inject_lambda_context</span></span>(<span>lambda_handler=None, log_event=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Decorator to capture Lambda contextual info and inject into struct logging</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>log_event</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Instructs logger to log Lambda Event, by default False</dd>
+</dl>
+<h2 id="environment-variables">Environment variables</h2>
+<dl>
+<dt><strong><code>POWERTOOLS_LOGGER_LOG_EVENT</code></strong> :&ensp;<code>str</code></dt>
+<dd>instruct logger to log Lambda Event (e.g. "true", "True", "TRUE")</dd>
+</dl>
+<h2 id="example">Example</h2>
+<p>Captures Lambda contextual runtime info (e.g memory, arn, req_id)
+&gt;&gt;&gt; from aws_lambda_powertools.logging import logger_setup, logger_inject_lambda_context
+&gt;&gt;&gt; import logging
+&gt;&gt;&gt;
+&gt;&gt;&gt; logger = logging.getLogger(<strong>name</strong>)
+&gt;&gt;&gt; logging.setLevel(logging.INFO)
+&gt;&gt;&gt; logger_setup()
+&gt;&gt;&gt;
+&gt;&gt;&gt; @logger_inject_lambda_context
+&gt;&gt;&gt; def handler(event, context):
+logger.info("Hello")</p>
+<p>Captures Lambda contextual runtime info and logs incoming request
+&gt;&gt;&gt; from aws_lambda_powertools.logging import logger_setup, logger_inject_lambda_context
+&gt;&gt;&gt; import logging
+&gt;&gt;&gt;
+&gt;&gt;&gt; logger = logging.getLogger(<strong>name</strong>)
+&gt;&gt;&gt; logging.setLevel(logging.INFO)
+&gt;&gt;&gt; logger_setup()
+&gt;&gt;&gt;
+&gt;&gt;&gt; @logger_inject_lambda_context(log_event=True)
+&gt;&gt;&gt; def handler(event, context):
+logger.info("Hello")</p>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><strong><code>decorate</code></strong> :&ensp;<code>Callable</code></dt>
+<dd>Decorated lambda handler</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def logger_inject_lambda_context(lambda_handler: Callable[[Dict, Any], Any] = None, log_event: bool = False):
+    &#34;&#34;&#34;Decorator to capture Lambda contextual info and inject into struct logging
+
+    Parameters
+    ----------
+    log_event : bool, optional
+        Instructs logger to log Lambda Event, by default False
+
+    Environment variables
+    ---------------------
+    POWERTOOLS_LOGGER_LOG_EVENT : str
+        instruct logger to log Lambda Event (e.g. &#34;true&#34;, &#34;True&#34;, &#34;TRUE&#34;)
+
+    Example
+    -------
+    Captures Lambda contextual runtime info (e.g memory, arn, req_id)
+        &gt;&gt;&gt; from aws_lambda_powertools.logging import logger_setup, logger_inject_lambda_context
+        &gt;&gt;&gt; import logging
+        &gt;&gt;&gt;
+        &gt;&gt;&gt; logger = logging.getLogger(__name__)
+        &gt;&gt;&gt; logging.setLevel(logging.INFO)
+        &gt;&gt;&gt; logger_setup()
+        &gt;&gt;&gt;
+        &gt;&gt;&gt; @logger_inject_lambda_context
+        &gt;&gt;&gt; def handler(event, context):
+                logger.info(&#34;Hello&#34;)
+
+    Captures Lambda contextual runtime info and logs incoming request
+        &gt;&gt;&gt; from aws_lambda_powertools.logging import logger_setup, logger_inject_lambda_context
+        &gt;&gt;&gt; import logging
+        &gt;&gt;&gt;
+        &gt;&gt;&gt; logger = logging.getLogger(__name__)
+        &gt;&gt;&gt; logging.setLevel(logging.INFO)
+        &gt;&gt;&gt; logger_setup()
+        &gt;&gt;&gt;
+        &gt;&gt;&gt; @logger_inject_lambda_context(log_event=True)
+        &gt;&gt;&gt; def handler(event, context):
+                logger.info(&#34;Hello&#34;)
+
+    Returns
+    -------
+    decorate : Callable
+        Decorated lambda handler
+    &#34;&#34;&#34;
+
+    # If handler is None we&#39;ve been called with parameters
+    # We then return a partial function with args filled
+    # Next time we&#39;re called we&#39;ll call our Lambda
+    # This allows us to avoid writing wrapper_wrapper type of fn
+    if lambda_handler is None:
+        logger.debug(&#34;Decorator called with parameters&#34;)
+        return functools.partial(logger_inject_lambda_context, log_event=log_event)
+
+    log_event_env_option = str(os.getenv(&#34;POWERTOOLS_LOGGER_LOG_EVENT&#34;, &#34;false&#34;))
+    log_event = strtobool(log_event_env_option) or log_event
+
+    @functools.wraps(lambda_handler)
+    def decorate(event, context):
+        if log_event:
+            logger.debug(&#34;Event received&#34;)
+            logger.info(event)
+
+        lambda_context = build_lambda_context_model(context)
+        cold_start = __is_cold_start()
+
+        logger_setup(cold_start=cold_start, **lambda_context.__dict__)
+
+        return lambda_handler(event, context)
+
+    return decorate</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.logging.logger.logger_setup"><code class="name flex">
+<span>def <span class="ident">logger_setup</span></span>(<span>service='service_undefined', level='INFO', sampling_rate=0.0, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Setups root logger to format statements in JSON.</p>
+<p>Includes service name and any additional key=value into logs
+It also accepts both service name or level explicitly via env vars</p>
+<h2 id="environment-variables">Environment variables</h2>
+<dl>
+<dt><strong><code>POWERTOOLS_SERVICE_NAME</code></strong> :&ensp;<code>str</code></dt>
+<dd>service name</dd>
+<dt><strong><code>LOG_LEVEL</code></strong> :&ensp;<code>str</code></dt>
+<dd>logging level (e.g. INFO, DEBUG)</dd>
+<dt><strong><code>POWERTOOLS_LOGGER_SAMPLE_RATE</code></strong> :&ensp;<code>float</code></dt>
+<dd>samping rate ranging from 0 to 1, 1 being 100% sampling</dd>
+</dl>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>service</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>service name to be appended in logs, by default "service_undefined"</dd>
+<dt><strong><code>level</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>logging.level, by default "INFO"</dd>
+<dt><strong><code>sample_rate</code></strong> :&ensp;<code>float</code>, optional</dt>
+<dd>sample rate for debug calls within execution context defaults to 0</dd>
+</dl>
+<h2 id="example">Example</h2>
+<p>Setups structured logging in JSON for Lambda functions with explicit service name</p>
+<pre><code>&gt;&gt;&gt; from aws_lambda_powertools.logging import logger_setup
+&gt;&gt;&gt; logger = logger_setup(service="payment")
+&gt;&gt;&gt;
+&gt;&gt;&gt; def handler(event, context):
+        logger.info("Hello")
+</code></pre>
+<p>Setups structured logging in JSON for Lambda functions using env vars</p>
+<pre><code>$ export POWERTOOLS_SERVICE_NAME="payment"
+$ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
+&gt;&gt;&gt; from aws_lambda_powertools.logging import logger_setup
+&gt;&gt;&gt; logger = logger_setup()
+&gt;&gt;&gt;
+&gt;&gt;&gt; def handler(event, context):
+        logger.info("Hello")
+</code></pre></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def logger_setup(service: str = &#34;service_undefined&#34;, level: str = &#34;INFO&#34;, sampling_rate: float = 0.0, **kwargs):
+    &#34;&#34;&#34;Setups root logger to format statements in JSON.
+
+    Includes service name and any additional key=value into logs
+    It also accepts both service name or level explicitly via env vars
+
+    Environment variables
+    ---------------------
+    POWERTOOLS_SERVICE_NAME : str
+        service name
+    LOG_LEVEL: str
+        logging level (e.g. INFO, DEBUG)
+    POWERTOOLS_LOGGER_SAMPLE_RATE: float
+        samping rate ranging from 0 to 1, 1 being 100% sampling
+
+    Parameters
+    ----------
+    service : str, optional
+        service name to be appended in logs, by default &#34;service_undefined&#34;
+    level : str, optional
+        logging.level, by default &#34;INFO&#34;
+    sample_rate: float, optional
+        sample rate for debug calls within execution context defaults to 0
+
+    Example
+    -------
+    Setups structured logging in JSON for Lambda functions with explicit service name
+
+        &gt;&gt;&gt; from aws_lambda_powertools.logging import logger_setup
+        &gt;&gt;&gt; logger = logger_setup(service=&#34;payment&#34;)
+        &gt;&gt;&gt;
+        &gt;&gt;&gt; def handler(event, context):
+                logger.info(&#34;Hello&#34;)
+
+    Setups structured logging in JSON for Lambda functions using env vars
+
+        $ export POWERTOOLS_SERVICE_NAME=&#34;payment&#34;
+        $ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
+        &gt;&gt;&gt; from aws_lambda_powertools.logging import logger_setup
+        &gt;&gt;&gt; logger = logger_setup()
+        &gt;&gt;&gt;
+        &gt;&gt;&gt; def handler(event, context):
+                logger.info(&#34;Hello&#34;)
+
+    &#34;&#34;&#34;
+    service = os.getenv(&#34;POWERTOOLS_SERVICE_NAME&#34;) or service
+    sampling_rate = os.getenv(&#34;POWERTOOLS_LOGGER_SAMPLE_RATE&#34;) or sampling_rate
+    log_level = os.getenv(&#34;LOG_LEVEL&#34;) or level
+    logger = logging.getLogger(name=service)
+
+    try:
+        if sampling_rate and random.random() &lt;= float(sampling_rate):
+            log_level = logging.DEBUG
+    except ValueError:
+        raise ValueError(
+            &#34;fExpected a float value ranging 0 to 1, but received {sampling_rate} instead. Please review POWERTOOLS_LOGGER_SAMPLE_RATE environment variable.&#34;  # noqa E501
+        )
+
+    logger.setLevel(log_level)
+
+    # Patch logger by structuring its outputs as JSON
+    aws_lambda_logging.setup(level=log_level, service=service, sampling_rate=sampling_rate, **kwargs)
+
+    return logger</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="aws_lambda_powertools.logging" href="index.html">aws_lambda_powertools.logging</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="aws_lambda_powertools.logging.logger.log_metric" href="#aws_lambda_powertools.logging.logger.log_metric">log_metric</a></code></li>
+<li><code><a title="aws_lambda_powertools.logging.logger.logger_inject_lambda_context" href="#aws_lambda_powertools.logging.logger.logger_inject_lambda_context">logger_inject_lambda_context</a></code></li>
+<li><code><a title="aws_lambda_powertools.logging.logger.logger_setup" href="#aws_lambda_powertools.logging.logger.logger_setup">logger_setup</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.5</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
