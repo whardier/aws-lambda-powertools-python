@@ -203,6 +203,7 @@ class MetricManager:
         }
         metrics_timestamp = {&#34;Timestamp&#34;: int(datetime.datetime.now().timestamp() * 1000)}
         metric_set[&#34;_aws&#34;] = {**metrics_timestamp, **metrics_definition}
+        metric_set.update(**dimensions)
 
         try:
             logger.debug(&#34;Validating serialized metrics against CloudWatch EMF schema&#34;, metric_set)
@@ -430,6 +431,7 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
         }
         metrics_timestamp = {&#34;Timestamp&#34;: int(datetime.datetime.now().timestamp() * 1000)}
         metric_set[&#34;_aws&#34;] = {**metrics_timestamp, **metrics_definition}
+        metric_set.update(**dimensions)
 
         try:
             logger.debug(&#34;Validating serialized metrics against CloudWatch EMF schema&#34;, metric_set)
@@ -711,6 +713,7 @@ ret = metrics.serialize_metric_set()
     }
     metrics_timestamp = {&#34;Timestamp&#34;: int(datetime.datetime.now().timestamp() * 1000)}
     metric_set[&#34;_aws&#34;] = {**metrics_timestamp, **metrics_definition}
+    metric_set.update(**dimensions)
 
     try:
         logger.debug(&#34;Validating serialized metrics against CloudWatch EMF schema&#34;, metric_set)
