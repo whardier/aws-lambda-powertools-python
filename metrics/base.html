@@ -39,11 +39,12 @@ from aws_lambda_powertools.helper.models import MetricUnit
 from .exceptions import MetricUnitError, MetricValueError, SchemaValidationError, UniqueNamespaceError
 
 logger = logging.getLogger(__name__)
-logger.setLevel(os.getenv(&#34;LOG_LEVEL&#34;, &#34;INFO&#34;))
 
 _schema_path = pathlib.Path(__file__).parent / &#34;./schema.json&#34;
 with _schema_path.open() as f:
     CLOUDWATCH_EMF_SCHEMA = json.load(f)
+
+MAX_METRICS = 100
 
 
 class MetricManager:
@@ -78,6 +79,8 @@ class MetricManager:
         self.metric_set = metric_set or {}
         self.dimension_set = dimension_set or {}
         self.namespace = os.getenv(&#34;POWERTOOLS_METRICS_NAMESPACE&#34;) or namespace
+        self._metric_units = [unit.value for unit in MetricUnit]
+        self._metric_unit_options = list(MetricUnit.__members__)
 
     def add_namespace(self, name: str):
         &#34;&#34;&#34;Adds given metric namespace
@@ -127,25 +130,19 @@ class MetricManager:
         MetricUnitError
             When metric unit is not supported by CloudWatch
         &#34;&#34;&#34;
-        if len(self.metric_set) == 100:
-            logger.debug(&#34;Exceeded maximum of 100 metrics - Publishing existing metric set&#34;)
-            metrics = self.serialize_metric_set()
-            print(json.dumps(metrics))
-            self.metric_set = {}
-
         if not isinstance(value, numbers.Number):
             raise MetricValueError(f&#34;{value} is not a valid number&#34;)
 
-        if not isinstance(unit, MetricUnit):
-            try:
-                unit = MetricUnit[unit]
-            except KeyError:
-                unit_options = list(MetricUnit.__members__)
-                raise MetricUnitError(f&#34;Invalid metric unit &#39;{unit}&#39;, expected either option: {unit_options}&#34;)
-
-        metric = {&#34;Unit&#34;: unit.value, &#34;Value&#34;: float(value)}
+        unit = self.__extract_metric_unit_value(unit=unit)
+        metric = {&#34;Unit&#34;: unit, &#34;Value&#34;: float(value)}
         logger.debug(f&#34;Adding metric: {name} with {metric}&#34;)
         self.metric_set[name] = metric
+
+        if len(self.metric_set) == MAX_METRICS:
+            logger.debug(f&#34;Exceeded maximum of {MAX_METRICS} metrics - Publishing existing metric set&#34;)
+            metrics = self.serialize_metric_set()
+            print(json.dumps(metrics))
+            self.metric_set = {}
 
     def serialize_metric_set(self, metrics: Dict = None, dimensions: Dict = None) -&gt; Dict:
         &#34;&#34;&#34;Serializes metric and dimensions set
@@ -175,10 +172,10 @@ class MetricManager:
         SchemaValidationError
             Raised when serialization fail schema validation
         &#34;&#34;&#34;
-        if metrics is None:
+        if metrics is None:  # pragma: no cover
             metrics = self.metric_set
 
-        if dimensions is None:
+        if dimensions is None:  # pragma: no cover
             dimensions = self.dimension_set
 
         logger.debug(&#34;Serializing...&#34;, {&#34;metrics&#34;: metrics, &#34;dimensions&#34;: dimensions})
@@ -190,11 +187,10 @@ class MetricManager:
         for metric_name in metrics:
             metric: str = metrics[metric_name]
             metric_value: int = metric.get(&#34;Value&#34;, 0)
-            metric_unit: str = metric.get(&#34;Unit&#34;)
+            metric_unit: str = metric.get(&#34;Unit&#34;, &#34;&#34;)
 
-            if metric_value &gt; 0 and metric_unit is not None:
-                metric_names_unit.append({&#34;Name&#34;: metric_name, &#34;Unit&#34;: metric[&#34;Unit&#34;]})
-                metric_set.update({metric_name: metric[&#34;Value&#34;]})
+            metric_names_unit.append({&#34;Name&#34;: metric_name, &#34;Unit&#34;: metric_unit})
+            metric_set.update({metric_name: metric_value})
 
         metrics_definition = {
             &#34;CloudWatchMetrics&#34;: [
@@ -230,7 +226,40 @@ class MetricManager:
             Dimension value
         &#34;&#34;&#34;
         logger.debug(f&#34;Adding dimension: {name}:{value}&#34;)
-        self.dimension_set[name] = value</code></pre>
+        self.dimension_set[name] = value
+
+    def __extract_metric_unit_value(self, unit: Union[str, MetricUnit]) -&gt; str:
+        &#34;&#34;&#34;Return metric value from metric unit whether that&#39;s str or MetricUnit enum
+
+        Parameters
+        ----------
+        unit : Union[str, MetricUnit]
+            Metric unit
+
+        Returns
+        -------
+        str
+            Metric unit value (e.g. &#34;Seconds&#34;, &#34;Count/Second&#34;)
+
+        Raises
+        ------
+        MetricUnitError
+            When metric unit is not supported by CloudWatch
+        &#34;&#34;&#34;
+
+        if isinstance(unit, str):
+            if unit in self._metric_unit_options:
+                unit = MetricUnit[unit].value
+
+            if unit not in self._metric_units:  # str correta
+                raise MetricUnitError(
+                    f&#34;Invalid metric unit &#39;{unit}&#39;, expected either option: {self._metric_unit_options}&#34;
+                )
+
+        if isinstance(unit, MetricUnit):
+            unit = unit.value
+
+        return unit</code></pre>
 </details>
 </section>
 <section>
@@ -306,6 +335,8 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
         self.metric_set = metric_set or {}
         self.dimension_set = dimension_set or {}
         self.namespace = os.getenv(&#34;POWERTOOLS_METRICS_NAMESPACE&#34;) or namespace
+        self._metric_units = [unit.value for unit in MetricUnit]
+        self._metric_unit_options = list(MetricUnit.__members__)
 
     def add_namespace(self, name: str):
         &#34;&#34;&#34;Adds given metric namespace
@@ -355,25 +386,19 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
         MetricUnitError
             When metric unit is not supported by CloudWatch
         &#34;&#34;&#34;
-        if len(self.metric_set) == 100:
-            logger.debug(&#34;Exceeded maximum of 100 metrics - Publishing existing metric set&#34;)
-            metrics = self.serialize_metric_set()
-            print(json.dumps(metrics))
-            self.metric_set = {}
-
         if not isinstance(value, numbers.Number):
             raise MetricValueError(f&#34;{value} is not a valid number&#34;)
 
-        if not isinstance(unit, MetricUnit):
-            try:
-                unit = MetricUnit[unit]
-            except KeyError:
-                unit_options = list(MetricUnit.__members__)
-                raise MetricUnitError(f&#34;Invalid metric unit &#39;{unit}&#39;, expected either option: {unit_options}&#34;)
-
-        metric = {&#34;Unit&#34;: unit.value, &#34;Value&#34;: float(value)}
+        unit = self.__extract_metric_unit_value(unit=unit)
+        metric = {&#34;Unit&#34;: unit, &#34;Value&#34;: float(value)}
         logger.debug(f&#34;Adding metric: {name} with {metric}&#34;)
         self.metric_set[name] = metric
+
+        if len(self.metric_set) == MAX_METRICS:
+            logger.debug(f&#34;Exceeded maximum of {MAX_METRICS} metrics - Publishing existing metric set&#34;)
+            metrics = self.serialize_metric_set()
+            print(json.dumps(metrics))
+            self.metric_set = {}
 
     def serialize_metric_set(self, metrics: Dict = None, dimensions: Dict = None) -&gt; Dict:
         &#34;&#34;&#34;Serializes metric and dimensions set
@@ -403,10 +428,10 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
         SchemaValidationError
             Raised when serialization fail schema validation
         &#34;&#34;&#34;
-        if metrics is None:
+        if metrics is None:  # pragma: no cover
             metrics = self.metric_set
 
-        if dimensions is None:
+        if dimensions is None:  # pragma: no cover
             dimensions = self.dimension_set
 
         logger.debug(&#34;Serializing...&#34;, {&#34;metrics&#34;: metrics, &#34;dimensions&#34;: dimensions})
@@ -418,11 +443,10 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
         for metric_name in metrics:
             metric: str = metrics[metric_name]
             metric_value: int = metric.get(&#34;Value&#34;, 0)
-            metric_unit: str = metric.get(&#34;Unit&#34;)
+            metric_unit: str = metric.get(&#34;Unit&#34;, &#34;&#34;)
 
-            if metric_value &gt; 0 and metric_unit is not None:
-                metric_names_unit.append({&#34;Name&#34;: metric_name, &#34;Unit&#34;: metric[&#34;Unit&#34;]})
-                metric_set.update({metric_name: metric[&#34;Value&#34;]})
+            metric_names_unit.append({&#34;Name&#34;: metric_name, &#34;Unit&#34;: metric_unit})
+            metric_set.update({metric_name: metric_value})
 
         metrics_definition = {
             &#34;CloudWatchMetrics&#34;: [
@@ -458,7 +482,40 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
             Dimension value
         &#34;&#34;&#34;
         logger.debug(f&#34;Adding dimension: {name}:{value}&#34;)
-        self.dimension_set[name] = value</code></pre>
+        self.dimension_set[name] = value
+
+    def __extract_metric_unit_value(self, unit: Union[str, MetricUnit]) -&gt; str:
+        &#34;&#34;&#34;Return metric value from metric unit whether that&#39;s str or MetricUnit enum
+
+        Parameters
+        ----------
+        unit : Union[str, MetricUnit]
+            Metric unit
+
+        Returns
+        -------
+        str
+            Metric unit value (e.g. &#34;Seconds&#34;, &#34;Count/Second&#34;)
+
+        Raises
+        ------
+        MetricUnitError
+            When metric unit is not supported by CloudWatch
+        &#34;&#34;&#34;
+
+        if isinstance(unit, str):
+            if unit in self._metric_unit_options:
+                unit = MetricUnit[unit].value
+
+            if unit not in self._metric_units:  # str correta
+                raise MetricUnitError(
+                    f&#34;Invalid metric unit &#39;{unit}&#39;, expected either option: {self._metric_unit_options}&#34;
+                )
+
+        if isinstance(unit, MetricUnit):
+            unit = unit.value
+
+        return unit</code></pre>
 </details>
 <h3>Subclasses</h3>
 <ul class="hlist">
@@ -564,25 +621,19 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
     MetricUnitError
         When metric unit is not supported by CloudWatch
     &#34;&#34;&#34;
-    if len(self.metric_set) == 100:
-        logger.debug(&#34;Exceeded maximum of 100 metrics - Publishing existing metric set&#34;)
-        metrics = self.serialize_metric_set()
-        print(json.dumps(metrics))
-        self.metric_set = {}
-
     if not isinstance(value, numbers.Number):
         raise MetricValueError(f&#34;{value} is not a valid number&#34;)
 
-    if not isinstance(unit, MetricUnit):
-        try:
-            unit = MetricUnit[unit]
-        except KeyError:
-            unit_options = list(MetricUnit.__members__)
-            raise MetricUnitError(f&#34;Invalid metric unit &#39;{unit}&#39;, expected either option: {unit_options}&#34;)
-
-    metric = {&#34;Unit&#34;: unit.value, &#34;Value&#34;: float(value)}
+    unit = self.__extract_metric_unit_value(unit=unit)
+    metric = {&#34;Unit&#34;: unit, &#34;Value&#34;: float(value)}
     logger.debug(f&#34;Adding metric: {name} with {metric}&#34;)
-    self.metric_set[name] = metric</code></pre>
+    self.metric_set[name] = metric
+
+    if len(self.metric_set) == MAX_METRICS:
+        logger.debug(f&#34;Exceeded maximum of {MAX_METRICS} metrics - Publishing existing metric set&#34;)
+        metrics = self.serialize_metric_set()
+        print(json.dumps(metrics))
+        self.metric_set = {}</code></pre>
 </details>
 </dd>
 <dt id="aws_lambda_powertools.metrics.base.MetricManager.add_namespace"><code class="name flex">
@@ -685,10 +736,10 @@ ret = metrics.serialize_metric_set()
     SchemaValidationError
         Raised when serialization fail schema validation
     &#34;&#34;&#34;
-    if metrics is None:
+    if metrics is None:  # pragma: no cover
         metrics = self.metric_set
 
-    if dimensions is None:
+    if dimensions is None:  # pragma: no cover
         dimensions = self.dimension_set
 
     logger.debug(&#34;Serializing...&#34;, {&#34;metrics&#34;: metrics, &#34;dimensions&#34;: dimensions})
@@ -700,11 +751,10 @@ ret = metrics.serialize_metric_set()
     for metric_name in metrics:
         metric: str = metrics[metric_name]
         metric_value: int = metric.get(&#34;Value&#34;, 0)
-        metric_unit: str = metric.get(&#34;Unit&#34;)
+        metric_unit: str = metric.get(&#34;Unit&#34;, &#34;&#34;)
 
-        if metric_value &gt; 0 and metric_unit is not None:
-            metric_names_unit.append({&#34;Name&#34;: metric_name, &#34;Unit&#34;: metric[&#34;Unit&#34;]})
-            metric_set.update({metric_name: metric[&#34;Value&#34;]})
+        metric_names_unit.append({&#34;Name&#34;: metric_name, &#34;Unit&#34;: metric_unit})
+        metric_set.update({metric_name: metric_value})
 
     metrics_definition = {
         &#34;CloudWatchMetrics&#34;: [

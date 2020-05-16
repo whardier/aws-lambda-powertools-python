@@ -28,8 +28,13 @@
 <pre><code class="python"># -*- coding: utf-8 -*-
 
 &#34;&#34;&#34;Top-level package for Lambda Python Powertools.&#34;&#34;&#34;
+import logging
 
-__author__ = &#34;&#34;&#34;Amazon Web Services&#34;&#34;&#34;</code></pre>
+__author__ = &#34;&#34;&#34;Amazon Web Services&#34;&#34;&#34;
+
+logger = logging.getLogger(&#34;aws_lambda_powertools&#34;)
+logger.addHandler(logging.NullHandler())
+logger.propagate = False</code></pre>
 </details>
 </section>
 <section>

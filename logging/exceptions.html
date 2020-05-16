@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.5" />
-<title>aws_lambda_powertools.metrics.exceptions API documentation</title>
+<title>aws_lambda_powertools.logging.exceptions API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,34 +17,14 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>aws_lambda_powertools.metrics.exceptions</code></h1>
+<h1 class="title">Module <code>aws_lambda_powertools.logging.exceptions</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class MetricUnitError(Exception):
-    &#34;&#34;&#34;When metric unit is not supported by CloudWatch&#34;&#34;&#34;
-
-    pass
-
-
-class SchemaValidationError(Exception):
-    &#34;&#34;&#34;When serialization fail schema validation&#34;&#34;&#34;
-
-    pass
-
-
-class MetricValueError(Exception):
-    &#34;&#34;&#34;When metric value isn&#39;t a valid number&#34;&#34;&#34;
-
-    pass
-
-
-class UniqueNamespaceError(Exception):
-    &#34;&#34;&#34;When an additional namespace is set&#34;&#34;&#34;
-
+<pre><code class="python">class InvalidLoggerSamplingRateError(Exception):
     pass</code></pre>
 </details>
 </section>
@@ -57,82 +37,17 @@ class UniqueNamespaceError(Exception):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="aws_lambda_powertools.metrics.exceptions.MetricUnitError"><code class="flex name class">
-<span>class <span class="ident">MetricUnitError</span></span>
+<dt id="aws_lambda_powertools.logging.exceptions.InvalidLoggerSamplingRateError"><code class="flex name class">
+<span>class <span class="ident">InvalidLoggerSamplingRateError</span></span>
 <span>(</span><span>...)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>When metric unit is not supported by CloudWatch</p></section>
+<section class="desc"><p>Common base class for all non-exit exceptions.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class MetricUnitError(Exception):
-    &#34;&#34;&#34;When metric unit is not supported by CloudWatch&#34;&#34;&#34;
-
-    pass</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>builtins.Exception</li>
-<li>builtins.BaseException</li>
-</ul>
-</dd>
-<dt id="aws_lambda_powertools.metrics.exceptions.MetricValueError"><code class="flex name class">
-<span>class <span class="ident">MetricValueError</span></span>
-<span>(</span><span>...)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>When metric value isn't a valid number</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class MetricValueError(Exception):
-    &#34;&#34;&#34;When metric value isn&#39;t a valid number&#34;&#34;&#34;
-
-    pass</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>builtins.Exception</li>
-<li>builtins.BaseException</li>
-</ul>
-</dd>
-<dt id="aws_lambda_powertools.metrics.exceptions.SchemaValidationError"><code class="flex name class">
-<span>class <span class="ident">SchemaValidationError</span></span>
-<span>(</span><span>...)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>When serialization fail schema validation</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class SchemaValidationError(Exception):
-    &#34;&#34;&#34;When serialization fail schema validation&#34;&#34;&#34;
-
-    pass</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>builtins.Exception</li>
-<li>builtins.BaseException</li>
-</ul>
-</dd>
-<dt id="aws_lambda_powertools.metrics.exceptions.UniqueNamespaceError"><code class="flex name class">
-<span>class <span class="ident">UniqueNamespaceError</span></span>
-<span>(</span><span>...)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>When an additional namespace is set</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class UniqueNamespaceError(Exception):
-    &#34;&#34;&#34;When an additional namespace is set&#34;&#34;&#34;
-
+<pre><code class="python">class InvalidLoggerSamplingRateError(Exception):
     pass</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -152,22 +67,13 @@ class UniqueNamespaceError(Exception):
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="aws_lambda_powertools.metrics" href="index.html">aws_lambda_powertools.metrics</a></code></li>
+<li><code><a title="aws_lambda_powertools.logging" href="index.html">aws_lambda_powertools.logging</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="aws_lambda_powertools.metrics.exceptions.MetricUnitError" href="#aws_lambda_powertools.metrics.exceptions.MetricUnitError">MetricUnitError</a></code></h4>
-</li>
-<li>
-<h4><code><a title="aws_lambda_powertools.metrics.exceptions.MetricValueError" href="#aws_lambda_powertools.metrics.exceptions.MetricValueError">MetricValueError</a></code></h4>
-</li>
-<li>
-<h4><code><a title="aws_lambda_powertools.metrics.exceptions.SchemaValidationError" href="#aws_lambda_powertools.metrics.exceptions.SchemaValidationError">SchemaValidationError</a></code></h4>
-</li>
-<li>
-<h4><code><a title="aws_lambda_powertools.metrics.exceptions.UniqueNamespaceError" href="#aws_lambda_powertools.metrics.exceptions.UniqueNamespaceError">UniqueNamespaceError</a></code></h4>
+<h4><code><a title="aws_lambda_powertools.logging.exceptions.InvalidLoggerSamplingRateError" href="#aws_lambda_powertools.logging.exceptions.InvalidLoggerSamplingRateError">InvalidLoggerSamplingRateError</a></code></h4>
 </li>
 </ul>
 </li>

@@ -163,8 +163,6 @@ def single_metric(name: str, unit: MetricUnit, value: float):
         yield metric
         logger.debug(&#34;Serializing single metric&#34;)
         metric_set: Dict = metric.serialize_metric_set()
-    except Exception as e:
-        raise e
     finally:
         logger.debug(&#34;Publishing single metric&#34;, {&#34;metric&#34;: metric})
         print(json.dumps(metric_set))</code></pre>
@@ -201,17 +199,17 @@ def single_metric(name: str, unit: MetricUnit, value: float):
     Terabits = &#34;Terabits&#34;
     Percent = &#34;Percent&#34;
     Count = &#34;Count&#34;
-    BytesPerSecond = &#34;Second&#34;
-    KilobytesPerSecond = &#34;Second&#34;
-    MegabytesPerSecond = &#34;Second&#34;
-    GigabytesPerSecond = &#34;Second&#34;
-    TerabytesPerSecond = &#34;Second&#34;
-    BitsPerSecond = &#34;Second&#34;
-    KilobitsPerSecond = &#34;Second&#34;
-    MegabitsPerSecond = &#34;Second&#34;
-    GigabitsPerSecond = &#34;Second&#34;
-    TerabitsPerSecond = &#34;Second&#34;
-    CountPerSecond = &#34;Second&#34;</code></pre>
+    BytesPerSecond = &#34;Bytes/Second&#34;
+    KilobytesPerSecond = &#34;Kilobytes/Second&#34;
+    MegabytesPerSecond = &#34;Megabytes/Second&#34;
+    GigabytesPerSecond = &#34;Gigabytes/Second&#34;
+    TerabytesPerSecond = &#34;Terabytes/Second&#34;
+    BitsPerSecond = &#34;Bits/Second&#34;
+    KilobitsPerSecond = &#34;Kilobits/Second&#34;
+    MegabitsPerSecond = &#34;Megabits/Second&#34;
+    GigabitsPerSecond = &#34;Gigabits/Second&#34;
+    TerabitsPerSecond = &#34;Terabits/Second&#34;
+    CountPerSecond = &#34;Count/Second&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -220,6 +218,10 @@ def single_metric(name: str, unit: MetricUnit, value: float):
 <h3>Class variables</h3>
 <dl>
 <dt id="aws_lambda_powertools.metrics.MetricUnit.Bits"><code class="name">var <span class="ident">Bits</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.MetricUnit.BitsPerSecond"><code class="name">var <span class="ident">BitsPerSecond</span></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
@@ -235,7 +237,15 @@ def single_metric(name: str, unit: MetricUnit, value: float):
 <dd>
 <section class="desc"></section>
 </dd>
+<dt id="aws_lambda_powertools.metrics.MetricUnit.CountPerSecond"><code class="name">var <span class="ident">CountPerSecond</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
 <dt id="aws_lambda_powertools.metrics.MetricUnit.Gigabits"><code class="name">var <span class="ident">Gigabits</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.MetricUnit.GigabitsPerSecond"><code class="name">var <span class="ident">GigabitsPerSecond</span></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
@@ -243,7 +253,15 @@ def single_metric(name: str, unit: MetricUnit, value: float):
 <dd>
 <section class="desc"></section>
 </dd>
+<dt id="aws_lambda_powertools.metrics.MetricUnit.GigabytesPerSecond"><code class="name">var <span class="ident">GigabytesPerSecond</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
 <dt id="aws_lambda_powertools.metrics.MetricUnit.Kilobits"><code class="name">var <span class="ident">Kilobits</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.MetricUnit.KilobitsPerSecond"><code class="name">var <span class="ident">KilobitsPerSecond</span></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
@@ -251,11 +269,23 @@ def single_metric(name: str, unit: MetricUnit, value: float):
 <dd>
 <section class="desc"></section>
 </dd>
+<dt id="aws_lambda_powertools.metrics.MetricUnit.KilobytesPerSecond"><code class="name">var <span class="ident">KilobytesPerSecond</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
 <dt id="aws_lambda_powertools.metrics.MetricUnit.Megabits"><code class="name">var <span class="ident">Megabits</span></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
+<dt id="aws_lambda_powertools.metrics.MetricUnit.MegabitsPerSecond"><code class="name">var <span class="ident">MegabitsPerSecond</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
 <dt id="aws_lambda_powertools.metrics.MetricUnit.Megabytes"><code class="name">var <span class="ident">Megabytes</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.MetricUnit.MegabytesPerSecond"><code class="name">var <span class="ident">MegabytesPerSecond</span></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
@@ -279,7 +309,15 @@ def single_metric(name: str, unit: MetricUnit, value: float):
 <dd>
 <section class="desc"></section>
 </dd>
+<dt id="aws_lambda_powertools.metrics.MetricUnit.TerabitsPerSecond"><code class="name">var <span class="ident">TerabitsPerSecond</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
 <dt id="aws_lambda_powertools.metrics.MetricUnit.Terabytes"><code class="name">var <span class="ident">Terabytes</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.MetricUnit.TerabytesPerSecond"><code class="name">var <span class="ident">TerabytesPerSecond</span></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
@@ -290,12 +328,14 @@ def single_metric(name: str, unit: MetricUnit, value: float):
 <span>(</span><span>...)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Common base class for all non-exit exceptions.</p></section>
+<section class="desc"><p>When metric unit is not supported by CloudWatch</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class MetricUnitError(Exception):
+    &#34;&#34;&#34;When metric unit is not supported by CloudWatch&#34;&#34;&#34;
+
     pass</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -309,12 +349,14 @@ def single_metric(name: str, unit: MetricUnit, value: float):
 <span>(</span><span>...)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Common base class for all non-exit exceptions.</p></section>
+<section class="desc"><p>When metric value isn't a valid number</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class MetricValueError(Exception):
+    &#34;&#34;&#34;When metric value isn&#39;t a valid number&#34;&#34;&#34;
+
     pass</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -469,8 +511,6 @@ def do_something():
         def decorate(*args, **kwargs):
             try:
                 response = lambda_handler(*args, **kwargs)
-            except Exception as e:
-                raise e
             finally:
                 metrics = self.serialize_metric_set()
                 logger.debug(&#34;Publishing metrics&#34;, {&#34;metrics&#34;: metrics})
@@ -546,8 +586,6 @@ tracer = Tracer(service="payment")
     def decorate(*args, **kwargs):
         try:
             response = lambda_handler(*args, **kwargs)
-        except Exception as e:
-            raise e
         finally:
             metrics = self.serialize_metric_set()
             logger.debug(&#34;Publishing metrics&#34;, {&#34;metrics&#34;: metrics})
@@ -576,12 +614,14 @@ tracer = Tracer(service="payment")
 <span>(</span><span>...)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Common base class for all non-exit exceptions.</p></section>
+<section class="desc"><p>When serialization fail schema validation</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class SchemaValidationError(Exception):
+    &#34;&#34;&#34;When serialization fail schema validation&#34;&#34;&#34;
+
     pass</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -595,12 +635,14 @@ tracer = Tracer(service="payment")
 <span>(</span><span>...)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Common base class for all non-exit exceptions.</p></section>
+<section class="desc"><p>When an additional namespace is set</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class UniqueNamespaceError(Exception):
+    &#34;&#34;&#34;When an additional namespace is set&#34;&#34;&#34;
+
     pass</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -642,21 +684,31 @@ tracer = Tracer(service="payment")
 <h4><code><a title="aws_lambda_powertools.metrics.MetricUnit" href="#aws_lambda_powertools.metrics.MetricUnit">MetricUnit</a></code></h4>
 <ul class="two-column">
 <li><code><a title="aws_lambda_powertools.metrics.MetricUnit.Bits" href="#aws_lambda_powertools.metrics.MetricUnit.Bits">Bits</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.MetricUnit.BitsPerSecond" href="#aws_lambda_powertools.metrics.MetricUnit.BitsPerSecond">BitsPerSecond</a></code></li>
 <li><code><a title="aws_lambda_powertools.metrics.MetricUnit.Bytes" href="#aws_lambda_powertools.metrics.MetricUnit.Bytes">Bytes</a></code></li>
 <li><code><a title="aws_lambda_powertools.metrics.MetricUnit.BytesPerSecond" href="#aws_lambda_powertools.metrics.MetricUnit.BytesPerSecond">BytesPerSecond</a></code></li>
 <li><code><a title="aws_lambda_powertools.metrics.MetricUnit.Count" href="#aws_lambda_powertools.metrics.MetricUnit.Count">Count</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.MetricUnit.CountPerSecond" href="#aws_lambda_powertools.metrics.MetricUnit.CountPerSecond">CountPerSecond</a></code></li>
 <li><code><a title="aws_lambda_powertools.metrics.MetricUnit.Gigabits" href="#aws_lambda_powertools.metrics.MetricUnit.Gigabits">Gigabits</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.MetricUnit.GigabitsPerSecond" href="#aws_lambda_powertools.metrics.MetricUnit.GigabitsPerSecond">GigabitsPerSecond</a></code></li>
 <li><code><a title="aws_lambda_powertools.metrics.MetricUnit.Gigabytes" href="#aws_lambda_powertools.metrics.MetricUnit.Gigabytes">Gigabytes</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.MetricUnit.GigabytesPerSecond" href="#aws_lambda_powertools.metrics.MetricUnit.GigabytesPerSecond">GigabytesPerSecond</a></code></li>
 <li><code><a title="aws_lambda_powertools.metrics.MetricUnit.Kilobits" href="#aws_lambda_powertools.metrics.MetricUnit.Kilobits">Kilobits</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.MetricUnit.KilobitsPerSecond" href="#aws_lambda_powertools.metrics.MetricUnit.KilobitsPerSecond">KilobitsPerSecond</a></code></li>
 <li><code><a title="aws_lambda_powertools.metrics.MetricUnit.Kilobytes" href="#aws_lambda_powertools.metrics.MetricUnit.Kilobytes">Kilobytes</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.MetricUnit.KilobytesPerSecond" href="#aws_lambda_powertools.metrics.MetricUnit.KilobytesPerSecond">KilobytesPerSecond</a></code></li>
 <li><code><a title="aws_lambda_powertools.metrics.MetricUnit.Megabits" href="#aws_lambda_powertools.metrics.MetricUnit.Megabits">Megabits</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.MetricUnit.MegabitsPerSecond" href="#aws_lambda_powertools.metrics.MetricUnit.MegabitsPerSecond">MegabitsPerSecond</a></code></li>
 <li><code><a title="aws_lambda_powertools.metrics.MetricUnit.Megabytes" href="#aws_lambda_powertools.metrics.MetricUnit.Megabytes">Megabytes</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.MetricUnit.MegabytesPerSecond" href="#aws_lambda_powertools.metrics.MetricUnit.MegabytesPerSecond">MegabytesPerSecond</a></code></li>
 <li><code><a title="aws_lambda_powertools.metrics.MetricUnit.Microseconds" href="#aws_lambda_powertools.metrics.MetricUnit.Microseconds">Microseconds</a></code></li>
 <li><code><a title="aws_lambda_powertools.metrics.MetricUnit.Milliseconds" href="#aws_lambda_powertools.metrics.MetricUnit.Milliseconds">Milliseconds</a></code></li>
 <li><code><a title="aws_lambda_powertools.metrics.MetricUnit.Percent" href="#aws_lambda_powertools.metrics.MetricUnit.Percent">Percent</a></code></li>
 <li><code><a title="aws_lambda_powertools.metrics.MetricUnit.Seconds" href="#aws_lambda_powertools.metrics.MetricUnit.Seconds">Seconds</a></code></li>
 <li><code><a title="aws_lambda_powertools.metrics.MetricUnit.Terabits" href="#aws_lambda_powertools.metrics.MetricUnit.Terabits">Terabits</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.MetricUnit.TerabitsPerSecond" href="#aws_lambda_powertools.metrics.MetricUnit.TerabitsPerSecond">TerabitsPerSecond</a></code></li>
 <li><code><a title="aws_lambda_powertools.metrics.MetricUnit.Terabytes" href="#aws_lambda_powertools.metrics.MetricUnit.Terabytes">Terabytes</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.MetricUnit.TerabytesPerSecond" href="#aws_lambda_powertools.metrics.MetricUnit.TerabytesPerSecond">TerabytesPerSecond</a></code></li>
 </ul>
 </li>
 <li>

@@ -24,163 +24,158 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">import functools
+<pre><code class="python">import copy
+import functools
 import itertools
+import json
 import logging
 import os
 import random
+import sys
 import warnings
 from distutils.util import strtobool
-from typing import Any, Callable, Dict
+from typing import Any, Callable, Dict, Union
 
 from ..helper.models import MetricUnit, build_lambda_context_model, build_metric_unit_from_str
-from . import aws_lambda_logging
+from .exceptions import InvalidLoggerSamplingRateError
 
 logger = logging.getLogger(__name__)
-logger.setLevel(os.getenv(&#34;LOG_LEVEL&#34;, &#34;INFO&#34;))
 
 is_cold_start = True
 
 
-def logger_setup(service: str = &#34;service_undefined&#34;, level: str = &#34;INFO&#34;, sampling_rate: float = 0.0, **kwargs):
-    &#34;&#34;&#34;Setups root logger to format statements in JSON.
-
-    Includes service name and any additional key=value into logs
-    It also accepts both service name or level explicitly via env vars
-
-    Environment variables
-    ---------------------
-    POWERTOOLS_SERVICE_NAME : str
-        service name
-    LOG_LEVEL: str
-        logging level (e.g. INFO, DEBUG)
-    POWERTOOLS_LOGGER_SAMPLE_RATE: float
-        samping rate ranging from 0 to 1, 1 being 100% sampling
-
-    Parameters
-    ----------
-    service : str, optional
-        service name to be appended in logs, by default &#34;service_undefined&#34;
-    level : str, optional
-        logging.level, by default &#34;INFO&#34;
-    sample_rate: float, optional
-        sample rate for debug calls within execution context defaults to 0
+def json_formatter(unserialized_value: Any):
+    &#34;&#34;&#34;JSON custom serializer to cast unserialisable values to strings.
 
     Example
     -------
-    Setups structured logging in JSON for Lambda functions with explicit service name
 
-        &gt;&gt;&gt; from aws_lambda_powertools.logging import logger_setup
-        &gt;&gt;&gt; logger = logger_setup(service=&#34;payment&#34;)
-        &gt;&gt;&gt;
-        &gt;&gt;&gt; def handler(event, context):
-                logger.info(&#34;Hello&#34;)
+    **Serialize unserialisable value to string**
 
-    Setups structured logging in JSON for Lambda functions using env vars
+        class X: pass
+        value = {&#34;x&#34;: X()}
 
-        $ export POWERTOOLS_SERVICE_NAME=&#34;payment&#34;
-        $ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
-        &gt;&gt;&gt; from aws_lambda_powertools.logging import logger_setup
-        &gt;&gt;&gt; logger = logger_setup()
-        &gt;&gt;&gt;
-        &gt;&gt;&gt; def handler(event, context):
-                logger.info(&#34;Hello&#34;)
-
-    &#34;&#34;&#34;
-    service = os.getenv(&#34;POWERTOOLS_SERVICE_NAME&#34;) or service
-    sampling_rate = os.getenv(&#34;POWERTOOLS_LOGGER_SAMPLE_RATE&#34;) or sampling_rate
-    log_level = os.getenv(&#34;LOG_LEVEL&#34;) or level
-    logger = logging.getLogger(name=service)
-
-    try:
-        if sampling_rate and random.random() &lt;= float(sampling_rate):
-            log_level = logging.DEBUG
-    except ValueError:
-        raise ValueError(
-            &#34;fExpected a float value ranging 0 to 1, but received {sampling_rate} instead. Please review POWERTOOLS_LOGGER_SAMPLE_RATE environment variable.&#34;  # noqa E501
-        )
-
-    logger.setLevel(log_level)
-
-    # Patch logger by structuring its outputs as JSON
-    aws_lambda_logging.setup(level=log_level, service=service, sampling_rate=sampling_rate, **kwargs)
-
-    return logger
-
-
-def logger_inject_lambda_context(lambda_handler: Callable[[Dict, Any], Any] = None, log_event: bool = False):
-    &#34;&#34;&#34;Decorator to capture Lambda contextual info and inject into struct logging
+        json.dumps(value, default=json_formatter)
 
     Parameters
     ----------
-    log_event : bool, optional
-        Instructs logger to log Lambda Event, by default False
+    unserialized_value: Any
+        Python object unserializable by JSON
+    &#34;&#34;&#34;
+    return str(unserialized_value)
 
-    Environment variables
-    ---------------------
-    POWERTOOLS_LOGGER_LOG_EVENT : str
-        instruct logger to log Lambda Event (e.g. `&#34;true&#34;, &#34;True&#34;, &#34;TRUE&#34;`)
+
+class JsonFormatter(logging.Formatter):
+    &#34;&#34;&#34;AWS Lambda Logging formatter.
+
+    Formats the log message as a JSON encoded string.  If the message is a
+    dict it will be used directly.  If the message can be parsed as JSON, then
+    the parse d value is used in the output record.
+
+    Originally taken from https://gitlab.com/hadrien/aws_lambda_logging/
+
+    &#34;&#34;&#34;
+
+    def __init__(self, **kwargs):
+        &#34;&#34;&#34;Return a JsonFormatter instance.
+
+        The `json_default` kwarg is used to specify a formatter for otherwise
+        unserialisable values.  It must not throw.  Defaults to a function that
+        coerces the value to a string.
+
+        Other kwargs are used to specify log field format strings.
+        &#34;&#34;&#34;
+        datefmt = kwargs.pop(&#34;datefmt&#34;, None)
+
+        super(JsonFormatter, self).__init__(datefmt=datefmt)
+        self.format_dict = {
+            &#34;timestamp&#34;: &#34;%(asctime)s&#34;,
+            &#34;level&#34;: &#34;%(levelname)s&#34;,
+            &#34;location&#34;: &#34;%(funcName)s:%(lineno)d&#34;,
+        }
+        self.format_dict.update(kwargs)
+        self.default_json_formatter = kwargs.pop(&#34;json_default&#34;, json_formatter)
+
+    def format(self, record):  # noqa: A003
+        record_dict = record.__dict__.copy()
+        record_dict[&#34;asctime&#34;] = self.formatTime(record, self.datefmt)
+
+        log_dict = {}
+        for key, value in self.format_dict.items():
+            if value:
+                # converts default logging expr to its record value
+                # e.g. &#39;%(asctime)s&#39; to &#39;2020-04-24 09:35:40,698&#39;
+                log_dict[key] = value % record_dict
+
+        if isinstance(record_dict[&#34;msg&#34;], dict):
+            log_dict[&#34;message&#34;] = record_dict[&#34;msg&#34;]
+        else:
+            log_dict[&#34;message&#34;] = record.getMessage()
+
+            # Attempt to decode the message as JSON, if so, merge it with the
+            # overall message for clarity.
+            try:
+                log_dict[&#34;message&#34;] = json.loads(log_dict[&#34;message&#34;])
+            except (json.decoder.JSONDecodeError, TypeError, ValueError):
+                pass
+
+        if record.exc_info:
+            # Cache the traceback text to avoid converting it multiple times
+            # (it&#39;s constant anyway)
+            # from logging.Formatter:format
+            if not record.exc_text:
+                record.exc_text = self.formatException(record.exc_info)
+
+        if record.exc_text:
+            log_dict[&#34;exception&#34;] = record.exc_text
+
+        json_record = json.dumps(log_dict, default=self.default_json_formatter)
+
+        if hasattr(json_record, &#34;decode&#34;):  # pragma: no cover
+            json_record = json_record.decode(&#34;utf-8&#34;)
+
+        return json_record
+
+
+def logger_setup(
+    service: str = None, level: str = None, sampling_rate: float = 0.0, legacy: bool = False, **kwargs
+) -&gt; DeprecationWarning:
+    &#34;&#34;&#34;DEPRECATED
+
+    This will be removed when GA - Use `aws_lambda_powertools.logging.logger.Logger` instead
 
     Example
     -------
-    **Captures Lambda contextual runtime info (e.g memory, arn, req_id)**
+        **Logger class - Same UX**
 
-        from aws_lambda_powertools.logging import logger_setup, logger_inject_lambda_context
-        import logging
+        from aws_lambda_powertools.logging import Logger
+        logger = Logger(service=&#34;payment&#34;) # same env var still applies
 
-        logger = logging.getLogger(__name__)
-        logging.setLevel(logging.INFO)
-        logger_setup()
-
-        @logger_inject_lambda_context
-        def handler(event, context):
-                logger.info(&#34;Hello&#34;)
-
-    **Captures Lambda contextual runtime info and logs incoming request**
-
-        from aws_lambda_powertools.logging import logger_setup, logger_inject_lambda_context
-        import logging
-
-        logger = logging.getLogger(__name__)
-        logging.setLevel(logging.INFO)
-        logger_setup()
-
-        @logger_inject_lambda_context(log_event=True)
-        def handler(event, context):
-                logger.info(&#34;Hello&#34;)
-
-    Returns
-    -------
-    decorate : Callable
-        Decorated lambda handler
     &#34;&#34;&#34;
-
-    # If handler is None we&#39;ve been called with parameters
-    # Return a partial function with args filled
-    if lambda_handler is None:
-        logger.debug(&#34;Decorator called with parameters&#34;)
-        return functools.partial(logger_inject_lambda_context, log_event=log_event)
-
-    log_event_env_option = str(os.getenv(&#34;POWERTOOLS_LOGGER_LOG_EVENT&#34;, &#34;false&#34;))
-    log_event = strtobool(log_event_env_option) or log_event
-
-    @functools.wraps(lambda_handler)
-    def decorate(event, context):
-        if log_event:
-            logger.debug(&#34;Event received&#34;)
-            logger.info(event)
-
-        lambda_context = build_lambda_context_model(context)
-        cold_start = __is_cold_start()
-
-        logger_setup(cold_start=cold_start, **lambda_context.__dict__)
-
-        return lambda_handler(event, context)
-
-    return decorate
+    raise DeprecationWarning(&#34;Use Logger instead - This method will be removed when GA&#34;)
 
 
-def __is_cold_start() -&gt; str:
+def logger_inject_lambda_context(
+    lambda_handler: Callable[[Dict, Any], Any] = None, log_event: bool = False
+) -&gt; DeprecationWarning:
+    &#34;&#34;&#34;DEPRECATED
+
+    This will be removed when GA - Use `aws_lambda_powertools.logging.logger.Logger` instead
+
+    Example
+    -------
+        **Logger class - Same UX**
+
+        from aws_lambda_powertools.logging import Logger
+        logger = Logger(service=&#34;payment&#34;) # same env var still applies
+        @logger.inject_lambda_context
+        def handler(evt, ctx):
+            pass
+    &#34;&#34;&#34;
+    raise DeprecationWarning(&#34;Use Logger instead - This method will be removed when GA&#34;)
+
+
+def _is_cold_start() -&gt; str:
     &#34;&#34;&#34;Verifies whether is cold start and return a string used for struct logging
 
     Returns
@@ -303,7 +298,235 @@ def __build_dimensions(**dimensions) -&gt; str:
     dimensions_list = [dimension + &#34;=&#34; + value for dimension, value in dimensions_partition.items() if value]
     dimension = &#34;,&#34;.join(dimensions_list)
 
-    return dimension</code></pre>
+    return dimension
+
+
+class Logger(logging.Logger):
+    &#34;&#34;&#34;Creates and setups a logger to format statements in JSON.
+
+    Includes service name and any additional key=value into logs
+    It also accepts both service name or level explicitly via env vars
+
+    Environment variables
+    ---------------------
+    POWERTOOLS_SERVICE_NAME : str
+        service name
+    LOG_LEVEL: str, int
+        logging level (e.g. INFO, DEBUG)
+    POWERTOOLS_LOGGER_SAMPLE_RATE: float
+        samping rate ranging from 0 to 1, 1 being 100% sampling
+
+    Parameters
+    ----------
+    service : str, optional
+        service name to be appended in logs, by default &#34;service_undefined&#34;
+    level : str, optional
+        logging.level, by default &#34;INFO&#34;
+    sample_rate: float, optional
+        sample rate for debug calls within execution context defaults to 0.0
+    stream: sys.stdout, optional
+        valid output for a logging stream, by default sys.stdout
+
+    Example
+    -------
+    **Setups structured logging in JSON for Lambda functions with explicit service name**
+
+        &gt;&gt;&gt; from aws_lambda_powertools.logging import Logger
+        &gt;&gt;&gt; logger = Logger(service=&#34;payment&#34;)
+        &gt;&gt;&gt;
+        &gt;&gt;&gt; def handler(event, context):
+                logger.info(&#34;Hello&#34;)
+
+    **Setups structured logging in JSON for Lambda functions using env vars**
+
+        $ export POWERTOOLS_SERVICE_NAME=&#34;payment&#34;
+        $ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
+        &gt;&gt;&gt; from aws_lambda_powertools.logging import Logger
+        &gt;&gt;&gt; logger = Logger()
+        &gt;&gt;&gt;
+        &gt;&gt;&gt; def handler(event, context):
+                logger.info(&#34;Hello&#34;)
+
+    **Append payment_id to previously setup structured log logger**
+
+        &gt;&gt;&gt; from aws_lambda_powertools.logging import Logger
+        &gt;&gt;&gt; logger = Logger(service=&#34;payment&#34;)
+        &gt;&gt;&gt;
+        &gt;&gt;&gt; def handler(event, context):
+                logger.structure_logs(append=True, payment_id=event[&#34;payment_id&#34;])
+                logger.info(&#34;Hello&#34;)
+
+    Parameters
+    ----------
+    logging : logging.Logger
+        Inherits Logger
+    service: str
+        name of the service to create the logger for, &#34;service_undefined&#34; by default
+    level: str, int
+        log level, INFO by default
+    sampling_rate: float
+        debug log sampling rate, 0.0 by default
+    stream: sys.stdout
+        log stream, stdout by default
+
+    Raises
+    ------
+    InvalidLoggerSamplingRateError
+        When sampling rate provided is not a float
+    &#34;&#34;&#34;
+
+    def __init__(
+        self,
+        service: str = None,
+        level: Union[str, int] = None,
+        sampling_rate: float = None,
+        stream: sys.stdout = None,
+        **kwargs,
+    ):
+        self.service = service or os.getenv(&#34;POWERTOOLS_SERVICE_NAME&#34;) or &#34;service_undefined&#34;
+        self.sampling_rate = sampling_rate or os.getenv(&#34;POWERTOOLS_LOGGER_SAMPLE_RATE&#34;) or 0.0
+        self.log_level = level or os.getenv(&#34;LOG_LEVEL&#34;) or logging.INFO
+        self.handler = logging.StreamHandler(stream) if stream is not None else logging.StreamHandler(sys.stdout)
+        self._default_log_keys = {&#34;service&#34;: self.service, &#34;sampling_rate&#34;: self.sampling_rate}
+        self.log_keys = copy.copy(self._default_log_keys)
+
+        super().__init__(name=self.service, level=self.log_level)
+
+        try:
+            if self.sampling_rate and random.random() &lt;= float(self.sampling_rate):
+                logger.debug(&#34;Setting log level to Debug due to sampling rate&#34;)
+                self.log_level = logging.DEBUG
+        except ValueError:
+            raise InvalidLoggerSamplingRateError(
+                f&#34;Expected a float value ranging 0 to 1, but received {self.sampling_rate} instead. Please review POWERTOOLS_LOGGER_SAMPLE_RATE environment variable.&#34;  # noqa E501
+            )
+
+        self.setLevel(self.log_level)
+        self.structure_logs(**kwargs)
+        self.addHandler(self.handler)
+
+    def inject_lambda_context(self, lambda_handler: Callable[[Dict, Any], Any] = None, log_event: bool = False):
+        &#34;&#34;&#34;Decorator to capture Lambda contextual info and inject into struct logging
+
+        Parameters
+        ----------
+        log_event : bool, optional
+            Instructs logger to log Lambda Event, by default False
+
+        Environment variables
+        ---------------------
+        POWERTOOLS_LOGGER_LOG_EVENT : str
+            instruct logger to log Lambda Event (e.g. `&#34;true&#34;, &#34;True&#34;, &#34;TRUE&#34;`)
+
+        Example
+        -------
+        **Captures Lambda contextual runtime info (e.g memory, arn, req_id)**
+
+            from aws_lambda_powertools.logging import Logger
+
+            logger = Logger(service=&#34;payment&#34;)
+
+            @logger.inject_lambda_context
+            def handler(event, context):
+                logger.info(&#34;Hello&#34;)
+
+        **Captures Lambda contextual runtime info and logs incoming request**
+
+            from aws_lambda_powertools.logging import Logger
+
+            logger = Logger(service=&#34;payment&#34;)
+
+            @logger.inject_lambda_context(log_event=True)
+            def handler(event, context):
+                logger.info(&#34;Hello&#34;)
+
+        Returns
+        -------
+        decorate : Callable
+            Decorated lambda handler
+        &#34;&#34;&#34;
+
+        # If handler is None we&#39;ve been called with parameters
+        # Return a partial function with args filled
+        if lambda_handler is None:
+            logger.debug(&#34;Decorator called with parameters&#34;)
+            return functools.partial(self.inject_lambda_context, log_event=log_event)
+
+        log_event_env_option = str(os.getenv(&#34;POWERTOOLS_LOGGER_LOG_EVENT&#34;, &#34;false&#34;))
+        log_event = strtobool(log_event_env_option) or log_event
+
+        @functools.wraps(lambda_handler)
+        def decorate(event, context):
+            if log_event:
+                logger.debug(&#34;Event received&#34;)
+                self.info(event)
+
+            lambda_context = build_lambda_context_model(context)
+            cold_start = _is_cold_start()
+
+            self.structure_logs(cold_start=cold_start, **lambda_context.__dict__)
+            return lambda_handler(event, context)
+
+        return decorate
+
+    def structure_logs(self, append: bool = False, **kwargs):
+        &#34;&#34;&#34;Sets logging formatting to JSON.
+
+        Optionally, it can append keyword arguments
+        to an existing logger so it is available
+        across future log statements.
+
+        Last keyword argument and value wins if duplicated.
+
+        Parameters
+        ----------
+        append : bool, optional
+            [description], by default False
+        &#34;&#34;&#34;
+        self.handler.setFormatter(JsonFormatter(**self._default_log_keys, **kwargs))
+
+        if append:
+            new_keys = {**self.log_keys, **kwargs}
+            self.handler.setFormatter(JsonFormatter(**new_keys))
+
+        self.log_keys.update(**kwargs)
+
+
+def set_package_logger(
+    level: Union[str, int] = logging.DEBUG, stream: sys.stdout = None, formatter: logging.Formatter = None
+):
+    &#34;&#34;&#34;Set an additional stream handler, formatter, and log level for aws_lambda_powertools package logger.
+
+    **Package log by default is supressed (NullHandler), this should only used for debugging.
+    This is separate from application Logger class utility**
+
+    Example
+    -------
+    **Enables debug logging for AWS Lambda Powertools package**
+
+        &gt;&gt;&gt; from aws_lambda_powertools.logging.logger import set_package_logger
+        &gt;&gt;&gt; set_package_logger()
+
+    Parameters
+    ----------
+    level: str, int
+        log level, DEBUG by default
+    stream: sys.stdout
+        log stream, stdout by default
+    formatter: logging.Formatter
+        log formatter, &#34;%(asctime)s %(name)s [%(levelname)s] %(message)s&#34; by default
+    &#34;&#34;&#34;
+    if formatter is None:
+        formatter = logging.Formatter(&#34;%(asctime)s %(name)s [%(levelname)s] %(message)s&#34;)
+
+    if stream is None:
+        stream = sys.stdout
+
+    logger = logging.getLogger(&#34;aws_lambda_powertools&#34;)
+    logger.setLevel(level)
+    handler = logging.StreamHandler(stream)
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)</code></pre>
 </details>
 </section>
 <section>
@@ -313,6 +536,48 @@ def __build_dimensions(**dimensions) -&gt; str:
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="aws_lambda_powertools.logging.logger.json_formatter"><code class="name flex">
+<span>def <span class="ident">json_formatter</span></span>(<span>unserialized_value)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>JSON custom serializer to cast unserialisable values to strings.</p>
+<h2 id="example">Example</h2>
+<p><strong>Serialize unserialisable value to string</strong></p>
+<pre><code>class X: pass
+value = {"x": X()}
+
+json.dumps(value, default=json_formatter)
+</code></pre>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>unserialized_value</code></strong> :&ensp;<code>Any</code></dt>
+<dd>Python object unserializable by JSON</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def json_formatter(unserialized_value: Any):
+    &#34;&#34;&#34;JSON custom serializer to cast unserialisable values to strings.
+
+    Example
+    -------
+
+    **Serialize unserialisable value to string**
+
+        class X: pass
+        value = {&#34;x&#34;: X()}
+
+        json.dumps(value, default=json_formatter)
+
+    Parameters
+    ----------
+    unserialized_value: Any
+        Python object unserializable by JSON
+    &#34;&#34;&#34;
+    return str(unserialized_value)</code></pre>
+</details>
+</dd>
 <dt id="aws_lambda_powertools.logging.logger.log_metric"><code class="name flex">
 <span>def <span class="ident">log_metric</span></span>(<span>name, namespace, unit, value=0, service='service_undefined', **dimensions)</span>
 </code></dt>
@@ -461,6 +726,579 @@ log_metric(
 <span>def <span class="ident">logger_inject_lambda_context</span></span>(<span>lambda_handler=None, log_event=False)</span>
 </code></dt>
 <dd>
+<section class="desc"><p>DEPRECATED</p>
+<p>This will be removed when GA - Use <a title="aws_lambda_powertools.logging.logger.Logger" href="#aws_lambda_powertools.logging.logger.Logger"><code>Logger</code></a> instead</p>
+<h2 id="example">Example</h2>
+<pre><code>**Logger class - Same UX**
+
+from aws_lambda_powertools.logging import Logger
+logger = Logger(service="payment") # same env var still applies
+@logger.inject_lambda_context
+def handler(evt, ctx):
+    pass
+</code></pre></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def logger_inject_lambda_context(
+    lambda_handler: Callable[[Dict, Any], Any] = None, log_event: bool = False
+) -&gt; DeprecationWarning:
+    &#34;&#34;&#34;DEPRECATED
+
+    This will be removed when GA - Use `aws_lambda_powertools.logging.logger.Logger` instead
+
+    Example
+    -------
+        **Logger class - Same UX**
+
+        from aws_lambda_powertools.logging import Logger
+        logger = Logger(service=&#34;payment&#34;) # same env var still applies
+        @logger.inject_lambda_context
+        def handler(evt, ctx):
+            pass
+    &#34;&#34;&#34;
+    raise DeprecationWarning(&#34;Use Logger instead - This method will be removed when GA&#34;)</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.logging.logger.logger_setup"><code class="name flex">
+<span>def <span class="ident">logger_setup</span></span>(<span>service=None, level=None, sampling_rate=0.0, legacy=False, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>DEPRECATED</p>
+<p>This will be removed when GA - Use <a title="aws_lambda_powertools.logging.logger.Logger" href="#aws_lambda_powertools.logging.logger.Logger"><code>Logger</code></a> instead</p>
+<h2 id="example">Example</h2>
+<pre><code>**Logger class - Same UX**
+
+from aws_lambda_powertools.logging import Logger
+logger = Logger(service="payment") # same env var still applies
+</code></pre></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def logger_setup(
+    service: str = None, level: str = None, sampling_rate: float = 0.0, legacy: bool = False, **kwargs
+) -&gt; DeprecationWarning:
+    &#34;&#34;&#34;DEPRECATED
+
+    This will be removed when GA - Use `aws_lambda_powertools.logging.logger.Logger` instead
+
+    Example
+    -------
+        **Logger class - Same UX**
+
+        from aws_lambda_powertools.logging import Logger
+        logger = Logger(service=&#34;payment&#34;) # same env var still applies
+
+    &#34;&#34;&#34;
+    raise DeprecationWarning(&#34;Use Logger instead - This method will be removed when GA&#34;)</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.logging.logger.set_package_logger"><code class="name flex">
+<span>def <span class="ident">set_package_logger</span></span>(<span>level=10, stream=None, formatter=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Set an additional stream handler, formatter, and log level for aws_lambda_powertools package logger.</p>
+<p><strong>Package log by default is supressed (NullHandler), this should only used for debugging.
+This is separate from application Logger class utility</strong></p>
+<h2 id="example">Example</h2>
+<p><strong>Enables debug logging for AWS Lambda Powertools package</strong></p>
+<pre><code>&gt;&gt;&gt; from aws_lambda_powertools.logging.logger import set_package_logger
+&gt;&gt;&gt; set_package_logger()
+</code></pre>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>level</code></strong> :&ensp;<code>str</code>, <code>int</code></dt>
+<dd>log level, DEBUG by default</dd>
+<dt><strong><code>stream</code></strong> :&ensp;<code>sys.stdout</code></dt>
+<dd>log stream, stdout by default</dd>
+<dt><strong><code>formatter</code></strong> :&ensp;<code>logging.Formatter</code></dt>
+<dd>log formatter, "%(asctime)s %(name)s [%(levelname)s] %(message)s" by default</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_package_logger(
+    level: Union[str, int] = logging.DEBUG, stream: sys.stdout = None, formatter: logging.Formatter = None
+):
+    &#34;&#34;&#34;Set an additional stream handler, formatter, and log level for aws_lambda_powertools package logger.
+
+    **Package log by default is supressed (NullHandler), this should only used for debugging.
+    This is separate from application Logger class utility**
+
+    Example
+    -------
+    **Enables debug logging for AWS Lambda Powertools package**
+
+        &gt;&gt;&gt; from aws_lambda_powertools.logging.logger import set_package_logger
+        &gt;&gt;&gt; set_package_logger()
+
+    Parameters
+    ----------
+    level: str, int
+        log level, DEBUG by default
+    stream: sys.stdout
+        log stream, stdout by default
+    formatter: logging.Formatter
+        log formatter, &#34;%(asctime)s %(name)s [%(levelname)s] %(message)s&#34; by default
+    &#34;&#34;&#34;
+    if formatter is None:
+        formatter = logging.Formatter(&#34;%(asctime)s %(name)s [%(levelname)s] %(message)s&#34;)
+
+    if stream is None:
+        stream = sys.stdout
+
+    logger = logging.getLogger(&#34;aws_lambda_powertools&#34;)
+    logger.setLevel(level)
+    handler = logging.StreamHandler(stream)
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="aws_lambda_powertools.logging.logger.JsonFormatter"><code class="flex name class">
+<span>class <span class="ident">JsonFormatter</span></span>
+<span>(</span><span>**kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>AWS Lambda Logging formatter.</p>
+<p>Formats the log message as a JSON encoded string.
+If the message is a
+dict it will be used directly.
+If the message can be parsed as JSON, then
+the parse d value is used in the output record.</p>
+<p>Originally taken from <a href="https://gitlab.com/hadrien/aws_lambda_logging/">https://gitlab.com/hadrien/aws_lambda_logging/</a></p>
+<p>Return a JsonFormatter instance.</p>
+<p>The <code>json_default</code> kwarg is used to specify a formatter for otherwise
+unserialisable values.
+It must not throw.
+Defaults to a function that
+coerces the value to a string.</p>
+<p>Other kwargs are used to specify log field format strings.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class JsonFormatter(logging.Formatter):
+    &#34;&#34;&#34;AWS Lambda Logging formatter.
+
+    Formats the log message as a JSON encoded string.  If the message is a
+    dict it will be used directly.  If the message can be parsed as JSON, then
+    the parse d value is used in the output record.
+
+    Originally taken from https://gitlab.com/hadrien/aws_lambda_logging/
+
+    &#34;&#34;&#34;
+
+    def __init__(self, **kwargs):
+        &#34;&#34;&#34;Return a JsonFormatter instance.
+
+        The `json_default` kwarg is used to specify a formatter for otherwise
+        unserialisable values.  It must not throw.  Defaults to a function that
+        coerces the value to a string.
+
+        Other kwargs are used to specify log field format strings.
+        &#34;&#34;&#34;
+        datefmt = kwargs.pop(&#34;datefmt&#34;, None)
+
+        super(JsonFormatter, self).__init__(datefmt=datefmt)
+        self.format_dict = {
+            &#34;timestamp&#34;: &#34;%(asctime)s&#34;,
+            &#34;level&#34;: &#34;%(levelname)s&#34;,
+            &#34;location&#34;: &#34;%(funcName)s:%(lineno)d&#34;,
+        }
+        self.format_dict.update(kwargs)
+        self.default_json_formatter = kwargs.pop(&#34;json_default&#34;, json_formatter)
+
+    def format(self, record):  # noqa: A003
+        record_dict = record.__dict__.copy()
+        record_dict[&#34;asctime&#34;] = self.formatTime(record, self.datefmt)
+
+        log_dict = {}
+        for key, value in self.format_dict.items():
+            if value:
+                # converts default logging expr to its record value
+                # e.g. &#39;%(asctime)s&#39; to &#39;2020-04-24 09:35:40,698&#39;
+                log_dict[key] = value % record_dict
+
+        if isinstance(record_dict[&#34;msg&#34;], dict):
+            log_dict[&#34;message&#34;] = record_dict[&#34;msg&#34;]
+        else:
+            log_dict[&#34;message&#34;] = record.getMessage()
+
+            # Attempt to decode the message as JSON, if so, merge it with the
+            # overall message for clarity.
+            try:
+                log_dict[&#34;message&#34;] = json.loads(log_dict[&#34;message&#34;])
+            except (json.decoder.JSONDecodeError, TypeError, ValueError):
+                pass
+
+        if record.exc_info:
+            # Cache the traceback text to avoid converting it multiple times
+            # (it&#39;s constant anyway)
+            # from logging.Formatter:format
+            if not record.exc_text:
+                record.exc_text = self.formatException(record.exc_info)
+
+        if record.exc_text:
+            log_dict[&#34;exception&#34;] = record.exc_text
+
+        json_record = json.dumps(log_dict, default=self.default_json_formatter)
+
+        if hasattr(json_record, &#34;decode&#34;):  # pragma: no cover
+            json_record = json_record.decode(&#34;utf-8&#34;)
+
+        return json_record</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>logging.Formatter</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="aws_lambda_powertools.logging.logger.JsonFormatter.format"><code class="name flex">
+<span>def <span class="ident">format</span></span>(<span>self, record)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Format the specified record as text.</p>
+<p>The record's attribute dictionary is used as the operand to a
+string formatting operation which yields the returned string.
+Before formatting the dictionary, a couple of preparatory steps
+are carried out. The message attribute of the record is computed
+using LogRecord.getMessage(). If the formatting string uses the
+time (as determined by a call to usesTime(), formatTime() is
+called to format the event time. If there is exception information,
+it is formatted using formatException() and appended to the message.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def format(self, record):  # noqa: A003
+    record_dict = record.__dict__.copy()
+    record_dict[&#34;asctime&#34;] = self.formatTime(record, self.datefmt)
+
+    log_dict = {}
+    for key, value in self.format_dict.items():
+        if value:
+            # converts default logging expr to its record value
+            # e.g. &#39;%(asctime)s&#39; to &#39;2020-04-24 09:35:40,698&#39;
+            log_dict[key] = value % record_dict
+
+    if isinstance(record_dict[&#34;msg&#34;], dict):
+        log_dict[&#34;message&#34;] = record_dict[&#34;msg&#34;]
+    else:
+        log_dict[&#34;message&#34;] = record.getMessage()
+
+        # Attempt to decode the message as JSON, if so, merge it with the
+        # overall message for clarity.
+        try:
+            log_dict[&#34;message&#34;] = json.loads(log_dict[&#34;message&#34;])
+        except (json.decoder.JSONDecodeError, TypeError, ValueError):
+            pass
+
+    if record.exc_info:
+        # Cache the traceback text to avoid converting it multiple times
+        # (it&#39;s constant anyway)
+        # from logging.Formatter:format
+        if not record.exc_text:
+            record.exc_text = self.formatException(record.exc_info)
+
+    if record.exc_text:
+        log_dict[&#34;exception&#34;] = record.exc_text
+
+    json_record = json.dumps(log_dict, default=self.default_json_formatter)
+
+    if hasattr(json_record, &#34;decode&#34;):  # pragma: no cover
+        json_record = json_record.decode(&#34;utf-8&#34;)
+
+    return json_record</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="aws_lambda_powertools.logging.logger.Logger"><code class="flex name class">
+<span>class <span class="ident">Logger</span></span>
+<span>(</span><span>service=None, level=None, sampling_rate=None, stream=None, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Creates and setups a logger to format statements in JSON.</p>
+<p>Includes service name and any additional key=value into logs
+It also accepts both service name or level explicitly via env vars</p>
+<h2 id="environment-variables">Environment variables</h2>
+<dl>
+<dt><strong><code>POWERTOOLS_SERVICE_NAME</code></strong> :&ensp;<code>str</code></dt>
+<dd>service name</dd>
+<dt><strong><code>LOG_LEVEL</code></strong> :&ensp;<code>str</code>, <code>int</code></dt>
+<dd>logging level (e.g. INFO, DEBUG)</dd>
+<dt><strong><code>POWERTOOLS_LOGGER_SAMPLE_RATE</code></strong> :&ensp;<code>float</code></dt>
+<dd>samping rate ranging from 0 to 1, 1 being 100% sampling</dd>
+</dl>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>service</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>service name to be appended in logs, by default "service_undefined"</dd>
+<dt><strong><code>level</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>logging.level, by default "INFO"</dd>
+<dt><strong><code>sample_rate</code></strong> :&ensp;<code>float</code>, optional</dt>
+<dd>sample rate for debug calls within execution context defaults to 0.0</dd>
+<dt><strong><code>stream</code></strong> :&ensp;<code>sys.stdout</code>, optional</dt>
+<dd>valid output for a logging stream, by default sys.stdout</dd>
+</dl>
+<h2 id="example">Example</h2>
+<p><strong>Setups structured logging in JSON for Lambda functions with explicit service name</strong></p>
+<pre><code>&gt;&gt;&gt; from aws_lambda_powertools.logging import Logger
+&gt;&gt;&gt; logger = Logger(service="payment")
+&gt;&gt;&gt;
+&gt;&gt;&gt; def handler(event, context):
+        logger.info("Hello")
+</code></pre>
+<p><strong>Setups structured logging in JSON for Lambda functions using env vars</strong></p>
+<pre><code>$ export POWERTOOLS_SERVICE_NAME="payment"
+$ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
+&gt;&gt;&gt; from aws_lambda_powertools.logging import Logger
+&gt;&gt;&gt; logger = Logger()
+&gt;&gt;&gt;
+&gt;&gt;&gt; def handler(event, context):
+        logger.info("Hello")
+</code></pre>
+<p><strong>Append payment_id to previously setup structured log logger</strong></p>
+<pre><code>&gt;&gt;&gt; from aws_lambda_powertools.logging import Logger
+&gt;&gt;&gt; logger = Logger(service="payment")
+&gt;&gt;&gt;
+&gt;&gt;&gt; def handler(event, context):
+        logger.structure_logs(append=True, payment_id=event["payment_id"])
+        logger.info("Hello")
+</code></pre>
+<h2 id="parameters_1">Parameters</h2>
+<dl>
+<dt><strong><code>logging</code></strong> :&ensp;<code>logging.Logger</code></dt>
+<dd>Inherits Logger</dd>
+<dt><strong><code>service</code></strong> :&ensp;<code>str</code></dt>
+<dd>name of the service to create the logger for, "service_undefined" by default</dd>
+<dt><strong><code>level</code></strong> :&ensp;<code>str</code>, <code>int</code></dt>
+<dd>log level, INFO by default</dd>
+<dt><strong><code>sampling_rate</code></strong> :&ensp;<code>float</code></dt>
+<dd>debug log sampling rate, 0.0 by default</dd>
+<dt><strong><code>stream</code></strong> :&ensp;<code>sys.stdout</code></dt>
+<dd>log stream, stdout by default</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><code>InvalidLoggerSamplingRateError</code></dt>
+<dd>When sampling rate provided is not a float</dd>
+</dl>
+<p>Initialize the logger with a name and an optional level.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Logger(logging.Logger):
+    &#34;&#34;&#34;Creates and setups a logger to format statements in JSON.
+
+    Includes service name and any additional key=value into logs
+    It also accepts both service name or level explicitly via env vars
+
+    Environment variables
+    ---------------------
+    POWERTOOLS_SERVICE_NAME : str
+        service name
+    LOG_LEVEL: str, int
+        logging level (e.g. INFO, DEBUG)
+    POWERTOOLS_LOGGER_SAMPLE_RATE: float
+        samping rate ranging from 0 to 1, 1 being 100% sampling
+
+    Parameters
+    ----------
+    service : str, optional
+        service name to be appended in logs, by default &#34;service_undefined&#34;
+    level : str, optional
+        logging.level, by default &#34;INFO&#34;
+    sample_rate: float, optional
+        sample rate for debug calls within execution context defaults to 0.0
+    stream: sys.stdout, optional
+        valid output for a logging stream, by default sys.stdout
+
+    Example
+    -------
+    **Setups structured logging in JSON for Lambda functions with explicit service name**
+
+        &gt;&gt;&gt; from aws_lambda_powertools.logging import Logger
+        &gt;&gt;&gt; logger = Logger(service=&#34;payment&#34;)
+        &gt;&gt;&gt;
+        &gt;&gt;&gt; def handler(event, context):
+                logger.info(&#34;Hello&#34;)
+
+    **Setups structured logging in JSON for Lambda functions using env vars**
+
+        $ export POWERTOOLS_SERVICE_NAME=&#34;payment&#34;
+        $ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
+        &gt;&gt;&gt; from aws_lambda_powertools.logging import Logger
+        &gt;&gt;&gt; logger = Logger()
+        &gt;&gt;&gt;
+        &gt;&gt;&gt; def handler(event, context):
+                logger.info(&#34;Hello&#34;)
+
+    **Append payment_id to previously setup structured log logger**
+
+        &gt;&gt;&gt; from aws_lambda_powertools.logging import Logger
+        &gt;&gt;&gt; logger = Logger(service=&#34;payment&#34;)
+        &gt;&gt;&gt;
+        &gt;&gt;&gt; def handler(event, context):
+                logger.structure_logs(append=True, payment_id=event[&#34;payment_id&#34;])
+                logger.info(&#34;Hello&#34;)
+
+    Parameters
+    ----------
+    logging : logging.Logger
+        Inherits Logger
+    service: str
+        name of the service to create the logger for, &#34;service_undefined&#34; by default
+    level: str, int
+        log level, INFO by default
+    sampling_rate: float
+        debug log sampling rate, 0.0 by default
+    stream: sys.stdout
+        log stream, stdout by default
+
+    Raises
+    ------
+    InvalidLoggerSamplingRateError
+        When sampling rate provided is not a float
+    &#34;&#34;&#34;
+
+    def __init__(
+        self,
+        service: str = None,
+        level: Union[str, int] = None,
+        sampling_rate: float = None,
+        stream: sys.stdout = None,
+        **kwargs,
+    ):
+        self.service = service or os.getenv(&#34;POWERTOOLS_SERVICE_NAME&#34;) or &#34;service_undefined&#34;
+        self.sampling_rate = sampling_rate or os.getenv(&#34;POWERTOOLS_LOGGER_SAMPLE_RATE&#34;) or 0.0
+        self.log_level = level or os.getenv(&#34;LOG_LEVEL&#34;) or logging.INFO
+        self.handler = logging.StreamHandler(stream) if stream is not None else logging.StreamHandler(sys.stdout)
+        self._default_log_keys = {&#34;service&#34;: self.service, &#34;sampling_rate&#34;: self.sampling_rate}
+        self.log_keys = copy.copy(self._default_log_keys)
+
+        super().__init__(name=self.service, level=self.log_level)
+
+        try:
+            if self.sampling_rate and random.random() &lt;= float(self.sampling_rate):
+                logger.debug(&#34;Setting log level to Debug due to sampling rate&#34;)
+                self.log_level = logging.DEBUG
+        except ValueError:
+            raise InvalidLoggerSamplingRateError(
+                f&#34;Expected a float value ranging 0 to 1, but received {self.sampling_rate} instead. Please review POWERTOOLS_LOGGER_SAMPLE_RATE environment variable.&#34;  # noqa E501
+            )
+
+        self.setLevel(self.log_level)
+        self.structure_logs(**kwargs)
+        self.addHandler(self.handler)
+
+    def inject_lambda_context(self, lambda_handler: Callable[[Dict, Any], Any] = None, log_event: bool = False):
+        &#34;&#34;&#34;Decorator to capture Lambda contextual info and inject into struct logging
+
+        Parameters
+        ----------
+        log_event : bool, optional
+            Instructs logger to log Lambda Event, by default False
+
+        Environment variables
+        ---------------------
+        POWERTOOLS_LOGGER_LOG_EVENT : str
+            instruct logger to log Lambda Event (e.g. `&#34;true&#34;, &#34;True&#34;, &#34;TRUE&#34;`)
+
+        Example
+        -------
+        **Captures Lambda contextual runtime info (e.g memory, arn, req_id)**
+
+            from aws_lambda_powertools.logging import Logger
+
+            logger = Logger(service=&#34;payment&#34;)
+
+            @logger.inject_lambda_context
+            def handler(event, context):
+                logger.info(&#34;Hello&#34;)
+
+        **Captures Lambda contextual runtime info and logs incoming request**
+
+            from aws_lambda_powertools.logging import Logger
+
+            logger = Logger(service=&#34;payment&#34;)
+
+            @logger.inject_lambda_context(log_event=True)
+            def handler(event, context):
+                logger.info(&#34;Hello&#34;)
+
+        Returns
+        -------
+        decorate : Callable
+            Decorated lambda handler
+        &#34;&#34;&#34;
+
+        # If handler is None we&#39;ve been called with parameters
+        # Return a partial function with args filled
+        if lambda_handler is None:
+            logger.debug(&#34;Decorator called with parameters&#34;)
+            return functools.partial(self.inject_lambda_context, log_event=log_event)
+
+        log_event_env_option = str(os.getenv(&#34;POWERTOOLS_LOGGER_LOG_EVENT&#34;, &#34;false&#34;))
+        log_event = strtobool(log_event_env_option) or log_event
+
+        @functools.wraps(lambda_handler)
+        def decorate(event, context):
+            if log_event:
+                logger.debug(&#34;Event received&#34;)
+                self.info(event)
+
+            lambda_context = build_lambda_context_model(context)
+            cold_start = _is_cold_start()
+
+            self.structure_logs(cold_start=cold_start, **lambda_context.__dict__)
+            return lambda_handler(event, context)
+
+        return decorate
+
+    def structure_logs(self, append: bool = False, **kwargs):
+        &#34;&#34;&#34;Sets logging formatting to JSON.
+
+        Optionally, it can append keyword arguments
+        to an existing logger so it is available
+        across future log statements.
+
+        Last keyword argument and value wins if duplicated.
+
+        Parameters
+        ----------
+        append : bool, optional
+            [description], by default False
+        &#34;&#34;&#34;
+        self.handler.setFormatter(JsonFormatter(**self._default_log_keys, **kwargs))
+
+        if append:
+            new_keys = {**self.log_keys, **kwargs}
+            self.handler.setFormatter(JsonFormatter(**new_keys))
+
+        self.log_keys.update(**kwargs)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>logging.Logger</li>
+<li>logging.Filterer</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="aws_lambda_powertools.logging.logger.Logger.inject_lambda_context"><code class="name flex">
+<span>def <span class="ident">inject_lambda_context</span></span>(<span>self, lambda_handler=None, log_event=False)</span>
+</code></dt>
+<dd>
 <section class="desc"><p>Decorator to capture Lambda contextual info and inject into struct logging</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
@@ -474,28 +1312,22 @@ log_metric(
 </dl>
 <h2 id="example">Example</h2>
 <p><strong>Captures Lambda contextual runtime info (e.g memory, arn, req_id)</strong></p>
-<pre><code>from aws_lambda_powertools.logging import logger_setup, logger_inject_lambda_context
-import logging
+<pre><code>from aws_lambda_powertools.logging import Logger
 
-logger = logging.getLogger(__name__)
-logging.setLevel(logging.INFO)
-logger_setup()
+logger = Logger(service="payment")
 
-@logger_inject_lambda_context
+@logger.inject_lambda_context
 def handler(event, context):
-        logger.info("Hello")
+    logger.info("Hello")
 </code></pre>
 <p><strong>Captures Lambda contextual runtime info and logs incoming request</strong></p>
-<pre><code>from aws_lambda_powertools.logging import logger_setup, logger_inject_lambda_context
-import logging
+<pre><code>from aws_lambda_powertools.logging import Logger
 
-logger = logging.getLogger(__name__)
-logging.setLevel(logging.INFO)
-logger_setup()
+logger = Logger(service="payment")
 
-@logger_inject_lambda_context(log_event=True)
+@logger.inject_lambda_context(log_event=True)
 def handler(event, context):
-        logger.info("Hello")
+    logger.info("Hello")
 </code></pre>
 <h2 id="returns">Returns</h2>
 <dl>
@@ -506,7 +1338,7 @@ def handler(event, context):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def logger_inject_lambda_context(lambda_handler: Callable[[Dict, Any], Any] = None, log_event: bool = False):
+<pre><code class="python">def inject_lambda_context(self, lambda_handler: Callable[[Dict, Any], Any] = None, log_event: bool = False):
     &#34;&#34;&#34;Decorator to capture Lambda contextual info and inject into struct logging
 
     Parameters
@@ -523,29 +1355,23 @@ def handler(event, context):
     -------
     **Captures Lambda contextual runtime info (e.g memory, arn, req_id)**
 
-        from aws_lambda_powertools.logging import logger_setup, logger_inject_lambda_context
-        import logging
+        from aws_lambda_powertools.logging import Logger
 
-        logger = logging.getLogger(__name__)
-        logging.setLevel(logging.INFO)
-        logger_setup()
+        logger = Logger(service=&#34;payment&#34;)
 
-        @logger_inject_lambda_context
+        @logger.inject_lambda_context
         def handler(event, context):
-                logger.info(&#34;Hello&#34;)
+            logger.info(&#34;Hello&#34;)
 
     **Captures Lambda contextual runtime info and logs incoming request**
 
-        from aws_lambda_powertools.logging import logger_setup, logger_inject_lambda_context
-        import logging
+        from aws_lambda_powertools.logging import Logger
 
-        logger = logging.getLogger(__name__)
-        logging.setLevel(logging.INFO)
-        logger_setup()
+        logger = Logger(service=&#34;payment&#34;)
 
-        @logger_inject_lambda_context(log_event=True)
+        @logger.inject_lambda_context(log_event=True)
         def handler(event, context):
-                logger.info(&#34;Hello&#34;)
+            logger.info(&#34;Hello&#34;)
 
     Returns
     -------
@@ -557,7 +1383,7 @@ def handler(event, context):
     # Return a partial function with args filled
     if lambda_handler is None:
         logger.debug(&#34;Decorator called with parameters&#34;)
-        return functools.partial(logger_inject_lambda_context, log_event=log_event)
+        return functools.partial(self.inject_lambda_context, log_event=log_event)
 
     log_event_env_option = str(os.getenv(&#34;POWERTOOLS_LOGGER_LOG_EVENT&#34;, &#34;false&#34;))
     log_event = strtobool(log_event_env_option) or log_event
@@ -566,133 +1392,61 @@ def handler(event, context):
     def decorate(event, context):
         if log_event:
             logger.debug(&#34;Event received&#34;)
-            logger.info(event)
+            self.info(event)
 
         lambda_context = build_lambda_context_model(context)
-        cold_start = __is_cold_start()
+        cold_start = _is_cold_start()
 
-        logger_setup(cold_start=cold_start, **lambda_context.__dict__)
-
+        self.structure_logs(cold_start=cold_start, **lambda_context.__dict__)
         return lambda_handler(event, context)
 
     return decorate</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.logging.logger.logger_setup"><code class="name flex">
-<span>def <span class="ident">logger_setup</span></span>(<span>service='service_undefined', level='INFO', sampling_rate=0.0, **kwargs)</span>
+<dt id="aws_lambda_powertools.logging.logger.Logger.structure_logs"><code class="name flex">
+<span>def <span class="ident">structure_logs</span></span>(<span>self, append=False, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Setups root logger to format statements in JSON.</p>
-<p>Includes service name and any additional key=value into logs
-It also accepts both service name or level explicitly via env vars</p>
-<h2 id="environment-variables">Environment variables</h2>
-<dl>
-<dt><strong><code>POWERTOOLS_SERVICE_NAME</code></strong> :&ensp;<code>str</code></dt>
-<dd>service name</dd>
-<dt><strong><code>LOG_LEVEL</code></strong> :&ensp;<code>str</code></dt>
-<dd>logging level (e.g. INFO, DEBUG)</dd>
-<dt><strong><code>POWERTOOLS_LOGGER_SAMPLE_RATE</code></strong> :&ensp;<code>float</code></dt>
-<dd>samping rate ranging from 0 to 1, 1 being 100% sampling</dd>
-</dl>
+<section class="desc"><p>Sets logging formatting to JSON.</p>
+<p>Optionally, it can append keyword arguments
+to an existing logger so it is available
+across future log statements.</p>
+<p>Last keyword argument and value wins if duplicated.</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><code>service</code></strong> :&ensp;<code>str</code>, optional</dt>
-<dd>service name to be appended in logs, by default "service_undefined"</dd>
-<dt><strong><code>level</code></strong> :&ensp;<code>str</code>, optional</dt>
-<dd>logging.level, by default "INFO"</dd>
-<dt><strong><code>sample_rate</code></strong> :&ensp;<code>float</code>, optional</dt>
-<dd>sample rate for debug calls within execution context defaults to 0</dd>
-</dl>
-<h2 id="example">Example</h2>
-<p>Setups structured logging in JSON for Lambda functions with explicit service name</p>
-<pre><code>&gt;&gt;&gt; from aws_lambda_powertools.logging import logger_setup
-&gt;&gt;&gt; logger = logger_setup(service="payment")
-&gt;&gt;&gt;
-&gt;&gt;&gt; def handler(event, context):
-        logger.info("Hello")
-</code></pre>
-<p>Setups structured logging in JSON for Lambda functions using env vars</p>
-<pre><code>$ export POWERTOOLS_SERVICE_NAME="payment"
-$ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
-&gt;&gt;&gt; from aws_lambda_powertools.logging import logger_setup
-&gt;&gt;&gt; logger = logger_setup()
-&gt;&gt;&gt;
-&gt;&gt;&gt; def handler(event, context):
-        logger.info("Hello")
-</code></pre></section>
+<dt><strong><code>append</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>[description], by default False</dd>
+</dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def logger_setup(service: str = &#34;service_undefined&#34;, level: str = &#34;INFO&#34;, sampling_rate: float = 0.0, **kwargs):
-    &#34;&#34;&#34;Setups root logger to format statements in JSON.
+<pre><code class="python">def structure_logs(self, append: bool = False, **kwargs):
+    &#34;&#34;&#34;Sets logging formatting to JSON.
 
-    Includes service name and any additional key=value into logs
-    It also accepts both service name or level explicitly via env vars
+    Optionally, it can append keyword arguments
+    to an existing logger so it is available
+    across future log statements.
 
-    Environment variables
-    ---------------------
-    POWERTOOLS_SERVICE_NAME : str
-        service name
-    LOG_LEVEL: str
-        logging level (e.g. INFO, DEBUG)
-    POWERTOOLS_LOGGER_SAMPLE_RATE: float
-        samping rate ranging from 0 to 1, 1 being 100% sampling
+    Last keyword argument and value wins if duplicated.
 
     Parameters
     ----------
-    service : str, optional
-        service name to be appended in logs, by default &#34;service_undefined&#34;
-    level : str, optional
-        logging.level, by default &#34;INFO&#34;
-    sample_rate: float, optional
-        sample rate for debug calls within execution context defaults to 0
-
-    Example
-    -------
-    Setups structured logging in JSON for Lambda functions with explicit service name
-
-        &gt;&gt;&gt; from aws_lambda_powertools.logging import logger_setup
-        &gt;&gt;&gt; logger = logger_setup(service=&#34;payment&#34;)
-        &gt;&gt;&gt;
-        &gt;&gt;&gt; def handler(event, context):
-                logger.info(&#34;Hello&#34;)
-
-    Setups structured logging in JSON for Lambda functions using env vars
-
-        $ export POWERTOOLS_SERVICE_NAME=&#34;payment&#34;
-        $ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
-        &gt;&gt;&gt; from aws_lambda_powertools.logging import logger_setup
-        &gt;&gt;&gt; logger = logger_setup()
-        &gt;&gt;&gt;
-        &gt;&gt;&gt; def handler(event, context):
-                logger.info(&#34;Hello&#34;)
-
+    append : bool, optional
+        [description], by default False
     &#34;&#34;&#34;
-    service = os.getenv(&#34;POWERTOOLS_SERVICE_NAME&#34;) or service
-    sampling_rate = os.getenv(&#34;POWERTOOLS_LOGGER_SAMPLE_RATE&#34;) or sampling_rate
-    log_level = os.getenv(&#34;LOG_LEVEL&#34;) or level
-    logger = logging.getLogger(name=service)
+    self.handler.setFormatter(JsonFormatter(**self._default_log_keys, **kwargs))
 
-    try:
-        if sampling_rate and random.random() &lt;= float(sampling_rate):
-            log_level = logging.DEBUG
-    except ValueError:
-        raise ValueError(
-            &#34;fExpected a float value ranging 0 to 1, but received {sampling_rate} instead. Please review POWERTOOLS_LOGGER_SAMPLE_RATE environment variable.&#34;  # noqa E501
-        )
+    if append:
+        new_keys = {**self.log_keys, **kwargs}
+        self.handler.setFormatter(JsonFormatter(**new_keys))
 
-    logger.setLevel(log_level)
-
-    # Patch logger by structuring its outputs as JSON
-    aws_lambda_logging.setup(level=log_level, service=service, sampling_rate=sampling_rate, **kwargs)
-
-    return logger</code></pre>
+    self.log_keys.update(**kwargs)</code></pre>
 </details>
 </dd>
 </dl>
-</section>
-<section>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -708,9 +1462,28 @@ $ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="aws_lambda_powertools.logging.logger.json_formatter" href="#aws_lambda_powertools.logging.logger.json_formatter">json_formatter</a></code></li>
 <li><code><a title="aws_lambda_powertools.logging.logger.log_metric" href="#aws_lambda_powertools.logging.logger.log_metric">log_metric</a></code></li>
 <li><code><a title="aws_lambda_powertools.logging.logger.logger_inject_lambda_context" href="#aws_lambda_powertools.logging.logger.logger_inject_lambda_context">logger_inject_lambda_context</a></code></li>
 <li><code><a title="aws_lambda_powertools.logging.logger.logger_setup" href="#aws_lambda_powertools.logging.logger.logger_setup">logger_setup</a></code></li>
+<li><code><a title="aws_lambda_powertools.logging.logger.set_package_logger" href="#aws_lambda_powertools.logging.logger.set_package_logger">set_package_logger</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="aws_lambda_powertools.logging.logger.JsonFormatter" href="#aws_lambda_powertools.logging.logger.JsonFormatter">JsonFormatter</a></code></h4>
+<ul class="">
+<li><code><a title="aws_lambda_powertools.logging.logger.JsonFormatter.format" href="#aws_lambda_powertools.logging.logger.JsonFormatter.format">format</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.logging.logger.Logger" href="#aws_lambda_powertools.logging.logger.Logger">Logger</a></code></h4>
+<ul class="">
+<li><code><a title="aws_lambda_powertools.logging.logger.Logger.inject_lambda_context" href="#aws_lambda_powertools.logging.logger.Logger.inject_lambda_context">inject_lambda_context</a></code></li>
+<li><code><a title="aws_lambda_powertools.logging.logger.Logger.structure_logs" href="#aws_lambda_powertools.logging.logger.Logger.structure_logs">structure_logs</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

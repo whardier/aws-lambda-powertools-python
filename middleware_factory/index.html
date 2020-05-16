@@ -34,6 +34,10 @@ __all__ = [&#34;lambda_handler_decorator&#34;]</code></pre>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
+<dt><code class="name"><a title="aws_lambda_powertools.middleware_factory.exceptions" href="exceptions.html">aws_lambda_powertools.middleware_factory.exceptions</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
 <dt><code class="name"><a title="aws_lambda_powertools.middleware_factory.factory" href="factory.html">aws_lambda_powertools.middleware_factory.factory</a></code></dt>
 <dd>
 <section class="desc"></section>
@@ -127,7 +131,7 @@ def lambda_handler(event, context):
 </ul>
 <h2 id="raises">Raises</h2>
 <dl>
-<dt><code>TypeError</code></dt>
+<dt><code>MiddlewareInvalidArgumentError</code></dt>
 <dd>When middleware receives non keyword=arguments</dd>
 </dl></section>
 <details class="source">
@@ -220,7 +224,7 @@ def lambda_handler(event, context):
 
     Raises
     ------
-    TypeError
+    MiddlewareInvalidArgumentError
         When middleware receives non keyword=arguments
     &#34;&#34;&#34;
 
@@ -236,7 +240,8 @@ def lambda_handler(event, context):
             return functools.partial(final_decorator, **kwargs)
 
         if not inspect.isfunction(func):
-            raise TypeError(
+            # @custom_middleware(True) vs @custom_middleware(log_event=True)
+            raise MiddlewareInvalidArgumentError(
                 f&#34;Only keyword arguments is supported for middlewares: {decorator.__qualname__} received {func}&#34;
             )
 
@@ -246,15 +251,14 @@ def lambda_handler(event, context):
                 middleware = functools.partial(decorator, func, event, context, **kwargs)
                 if trace_execution:
                     tracer = Tracer(auto_patch=False)
-                    tracer.create_subsegment(name=f&#34;## {decorator.__qualname__}&#34;)
-                    response = middleware()
-                    tracer.end_subsegment()
+                    with tracer.provider.in_subsegment(name=f&#34;## {decorator.__qualname__}&#34;):
+                        response = middleware()
                 else:
                     response = middleware()
                 return response
-            except Exception as err:
-                logger.error(f&#34;Caught exception in {decorator.__qualname__}&#34;)
-                raise err
+            except Exception:
+                logger.exception(f&#34;Caught exception in {decorator.__qualname__}&#34;)
+                raise
 
         return wrapper
 
@@ -279,6 +283,7 @@ def lambda_handler(event, context):
 </li>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
+<li><code><a title="aws_lambda_powertools.middleware_factory.exceptions" href="exceptions.html">aws_lambda_powertools.middleware_factory.exceptions</a></code></li>
 <li><code><a title="aws_lambda_powertools.middleware_factory.factory" href="factory.html">aws_lambda_powertools.middleware_factory.factory</a></code></li>
 </ul>
 </li>

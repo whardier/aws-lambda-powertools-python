@@ -27,13 +27,11 @@
 <pre><code class="python">import functools
 import json
 import logging
-import os
 from typing import Any, Callable
 
 from aws_lambda_powertools.metrics.base import MetricManager
 
 logger = logging.getLogger(__name__)
-logger.setLevel(os.getenv(&#34;LOG_LEVEL&#34;, &#34;INFO&#34;))
 
 
 class Metrics(MetricManager):
@@ -127,8 +125,6 @@ class Metrics(MetricManager):
         def decorate(*args, **kwargs):
             try:
                 response = lambda_handler(*args, **kwargs)
-            except Exception as e:
-                raise e
             finally:
                 metrics = self.serialize_metric_set()
                 logger.debug(&#34;Publishing metrics&#34;, {&#34;metrics&#34;: metrics})
@@ -294,8 +290,6 @@ def do_something():
         def decorate(*args, **kwargs):
             try:
                 response = lambda_handler(*args, **kwargs)
-            except Exception as e:
-                raise e
             finally:
                 metrics = self.serialize_metric_set()
                 logger.debug(&#34;Publishing metrics&#34;, {&#34;metrics&#34;: metrics})
@@ -371,8 +365,6 @@ tracer = Tracer(service="payment")
     def decorate(*args, **kwargs):
         try:
             response = lambda_handler(*args, **kwargs)
-        except Exception as e:
-            raise e
         finally:
             metrics = self.serialize_metric_set()
             logger.debug(&#34;Publishing metrics&#34;, {&#34;metrics&#34;: metrics})
