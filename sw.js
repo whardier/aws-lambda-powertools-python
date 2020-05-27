@@ -39,11 +39,11 @@ self.__precacheManifest = [
     "url": "styles-2c8cc638826070126d54.js"
   },
   {
-    "url": "app-3e8f225f448924009453.js"
+    "url": "app-31d518afb29ad8a29349.js"
   },
   {
     "url": "offline-plugin-app-shell-fallback/index.html",
-    "revision": "0b02c69ea92f81d62ff231874d279be5"
+    "revision": "6c380d114432ded09b0c38b467c5a6ad"
   },
   {
     "url": "component---cache-caches-gatsby-plugin-offline-app-shell-js-2a242c05cade058abd28.js"
@@ -54,7 +54,7 @@ self.__precacheManifest = [
   },
   {
     "url": "page-data/app-data.json",
-    "revision": "afee7f1b386682d013701906015ae732"
+    "revision": "44e977e62e0ee68362a245d0dd48fc99"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
@@ -147,7 +147,7 @@ const navigationRoute = new NavigationRoute(async ({ event }) => {
   // Check for resources + the app bundle
   // The latter may not exist if the SW is updating to a new version
   const resources = await idbKeyval.get(`resources:${pathname}`)
-  if (!resources || !(await caches.match(`/aws-lambda-powertools-python/app-3e8f225f448924009453.js`))) {
+  if (!resources || !(await caches.match(`/aws-lambda-powertools-python/app-31d518afb29ad8a29349.js`))) {
     return await fetch(event.request)
   }
 
