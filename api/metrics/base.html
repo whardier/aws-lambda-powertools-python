@@ -76,8 +76,8 @@ class MetricManager:
     &#34;&#34;&#34;
 
     def __init__(self, metric_set: Dict[str, str] = None, dimension_set: Dict = None, namespace: str = None):
-        self.metric_set = metric_set or {}
-        self.dimension_set = dimension_set or {}
+        self.metric_set = metric_set if metric_set is not None else {}
+        self.dimension_set = dimension_set if dimension_set is not None else {}
         self.namespace = os.getenv(&#34;POWERTOOLS_METRICS_NAMESPACE&#34;) or namespace
         self._metric_units = [unit.value for unit in MetricUnit]
         self._metric_unit_options = list(MetricUnit.__members__)
@@ -142,7 +142,10 @@ class MetricManager:
             logger.debug(f&#34;Exceeded maximum of {MAX_METRICS} metrics - Publishing existing metric set&#34;)
             metrics = self.serialize_metric_set()
             print(json.dumps(metrics))
-            self.metric_set = {}
+
+            # clear metric set only as opposed to metrics and dimensions set
+            # since we could have more than 100 metrics
+            self.metric_set.clear()
 
     def serialize_metric_set(self, metrics: Dict = None, dimensions: Dict = None) -&gt; Dict:
         &#34;&#34;&#34;Serializes metric and dimensions set
@@ -332,8 +335,8 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
     &#34;&#34;&#34;
 
     def __init__(self, metric_set: Dict[str, str] = None, dimension_set: Dict = None, namespace: str = None):
-        self.metric_set = metric_set or {}
-        self.dimension_set = dimension_set or {}
+        self.metric_set = metric_set if metric_set is not None else {}
+        self.dimension_set = dimension_set if dimension_set is not None else {}
         self.namespace = os.getenv(&#34;POWERTOOLS_METRICS_NAMESPACE&#34;) or namespace
         self._metric_units = [unit.value for unit in MetricUnit]
         self._metric_unit_options = list(MetricUnit.__members__)
@@ -398,7 +401,10 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
             logger.debug(f&#34;Exceeded maximum of {MAX_METRICS} metrics - Publishing existing metric set&#34;)
             metrics = self.serialize_metric_set()
             print(json.dumps(metrics))
-            self.metric_set = {}
+
+            # clear metric set only as opposed to metrics and dimensions set
+            # since we could have more than 100 metrics
+            self.metric_set.clear()
 
     def serialize_metric_set(self, metrics: Dict = None, dimensions: Dict = None) -&gt; Dict:
         &#34;&#34;&#34;Serializes metric and dimensions set
@@ -633,7 +639,10 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
         logger.debug(f&#34;Exceeded maximum of {MAX_METRICS} metrics - Publishing existing metric set&#34;)
         metrics = self.serialize_metric_set()
         print(json.dumps(metrics))
-        self.metric_set = {}</code></pre>
+
+        # clear metric set only as opposed to metrics and dimensions set
+        # since we could have more than 100 metrics
+        self.metric_set.clear()</code></pre>
 </details>
 </dd>
 <dt id="aws_lambda_powertools.metrics.base.MetricManager.add_namespace"><code class="name flex">
