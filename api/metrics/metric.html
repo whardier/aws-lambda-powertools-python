@@ -56,9 +56,8 @@ class SingleMetric(MetricManager):
 
         from aws_lambda_powertools.metrics import SingleMetric, MetricUnit
         import json
-        metric = Single_Metric()
+        metric = Single_Metric(namespace=&#34;ServerlessAirline&#34;)
 
-        metric.add_namespace(name=&#34;ServerlessAirline&#34;)
         metric.add_metric(name=&#34;ColdStart&#34;, unit=MetricUnit.Count, value=1)
         metric.add_dimension(name=&#34;function_version&#34;, value=47)
 
@@ -89,7 +88,7 @@ class SingleMetric(MetricManager):
 
 
 @contextmanager
-def single_metric(name: str, unit: MetricUnit, value: float):
+def single_metric(name: str, unit: MetricUnit, value: float, namespace: str = None):
     &#34;&#34;&#34;Context manager to simplify creation of a single metric
 
     Example
@@ -98,8 +97,7 @@ def single_metric(name: str, unit: MetricUnit, value: float):
 
         from aws_lambda_powertools.metrics import single_metric, MetricUnit
 
-        with single_metric(name=&#34;ColdStart&#34;, unit=MetricUnit.Count, value=1) as metric:
-                metric.add_namespace(name=&#34;ServerlessAirline&#34;)
+        with single_metric(name=&#34;ColdStart&#34;, unit=MetricUnit.Count, value=1, namespace=&#34;ServerlessAirline&#34;) as metric:
                 metric.add_dimension(name=&#34;function_version&#34;, value=47)
 
     **Same as above but set namespace using environment variable**
@@ -119,6 +117,8 @@ def single_metric(name: str, unit: MetricUnit, value: float):
         `aws_lambda_powertools.helper.models.MetricUnit`
     value : float
         Metric value
+    namespace: str
+        Namespace for metrics
 
     Yields
     -------
@@ -132,7 +132,7 @@ def single_metric(name: str, unit: MetricUnit, value: float):
     &#34;&#34;&#34;
     metric_set = None
     try:
-        metric: SingleMetric = SingleMetric()
+        metric: SingleMetric = SingleMetric(namespace=namespace)
         metric.add_metric(name=name, unit=unit, value=value)
         yield metric
         logger.debug(&#34;Serializing single metric&#34;)
@@ -150,7 +150,7 @@ def single_metric(name: str, unit: MetricUnit, value: float):
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="aws_lambda_powertools.metrics.metric.single_metric"><code class="name flex">
-<span>def <span class="ident">single_metric</span></span>(<span>name, unit, value)</span>
+<span>def <span class="ident">single_metric</span></span>(<span>name, unit, value, namespace=None)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Context manager to simplify creation of a single metric</p>
@@ -158,8 +158,7 @@ def single_metric(name: str, unit: MetricUnit, value: float):
 <p><strong>Creates cold start metric with function_version as dimension</strong></p>
 <pre><code>from aws_lambda_powertools.metrics import single_metric, MetricUnit
 
-with single_metric(name="ColdStart", unit=MetricUnit.Count, value=1) as metric:
-        metric.add_namespace(name="ServerlessAirline")
+with single_metric(name="ColdStart", unit=MetricUnit.Count, value=1, namespace="ServerlessAirline") as metric:
         metric.add_dimension(name="function_version", value=47)
 </code></pre>
 <p><strong>Same as above but set namespace using environment variable</strong></p>
@@ -178,6 +177,8 @@ with single_metric(name="ColdStart", unit=MetricUnit.Count, value=1) as metric:
 <dd><a title="aws_lambda_powertools.helper.models.MetricUnit" href="../helper/models.html#aws_lambda_powertools.helper.models.MetricUnit"><code>MetricUnit</code></a></dd>
 <dt><strong><code>value</code></strong> :&ensp;<code>float</code></dt>
 <dd>Metric value</dd>
+<dt><strong><code>namespace</code></strong> :&ensp;<code>str</code></dt>
+<dd>Namespace for metrics</dd>
 </dl>
 <h2 id="yields">Yields</h2>
 <dl>
@@ -194,7 +195,7 @@ with single_metric(name="ColdStart", unit=MetricUnit.Count, value=1) as metric:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@contextmanager
-def single_metric(name: str, unit: MetricUnit, value: float):
+def single_metric(name: str, unit: MetricUnit, value: float, namespace: str = None):
     &#34;&#34;&#34;Context manager to simplify creation of a single metric
 
     Example
@@ -203,8 +204,7 @@ def single_metric(name: str, unit: MetricUnit, value: float):
 
         from aws_lambda_powertools.metrics import single_metric, MetricUnit
 
-        with single_metric(name=&#34;ColdStart&#34;, unit=MetricUnit.Count, value=1) as metric:
-                metric.add_namespace(name=&#34;ServerlessAirline&#34;)
+        with single_metric(name=&#34;ColdStart&#34;, unit=MetricUnit.Count, value=1, namespace=&#34;ServerlessAirline&#34;) as metric:
                 metric.add_dimension(name=&#34;function_version&#34;, value=47)
 
     **Same as above but set namespace using environment variable**
@@ -224,6 +224,8 @@ def single_metric(name: str, unit: MetricUnit, value: float):
         `aws_lambda_powertools.helper.models.MetricUnit`
     value : float
         Metric value
+    namespace: str
+        Namespace for metrics
 
     Yields
     -------
@@ -237,7 +239,7 @@ def single_metric(name: str, unit: MetricUnit, value: float):
     &#34;&#34;&#34;
     metric_set = None
     try:
-        metric: SingleMetric = SingleMetric()
+        metric: SingleMetric = SingleMetric(namespace=namespace)
         metric.add_metric(name=name, unit=unit, value=value)
         yield metric
         logger.debug(&#34;Serializing single metric&#34;)
@@ -272,9 +274,8 @@ a more cost effective option</p>
 <p><strong>Creates cold start metric with function_version as dimension</strong></p>
 <pre><code>from aws_lambda_powertools.metrics import SingleMetric, MetricUnit
 import json
-metric = Single_Metric()
+metric = Single_Metric(namespace="ServerlessAirline")
 
-metric.add_namespace(name="ServerlessAirline")
 metric.add_metric(name="ColdStart", unit=MetricUnit.Count, value=1)
 metric.add_dimension(name="function_version", value=47)
 
@@ -310,9 +311,8 @@ print(json.dumps(metric.serialize_metric_set(), indent=4))
 
         from aws_lambda_powertools.metrics import SingleMetric, MetricUnit
         import json
-        metric = Single_Metric()
+        metric = Single_Metric(namespace=&#34;ServerlessAirline&#34;)
 
-        metric.add_namespace(name=&#34;ServerlessAirline&#34;)
         metric.add_metric(name=&#34;ColdStart&#34;, unit=MetricUnit.Count, value=1)
         metric.add_dimension(name=&#34;function_version&#34;, value=47)
 

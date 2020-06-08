@@ -96,7 +96,7 @@ def build_lambda_context_model(context: object) -&gt; LambdaContextModel:
 
     context = {
         &#34;function_name&#34;: context.function_name,
-        &#34;function_memory_size&#34;: str(context.memory_limit_in_mb),
+        &#34;function_memory_size&#34;: context.memory_limit_in_mb,
         &#34;function_arn&#34;: context.invoked_function_arn,
         &#34;function_request_id&#34;: context.aws_request_id,
     }
@@ -205,7 +205,7 @@ def build_metric_unit_from_str(unit: Union[str, MetricUnit]) -&gt; MetricUnit:
 
     context = {
         &#34;function_name&#34;: context.function_name,
-        &#34;function_memory_size&#34;: str(context.memory_limit_in_mb),
+        &#34;function_memory_size&#34;: context.memory_limit_in_mb,
         &#34;function_arn&#34;: context.invoked_function_arn,
         &#34;function_request_id&#34;: context.aws_request_id,
     }

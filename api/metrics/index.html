@@ -71,7 +71,7 @@ __all__ = [
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="aws_lambda_powertools.metrics.single_metric"><code class="name flex">
-<span>def <span class="ident">single_metric</span></span>(<span>name, unit, value)</span>
+<span>def <span class="ident">single_metric</span></span>(<span>name, unit, value, namespace=None)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Context manager to simplify creation of a single metric</p>
@@ -79,8 +79,7 @@ __all__ = [
 <p><strong>Creates cold start metric with function_version as dimension</strong></p>
 <pre><code>from aws_lambda_powertools.metrics import single_metric, MetricUnit
 
-with single_metric(name="ColdStart", unit=MetricUnit.Count, value=1) as metric:
-        metric.add_namespace(name="ServerlessAirline")
+with single_metric(name="ColdStart", unit=MetricUnit.Count, value=1, namespace="ServerlessAirline") as metric:
         metric.add_dimension(name="function_version", value=47)
 </code></pre>
 <p><strong>Same as above but set namespace using environment variable</strong></p>
@@ -99,6 +98,8 @@ with single_metric(name="ColdStart", unit=MetricUnit.Count, value=1) as metric:
 <dd><a title="aws_lambda_powertools.helper.models.MetricUnit" href="../helper/models.html#aws_lambda_powertools.helper.models.MetricUnit"><code>MetricUnit</code></a></dd>
 <dt><strong><code>value</code></strong> :&ensp;<code>float</code></dt>
 <dd>Metric value</dd>
+<dt><strong><code>namespace</code></strong> :&ensp;<code>str</code></dt>
+<dd>Namespace for metrics</dd>
 </dl>
 <h2 id="yields">Yields</h2>
 <dl>
@@ -115,7 +116,7 @@ with single_metric(name="ColdStart", unit=MetricUnit.Count, value=1) as metric:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@contextmanager
-def single_metric(name: str, unit: MetricUnit, value: float):
+def single_metric(name: str, unit: MetricUnit, value: float, namespace: str = None):
     &#34;&#34;&#34;Context manager to simplify creation of a single metric
 
     Example
@@ -124,8 +125,7 @@ def single_metric(name: str, unit: MetricUnit, value: float):
 
         from aws_lambda_powertools.metrics import single_metric, MetricUnit
 
-        with single_metric(name=&#34;ColdStart&#34;, unit=MetricUnit.Count, value=1) as metric:
-                metric.add_namespace(name=&#34;ServerlessAirline&#34;)
+        with single_metric(name=&#34;ColdStart&#34;, unit=MetricUnit.Count, value=1, namespace=&#34;ServerlessAirline&#34;) as metric:
                 metric.add_dimension(name=&#34;function_version&#34;, value=47)
 
     **Same as above but set namespace using environment variable**
@@ -145,6 +145,8 @@ def single_metric(name: str, unit: MetricUnit, value: float):
         `aws_lambda_powertools.helper.models.MetricUnit`
     value : float
         Metric value
+    namespace: str
+        Namespace for metrics
 
     Yields
     -------
@@ -158,7 +160,7 @@ def single_metric(name: str, unit: MetricUnit, value: float):
     &#34;&#34;&#34;
     metric_set = None
     try:
-        metric: SingleMetric = SingleMetric()
+        metric: SingleMetric = SingleMetric(namespace=namespace)
         metric.add_metric(name=name, unit=unit, value=value)
         yield metric
         logger.debug(&#34;Serializing single metric&#34;)
@@ -367,6 +369,7 @@ def single_metric(name: str, unit: MetricUnit, value: float):
 </dd>
 <dt id="aws_lambda_powertools.metrics.Metrics"><code class="flex name class">
 <span>class <span class="ident">Metrics</span></span>
+<span>(</span><span>service=None, namespace=None)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Metrics create an EMF object with up to 100 metrics</p>
@@ -383,11 +386,9 @@ to prevent metric truncation.</p>
 <p><strong>Creates a few metrics and publish at the end of a function execution</strong></p>
 <pre><code>from aws_lambda_powertools.metrics import Metrics
 
-metrics = Metrics()
-metrics.add_namespace(name="ServerlessAirline")
+metrics = Metrics(namespace="ServerlessAirline", service="payment")
 metrics.add_metric(name="ColdStart", unit=MetricUnit.Count, value=1)
 metrics.add_metric(name="BookingConfirmation", unit="Count", value=1)
-metrics.add_dimension(name="service", value="booking")
 metrics.add_dimension(name="function_version", value="$LATEST")
 ...
 
@@ -404,6 +405,8 @@ def do_something():
 <dl>
 <dt><strong><code>POWERTOOLS_METRICS_NAMESPACE</code></strong> :&ensp;<code>str</code></dt>
 <dd>metric namespace</dd>
+<dt><strong><code>POWERTOOLS_SERVICE_NAME</code></strong> :&ensp;<code>str</code></dt>
+<dd>service name used for default dimension</dd>
 </dl>
 <h2 id="parameters">Parameters</h2>
 <dl>
@@ -440,11 +443,9 @@ def do_something():
 
         from aws_lambda_powertools.metrics import Metrics
 
-        metrics = Metrics()
-        metrics.add_namespace(name=&#34;ServerlessAirline&#34;)
+        metrics = Metrics(namespace=&#34;ServerlessAirline&#34;, service=&#34;payment&#34;)
         metrics.add_metric(name=&#34;ColdStart&#34;, unit=MetricUnit.Count, value=1)
         metrics.add_metric(name=&#34;BookingConfirmation&#34;, unit=&#34;Count&#34;, value=1)
-        metrics.add_dimension(name=&#34;service&#34;, value=&#34;booking&#34;)
         metrics.add_dimension(name=&#34;function_version&#34;, value=&#34;$LATEST&#34;)
         ...
 
@@ -461,6 +462,8 @@ def do_something():
     ---------------------
     POWERTOOLS_METRICS_NAMESPACE : str
         metric namespace
+    POWERTOOLS_SERVICE_NAME : str
+        service name used for default dimension
 
     Parameters
     ----------
@@ -476,17 +479,21 @@ def do_something():
     _metrics = {}
     _dimensions = {}
 
-    def __init__(self):
+    def __init__(self, service: str = None, namespace: str = None):
         self.metric_set = self._metrics
         self.dimension_set = self._dimensions
-        super().__init__(metric_set=self.metric_set, dimension_set=self.dimension_set)
+        self.service = service or os.environ.get(&#34;POWERTOOLS_SERVICE_NAME&#34;)
+        self.namespace = namespace
+        if self.service:
+            self.dimension_set[&#34;service&#34;] = self.service
+        super().__init__(metric_set=self.metric_set, dimension_set=self.dimension_set, namespace=self.namespace)
 
     def clear_metrics(self):
         logger.debug(&#34;Clearing out existing metric set from memory&#34;)
         self.metric_set.clear()
         self.dimension_set.clear()
 
-    def log_metrics(self, lambda_handler: Callable[[Any, Any], Any] = None):
+    def log_metrics(self, lambda_handler: Callable[[Any, Any], Any] = None, capture_cold_start_metric: bool = False):
         &#34;&#34;&#34;Decorator to serialize and publish metrics at the end of a function execution.
 
         Be aware that the log_metrics **does call* the decorated function (e.g. lambda_handler).
@@ -495,7 +502,7 @@ def do_something():
         -------
         **Lambda function using tracer and metrics decorators**
 
-            metrics = Metrics()
+            metrics = Metrics(service=&#34;payment&#34;)
             tracer = Tracer(service=&#34;payment&#34;)
 
             @tracer.capture_lambda_handler
@@ -513,10 +520,18 @@ def do_something():
             Propagate error received
         &#34;&#34;&#34;
 
+        # If handler is None we&#39;ve been called with parameters
+        # Return a partial function with args filled
+        if lambda_handler is None:
+            logger.debug(&#34;Decorator called with parameters&#34;)
+            return functools.partial(self.log_metrics, capture_cold_start_metric=capture_cold_start_metric)
+
         @functools.wraps(lambda_handler)
-        def decorate(*args, **kwargs):
+        def decorate(event, context):
             try:
-                response = lambda_handler(*args, **kwargs)
+                response = lambda_handler(event, context)
+                if capture_cold_start_metric:
+                    self.__add_cold_start_metric(context=context)
             finally:
                 metrics = self.serialize_metric_set()
                 self.clear_metrics()
@@ -525,7 +540,22 @@ def do_something():
 
             return response
 
-        return decorate</code></pre>
+        return decorate
+
+    def __add_cold_start_metric(self, context: Any):
+        &#34;&#34;&#34;Add cold start metric and function_name dimension
+
+        Parameters
+        ----------
+        context : Any
+            Lambda context
+        &#34;&#34;&#34;
+        global is_cold_start
+        if is_cold_start:
+            logger.debug(&#34;Adding cold start metric and function_name dimension&#34;)
+            self.add_metric(name=&#34;ColdStart&#34;, value=1, unit=&#34;Count&#34;)
+            self.add_dimension(name=&#34;function_name&#34;, value=context.function_name)
+            is_cold_start = False</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -549,14 +579,14 @@ def do_something():
 </details>
 </dd>
 <dt id="aws_lambda_powertools.metrics.Metrics.log_metrics"><code class="name flex">
-<span>def <span class="ident">log_metrics</span></span>(<span>self, lambda_handler=None)</span>
+<span>def <span class="ident">log_metrics</span></span>(<span>self, lambda_handler=None, capture_cold_start_metric=False)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Decorator to serialize and publish metrics at the end of a function execution.</p>
 <p>Be aware that the log_metrics *<em>does call</em> the decorated function (e.g. lambda_handler).</p>
 <h2 id="example">Example</h2>
 <p><strong>Lambda function using tracer and metrics decorators</strong></p>
-<pre><code>metrics = Metrics()
+<pre><code>metrics = Metrics(service="payment")
 tracer = Tracer(service="payment")
 
 @tracer.capture_lambda_handler
@@ -577,7 +607,7 @@ tracer = Tracer(service="payment")
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def log_metrics(self, lambda_handler: Callable[[Any, Any], Any] = None):
+<pre><code class="python">def log_metrics(self, lambda_handler: Callable[[Any, Any], Any] = None, capture_cold_start_metric: bool = False):
     &#34;&#34;&#34;Decorator to serialize and publish metrics at the end of a function execution.
 
     Be aware that the log_metrics **does call* the decorated function (e.g. lambda_handler).
@@ -586,7 +616,7 @@ tracer = Tracer(service="payment")
     -------
     **Lambda function using tracer and metrics decorators**
 
-        metrics = Metrics()
+        metrics = Metrics(service=&#34;payment&#34;)
         tracer = Tracer(service=&#34;payment&#34;)
 
         @tracer.capture_lambda_handler
@@ -604,10 +634,18 @@ tracer = Tracer(service="payment")
         Propagate error received
     &#34;&#34;&#34;
 
+    # If handler is None we&#39;ve been called with parameters
+    # Return a partial function with args filled
+    if lambda_handler is None:
+        logger.debug(&#34;Decorator called with parameters&#34;)
+        return functools.partial(self.log_metrics, capture_cold_start_metric=capture_cold_start_metric)
+
     @functools.wraps(lambda_handler)
-    def decorate(*args, **kwargs):
+    def decorate(event, context):
         try:
-            response = lambda_handler(*args, **kwargs)
+            response = lambda_handler(event, context)
+            if capture_cold_start_metric:
+                self.__add_cold_start_metric(context=context)
         finally:
             metrics = self.serialize_metric_set()
             self.clear_metrics()

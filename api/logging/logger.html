@@ -88,6 +88,7 @@ class JsonFormatter(logging.Formatter):
         datefmt = kwargs.pop(&#34;datefmt&#34;, None)
 
         super(JsonFormatter, self).__init__(datefmt=datefmt)
+        self.reserved_keys = [&#34;timestamp&#34;, &#34;level&#34;, &#34;location&#34;]
         self.format_dict = {
             &#34;timestamp&#34;: &#34;%(asctime)s&#34;,
             &#34;level&#34;: &#34;%(levelname)s&#34;,
@@ -102,10 +103,12 @@ class JsonFormatter(logging.Formatter):
 
         log_dict = {}
         for key, value in self.format_dict.items():
-            if value:
+            if value and key in self.reserved_keys:
                 # converts default logging expr to its record value
                 # e.g. &#39;%(asctime)s&#39; to &#39;2020-04-24 09:35:40,698&#39;
                 log_dict[key] = value % record_dict
+            else:
+                log_dict[key] = value
 
         if isinstance(record_dict[&#34;msg&#34;], dict):
             log_dict[&#34;message&#34;] = record_dict[&#34;msg&#34;]
@@ -175,20 +178,19 @@ def logger_inject_lambda_context(
     raise DeprecationWarning(&#34;Use Logger instead - This method will be removed when GA&#34;)
 
 
-def _is_cold_start() -&gt; str:
-    &#34;&#34;&#34;Verifies whether is cold start and return a string used for struct logging
+def _is_cold_start() -&gt; bool:
+    &#34;&#34;&#34;Verifies whether is cold start
 
     Returns
     -------
-    str
-        lower case bool as a string
-        aws_lambda_logging doesn&#39;t support bool; cast cold start value to string
+    bool
+        cold start bool value
     &#34;&#34;&#34;
-    cold_start = &#34;false&#34;
+    cold_start = False
 
     global is_cold_start
     if is_cold_start:
-        cold_start = str(is_cold_start).lower()
+        cold_start = is_cold_start
         is_cold_start = False
 
     return cold_start
@@ -908,6 +910,7 @@ coerces the value to a string.</p>
         datefmt = kwargs.pop(&#34;datefmt&#34;, None)
 
         super(JsonFormatter, self).__init__(datefmt=datefmt)
+        self.reserved_keys = [&#34;timestamp&#34;, &#34;level&#34;, &#34;location&#34;]
         self.format_dict = {
             &#34;timestamp&#34;: &#34;%(asctime)s&#34;,
             &#34;level&#34;: &#34;%(levelname)s&#34;,
@@ -922,10 +925,12 @@ coerces the value to a string.</p>
 
         log_dict = {}
         for key, value in self.format_dict.items():
-            if value:
+            if value and key in self.reserved_keys:
                 # converts default logging expr to its record value
                 # e.g. &#39;%(asctime)s&#39; to &#39;2020-04-24 09:35:40,698&#39;
                 log_dict[key] = value % record_dict
+            else:
+                log_dict[key] = value
 
         if isinstance(record_dict[&#34;msg&#34;], dict):
             log_dict[&#34;message&#34;] = record_dict[&#34;msg&#34;]
@@ -985,10 +990,12 @@ it is formatted using formatException() and appended to the message.</p></sectio
 
     log_dict = {}
     for key, value in self.format_dict.items():
-        if value:
+        if value and key in self.reserved_keys:
             # converts default logging expr to its record value
             # e.g. &#39;%(asctime)s&#39; to &#39;2020-04-24 09:35:40,698&#39;
             log_dict[key] = value % record_dict
+        else:
+            log_dict[key] = value
 
     if isinstance(record_dict[&#34;msg&#34;], dict):
         log_dict[&#34;message&#34;] = record_dict[&#34;msg&#34;]

@@ -30,6 +30,7 @@ import logging
 import numbers
 import os
 import pathlib
+import warnings
 from typing import Dict, List, Union
 
 import fastjsonschema
@@ -78,7 +79,7 @@ class MetricManager:
     def __init__(self, metric_set: Dict[str, str] = None, dimension_set: Dict = None, namespace: str = None):
         self.metric_set = metric_set if metric_set is not None else {}
         self.dimension_set = dimension_set if dimension_set is not None else {}
-        self.namespace = os.getenv(&#34;POWERTOOLS_METRICS_NAMESPACE&#34;) or namespace
+        self.namespace = namespace or os.getenv(&#34;POWERTOOLS_METRICS_NAMESPACE&#34;)
         self._metric_units = [unit.value for unit in MetricUnit]
         self._metric_unit_options = list(MetricUnit.__members__)
 
@@ -96,6 +97,9 @@ class MetricManager:
         name : str
             Metric namespace
         &#34;&#34;&#34;
+        warnings.warn(
+            &#34;add_namespace method is deprecated. Pass namespace to Metrics constructor instead&#34;, DeprecationWarning
+        )
         if self.namespace is not None:
             raise UniqueNamespaceError(
                 f&#34;Namespace &#39;{self.namespace}&#39; already set - Only one namespace is allowed across metrics&#34;
@@ -229,7 +233,14 @@ class MetricManager:
             Dimension value
         &#34;&#34;&#34;
         logger.debug(f&#34;Adding dimension: {name}:{value}&#34;)
-        self.dimension_set[name] = value
+
+        # Cast value to str according to EMF spec
+        # Majority of values are expected to be string already, so
+        # checking before casting improves performance in most cases
+        if isinstance(value, str):
+            self.dimension_set[name] = value
+        else:
+            self.dimension_set[name] = str(value)
 
     def __extract_metric_unit_value(self, unit: Union[str, MetricUnit]) -&gt; str:
         &#34;&#34;&#34;Return metric value from metric unit whether that&#39;s str or MetricUnit enum
@@ -337,7 +348,7 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
     def __init__(self, metric_set: Dict[str, str] = None, dimension_set: Dict = None, namespace: str = None):
         self.metric_set = metric_set if metric_set is not None else {}
         self.dimension_set = dimension_set if dimension_set is not None else {}
-        self.namespace = os.getenv(&#34;POWERTOOLS_METRICS_NAMESPACE&#34;) or namespace
+        self.namespace = namespace or os.getenv(&#34;POWERTOOLS_METRICS_NAMESPACE&#34;)
         self._metric_units = [unit.value for unit in MetricUnit]
         self._metric_unit_options = list(MetricUnit.__members__)
 
@@ -355,6 +366,9 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
         name : str
             Metric namespace
         &#34;&#34;&#34;
+        warnings.warn(
+            &#34;add_namespace method is deprecated. Pass namespace to Metrics constructor instead&#34;, DeprecationWarning
+        )
         if self.namespace is not None:
             raise UniqueNamespaceError(
                 f&#34;Namespace &#39;{self.namespace}&#39; already set - Only one namespace is allowed across metrics&#34;
@@ -488,7 +502,14 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
             Dimension value
         &#34;&#34;&#34;
         logger.debug(f&#34;Adding dimension: {name}:{value}&#34;)
-        self.dimension_set[name] = value
+
+        # Cast value to str according to EMF spec
+        # Majority of values are expected to be string already, so
+        # checking before casting improves performance in most cases
+        if isinstance(value, str):
+            self.dimension_set[name] = value
+        else:
+            self.dimension_set[name] = str(value)
 
     def __extract_metric_unit_value(self, unit: Union[str, MetricUnit]) -&gt; str:
         &#34;&#34;&#34;Return metric value from metric unit whether that&#39;s str or MetricUnit enum
@@ -567,7 +588,14 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
         Dimension value
     &#34;&#34;&#34;
     logger.debug(f&#34;Adding dimension: {name}:{value}&#34;)
-    self.dimension_set[name] = value</code></pre>
+
+    # Cast value to str according to EMF spec
+    # Majority of values are expected to be string already, so
+    # checking before casting improves performance in most cases
+    if isinstance(value, str):
+        self.dimension_set[name] = value
+    else:
+        self.dimension_set[name] = str(value)</code></pre>
 </details>
 </dd>
 <dt id="aws_lambda_powertools.metrics.base.MetricManager.add_metric"><code class="name flex">
@@ -677,6 +705,9 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
     name : str
         Metric namespace
     &#34;&#34;&#34;
+    warnings.warn(
+        &#34;add_namespace method is deprecated. Pass namespace to Metrics constructor instead&#34;, DeprecationWarning
+    )
     if self.namespace is not None:
         raise UniqueNamespaceError(
             f&#34;Namespace &#39;{self.namespace}&#39; already set - Only one namespace is allowed across metrics&#34;
