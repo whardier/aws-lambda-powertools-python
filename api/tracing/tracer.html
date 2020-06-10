@@ -76,7 +76,7 @@ class Tracer:
     -------
     **A Lambda function using Tracer**
 
-        from aws_lambda_powertools.tracing import Tracer
+        from aws_lambda_powertools import Tracer
         tracer = Tracer(service=&#34;greeting&#34;)
 
         @tracer.capture_method
@@ -93,7 +93,7 @@ class Tracer:
 
     **Booking Lambda function using Tracer that adds additional annotation/metadata**
 
-        from aws_lambda_powertools.tracing import Tracer
+        from aws_lambda_powertools import Tracer
         tracer = Tracer(service=&#34;booking&#34;)
 
         @tracer.capture_method
@@ -115,7 +115,7 @@ class Tracer:
     **A Lambda function using service name via POWERTOOLS_SERVICE_NAME**
 
         export POWERTOOLS_SERVICE_NAME=&#34;booking&#34;
-        from aws_lambda_powertools.tracing import Tracer
+        from aws_lambda_powertools import Tracer
         tracer = Tracer()
 
         @tracer.capture_lambda_handler
@@ -127,7 +127,7 @@ class Tracer:
     **Reuse an existing instance of Tracer anywhere in the code**
 
         # lambda_handler.py
-        from aws_lambda_powertools.tracing import Tracer
+        from aws_lambda_powertools import Tracer
         tracer = Tracer()
 
         @tracer.capture_lambda_handler
@@ -135,7 +135,7 @@ class Tracer:
             ...
 
         # utils.py
-        from aws_lambda_powertools.tracing import Tracer
+        from aws_lambda_powertools import Tracer
         tracer = Tracer()
         ...
 
@@ -327,7 +327,7 @@ class Tracer:
 
         **Custom async method using capture_method decorator**
 
-            from aws_lambda_powertools.tracing import Tracer
+            from aws_lambda_powertools import Tracer
             tracer = Tracer(service=&#34;booking&#34;)
 
             @tracer.capture_method
@@ -345,7 +345,7 @@ class Tracer:
 
         **Tracing nested async calls**
 
-            from aws_lambda_powertools.tracing import Tracer
+            from aws_lambda_powertools import Tracer
             tracer = Tracer(service=&#34;booking&#34;)
 
             @tracer.capture_method
@@ -367,7 +367,7 @@ class Tracer:
 
         This may not needed once [this bug is closed](https://github.com/aws/aws-xray-sdk-python/issues/164)
 
-            from aws_lambda_powertools.tracing import Tracer
+            from aws_lambda_powertools import Tracer
             tracer = Tracer(service=&#34;booking&#34;)
 
             async def get_identity():
@@ -388,7 +388,7 @@ class Tracer:
 
         This may not needed once [this bug is closed](https://github.com/aws/aws-xray-sdk-python/issues/164)
 
-            from aws_lambda_powertools.tracing import Tracer
+            from aws_lambda_powertools import Tracer
             tracer = Tracer(service=&#34;booking&#34;)
 
             async def get_identity():
@@ -590,7 +590,7 @@ Make sure to set <code>auto_patch=False</code> in subsequent Tracer instances to
 </dl>
 <h2 id="example">Example</h2>
 <p><strong>A Lambda function using Tracer</strong></p>
-<pre><code>from aws_lambda_powertools.tracing import Tracer
+<pre><code>from aws_lambda_powertools import Tracer
 tracer = Tracer(service="greeting")
 
 @tracer.capture_method
@@ -606,7 +606,7 @@ def handler(event: dict, context: Any) -&gt; Dict:
     return response
 </code></pre>
 <p><strong>Booking Lambda function using Tracer that adds additional annotation/metadata</strong></p>
-<pre><code>from aws_lambda_powertools.tracing import Tracer
+<pre><code>from aws_lambda_powertools import Tracer
 tracer = Tracer(service="booking")
 
 @tracer.capture_method
@@ -627,7 +627,7 @@ def handler(event: dict, context: Any) -&gt; Dict:
 </code></pre>
 <p><strong>A Lambda function using service name via POWERTOOLS_SERVICE_NAME</strong></p>
 <pre><code>export POWERTOOLS_SERVICE_NAME="booking"
-from aws_lambda_powertools.tracing import Tracer
+from aws_lambda_powertools import Tracer
 tracer = Tracer()
 
 @tracer.capture_lambda_handler
@@ -638,7 +638,7 @@ def handler(event: dict, context: Any) -&gt; Dict:
 </code></pre>
 <p><strong>Reuse an existing instance of Tracer anywhere in the code</strong></p>
 <pre><code># lambda_handler.py
-from aws_lambda_powertools.tracing import Tracer
+from aws_lambda_powertools import Tracer
 tracer = Tracer()
 
 @tracer.capture_lambda_handler
@@ -646,7 +646,7 @@ def handler(event: dict, context: Any) -&gt; Dict:
     ...
 
 # utils.py
-from aws_lambda_powertools.tracing import Tracer
+from aws_lambda_powertools import Tracer
 tracer = Tracer()
 ...
 </code></pre>
@@ -700,7 +700,7 @@ tracer = Tracer()
     -------
     **A Lambda function using Tracer**
 
-        from aws_lambda_powertools.tracing import Tracer
+        from aws_lambda_powertools import Tracer
         tracer = Tracer(service=&#34;greeting&#34;)
 
         @tracer.capture_method
@@ -717,7 +717,7 @@ tracer = Tracer()
 
     **Booking Lambda function using Tracer that adds additional annotation/metadata**
 
-        from aws_lambda_powertools.tracing import Tracer
+        from aws_lambda_powertools import Tracer
         tracer = Tracer(service=&#34;booking&#34;)
 
         @tracer.capture_method
@@ -739,7 +739,7 @@ tracer = Tracer()
     **A Lambda function using service name via POWERTOOLS_SERVICE_NAME**
 
         export POWERTOOLS_SERVICE_NAME=&#34;booking&#34;
-        from aws_lambda_powertools.tracing import Tracer
+        from aws_lambda_powertools import Tracer
         tracer = Tracer()
 
         @tracer.capture_lambda_handler
@@ -751,7 +751,7 @@ tracer = Tracer()
     **Reuse an existing instance of Tracer anywhere in the code**
 
         # lambda_handler.py
-        from aws_lambda_powertools.tracing import Tracer
+        from aws_lambda_powertools import Tracer
         tracer = Tracer()
 
         @tracer.capture_lambda_handler
@@ -759,7 +759,7 @@ tracer = Tracer()
             ...
 
         # utils.py
-        from aws_lambda_powertools.tracing import Tracer
+        from aws_lambda_powertools import Tracer
         tracer = Tracer()
         ...
 
@@ -951,7 +951,7 @@ tracer = Tracer()
 
         **Custom async method using capture_method decorator**
 
-            from aws_lambda_powertools.tracing import Tracer
+            from aws_lambda_powertools import Tracer
             tracer = Tracer(service=&#34;booking&#34;)
 
             @tracer.capture_method
@@ -969,7 +969,7 @@ tracer = Tracer()
 
         **Tracing nested async calls**
 
-            from aws_lambda_powertools.tracing import Tracer
+            from aws_lambda_powertools import Tracer
             tracer = Tracer(service=&#34;booking&#34;)
 
             @tracer.capture_method
@@ -991,7 +991,7 @@ tracer = Tracer()
 
         This may not needed once [this bug is closed](https://github.com/aws/aws-xray-sdk-python/issues/164)
 
-            from aws_lambda_powertools.tracing import Tracer
+            from aws_lambda_powertools import Tracer
             tracer = Tracer(service=&#34;booking&#34;)
 
             async def get_identity():
@@ -1012,7 +1012,7 @@ tracer = Tracer()
 
         This may not needed once [this bug is closed](https://github.com/aws/aws-xray-sdk-python/issues/164)
 
-            from aws_lambda_powertools.tracing import Tracer
+            from aws_lambda_powertools import Tracer
             tracer = Tracer(service=&#34;booking&#34;)
 
             async def get_identity():
@@ -1271,7 +1271,7 @@ context manager via our escape hatch mechanism - See examples.</p>
 def some_function()
 </code></pre>
 <p><strong>Custom async method using capture_method decorator</strong></p>
-<pre><code>from aws_lambda_powertools.tracing import Tracer
+<pre><code>from aws_lambda_powertools import Tracer
 tracer = Tracer(service="booking")
 
 @tracer.capture_method
@@ -1288,7 +1288,7 @@ def lambda_handler(event: dict, context: Any) -&gt; Dict:
     asyncio.run(confirm_booking(booking_id=booking_id))
 </code></pre>
 <p><strong>Tracing nested async calls</strong></p>
-<pre><code>from aws_lambda_powertools.tracing import Tracer
+<pre><code>from aws_lambda_powertools import Tracer
 tracer = Tracer(service="booking")
 
 @tracer.capture_method
@@ -1308,7 +1308,7 @@ async def async_tasks():
 </code></pre>
 <p><strong>Safely tracing concurrent async calls with decorator</strong></p>
 <p>This may not needed once <a href="https://github.com/aws/aws-xray-sdk-python/issues/164">this bug is closed</a></p>
-<pre><code>from aws_lambda_powertools.tracing import Tracer
+<pre><code>from aws_lambda_powertools import Tracer
 tracer = Tracer(service="booking")
 
 async def get_identity():
@@ -1327,7 +1327,7 @@ async def async_tasks():
 </code></pre>
 <p><strong>Safely tracing each concurrent async calls with escape hatch</strong></p>
 <p>This may not needed once <a href="https://github.com/aws/aws-xray-sdk-python/issues/164">this bug is closed</a></p>
-<pre><code>from aws_lambda_powertools.tracing import Tracer
+<pre><code>from aws_lambda_powertools import Tracer
 tracer = Tracer(service="booking")
 
 async def get_identity():
@@ -1382,7 +1382,7 @@ async def async_tasks():
 
     **Custom async method using capture_method decorator**
 
-        from aws_lambda_powertools.tracing import Tracer
+        from aws_lambda_powertools import Tracer
         tracer = Tracer(service=&#34;booking&#34;)
 
         @tracer.capture_method
@@ -1400,7 +1400,7 @@ async def async_tasks():
 
     **Tracing nested async calls**
 
-        from aws_lambda_powertools.tracing import Tracer
+        from aws_lambda_powertools import Tracer
         tracer = Tracer(service=&#34;booking&#34;)
 
         @tracer.capture_method
@@ -1422,7 +1422,7 @@ async def async_tasks():
 
     This may not needed once [this bug is closed](https://github.com/aws/aws-xray-sdk-python/issues/164)
 
-        from aws_lambda_powertools.tracing import Tracer
+        from aws_lambda_powertools import Tracer
         tracer = Tracer(service=&#34;booking&#34;)
 
         async def get_identity():
@@ -1443,7 +1443,7 @@ async def async_tasks():
 
     This may not needed once [this bug is closed](https://github.com/aws/aws-xray-sdk-python/issues/164)
 
-        from aws_lambda_powertools.tracing import Tracer
+        from aws_lambda_powertools import Tracer
         tracer = Tracer(service=&#34;booking&#34;)
 
         async def get_identity():

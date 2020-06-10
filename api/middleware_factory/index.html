@@ -110,7 +110,7 @@ def lambda_handler(event, context):
     return True
 </code></pre>
 <p><strong>Trace execution of custom middleware</strong></p>
-<pre><code>from aws_lambda_powertools.tracing import Tracer
+<pre><code>from aws_lambda_powertools import Tracer
 from aws_lambda_powertools.middleware_factory import lambda_handler_decorator
 
 tracer = Tracer(service="payment") # or via env var
@@ -203,7 +203,7 @@ def lambda_handler(event, context):
 
     **Trace execution of custom middleware**
 
-        from aws_lambda_powertools.tracing import Tracer
+        from aws_lambda_powertools import Tracer
         from aws_lambda_powertools.middleware_factory import lambda_handler_decorator
 
         tracer = Tracer(service=&#34;payment&#34;) # or via env var
