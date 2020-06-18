@@ -30,13 +30,12 @@ import logging
 import numbers
 import os
 import pathlib
-import warnings
-from typing import Dict, List, Union
+from enum import Enum
+from typing import Any, Dict, List, Union
 
 import fastjsonschema
 
-from ..helper.models import MetricUnit
-from .exceptions import MetricUnitError, MetricValueError, SchemaValidationError, UniqueNamespaceError
+from .exceptions import MetricUnitError, MetricValueError, SchemaValidationError
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +44,35 @@ with _schema_path.open() as f:
     CLOUDWATCH_EMF_SCHEMA = json.load(f)
 
 MAX_METRICS = 100
+
+
+class MetricUnit(Enum):
+    Seconds = &#34;Seconds&#34;
+    Microseconds = &#34;Microseconds&#34;
+    Milliseconds = &#34;Milliseconds&#34;
+    Bytes = &#34;Bytes&#34;
+    Kilobytes = &#34;Kilobytes&#34;
+    Megabytes = &#34;Megabytes&#34;
+    Gigabytes = &#34;Gigabytes&#34;
+    Terabytes = &#34;Terabytes&#34;
+    Bits = &#34;Bits&#34;
+    Kilobits = &#34;Kilobits&#34;
+    Megabits = &#34;Megabits&#34;
+    Gigabits = &#34;Gigabits&#34;
+    Terabits = &#34;Terabits&#34;
+    Percent = &#34;Percent&#34;
+    Count = &#34;Count&#34;
+    BytesPerSecond = &#34;Bytes/Second&#34;
+    KilobytesPerSecond = &#34;Kilobytes/Second&#34;
+    MegabytesPerSecond = &#34;Megabytes/Second&#34;
+    GigabytesPerSecond = &#34;Gigabytes/Second&#34;
+    TerabytesPerSecond = &#34;Terabytes/Second&#34;
+    BitsPerSecond = &#34;Bits/Second&#34;
+    KilobitsPerSecond = &#34;Kilobits/Second&#34;
+    MegabitsPerSecond = &#34;Megabits/Second&#34;
+    GigabitsPerSecond = &#34;Gigabits/Second&#34;
+    TerabitsPerSecond = &#34;Terabits/Second&#34;
+    CountPerSecond = &#34;Count/Second&#34;
 
 
 class MetricManager:
@@ -71,14 +99,17 @@ class MetricManager:
         When metric metric isn&#39;t supported by CloudWatch
     MetricValueError
         When metric value isn&#39;t a number
-    UniqueNamespaceError
-        When an additional namespace is set
     SchemaValidationError
         When metric object fails EMF schema validation
     &#34;&#34;&#34;
 
     def __init__(
-        self, metric_set: Dict[str, str] = None, dimension_set: Dict = None, namespace: str = None, service: str = None
+        self,
+        metric_set: Dict[str, str] = None,
+        dimension_set: Dict = None,
+        namespace: str = None,
+        metadata_set: Dict[str, Any] = None,
+        service: str = None,
     ):
         self.metric_set = metric_set if metric_set is not None else {}
         self.dimension_set = dimension_set if dimension_set is not None else {}
@@ -86,30 +117,7 @@ class MetricManager:
         self.service = service or os.environ.get(&#34;POWERTOOLS_SERVICE_NAME&#34;)
         self._metric_units = [unit.value for unit in MetricUnit]
         self._metric_unit_options = list(MetricUnit.__members__)
-
-    def add_namespace(self, name: str):
-        &#34;&#34;&#34;Adds given metric namespace
-
-        Example
-        -------
-        **Add metric namespace**
-
-            metric.add_namespace(name=&#34;ServerlessAirline&#34;)
-
-        Parameters
-        ----------
-        name : str
-            Metric namespace
-        &#34;&#34;&#34;
-        warnings.warn(
-            &#34;add_namespace method is deprecated. Pass namespace to Metrics constructor instead&#34;, DeprecationWarning
-        )
-        if self.namespace is not None:
-            raise UniqueNamespaceError(
-                f&#34;Namespace &#39;{self.namespace}&#39; already set - Only one namespace is allowed across metrics&#34;
-            )
-        logger.debug(f&#34;Adding metrics namespace: {name}&#34;)
-        self.namespace = name
+        self.metadata_set = self.metadata_set if metadata_set is not None else {}
 
     def add_metric(self, name: str, unit: MetricUnit, value: Union[float, int]):
         &#34;&#34;&#34;Adds given metric
@@ -155,7 +163,7 @@ class MetricManager:
             # since we could have more than 100 metrics
             self.metric_set.clear()
 
-    def serialize_metric_set(self, metrics: Dict = None, dimensions: Dict = None) -&gt; Dict:
+    def serialize_metric_set(self, metrics: Dict = None, dimensions: Dict = None, metadata: Dict = None) -&gt; Dict:
         &#34;&#34;&#34;Serializes metric and dimensions set
 
         Parameters
@@ -189,39 +197,48 @@ class MetricManager:
         if dimensions is None:  # pragma: no cover
             dimensions = self.dimension_set
 
+        if metadata is None:  # pragma: no cover
+            metadata = self.metadata_set
+
         if self.service and not self.dimension_set.get(&#34;service&#34;):
             self.dimension_set[&#34;service&#34;] = self.service
 
         logger.debug(&#34;Serializing...&#34;, {&#34;metrics&#34;: metrics, &#34;dimensions&#34;: dimensions})
 
-        dimension_keys: List[str] = list(dimensions.keys())
-        metric_names_unit: List[Dict[str, str]] = []
-        metric_set: Dict[str, str] = {}
+        metric_names_and_units: List[Dict[str, str]] = []  # [ { &#34;Name&#34;: &#34;metric_name&#34;, &#34;Unit&#34;: &#34;Count&#34; } ]
+        metric_names_and_values: Dict[str, str] = {}  # { &#34;metric_name&#34;: 1.0 }
 
         for metric_name in metrics:
             metric: str = metrics[metric_name]
             metric_value: int = metric.get(&#34;Value&#34;, 0)
             metric_unit: str = metric.get(&#34;Unit&#34;, &#34;&#34;)
 
-            metric_names_unit.append({&#34;Name&#34;: metric_name, &#34;Unit&#34;: metric_unit})
-            metric_set.update({metric_name: metric_value})
+            metric_names_and_units.append({&#34;Name&#34;: metric_name, &#34;Unit&#34;: metric_unit})
+            metric_names_and_values.update({metric_name: metric_value})
 
-        metrics_definition = {
-            &#34;CloudWatchMetrics&#34;: [
-                {&#34;Namespace&#34;: self.namespace, &#34;Dimensions&#34;: [dimension_keys], &#34;Metrics&#34;: metric_names_unit}
-            ]
+        embedded_metrics_object = {
+            &#34;_aws&#34;: {
+                &#34;Timestamp&#34;: int(datetime.datetime.now().timestamp() * 1000),  # epoch
+                &#34;CloudWatchMetrics&#34;: [
+                    {
+                        &#34;Namespace&#34;: self.namespace,  # &#34;test_namespace&#34;
+                        &#34;Dimensions&#34;: [list(dimensions.keys())],  # [ &#34;service&#34; ]
+                        &#34;Metrics&#34;: metric_names_and_units,
+                    }
+                ],
+            },
+            **dimensions,  # &#34;service&#34;: &#34;test_service&#34;
+            **metadata,  # &#34;username&#34;: &#34;test&#34;
+            **metric_names_and_values,  # &#34;single_metric&#34;: 1.0
         }
-        metrics_timestamp = {&#34;Timestamp&#34;: int(datetime.datetime.now().timestamp() * 1000)}
-        metric_set[&#34;_aws&#34;] = {**metrics_timestamp, **metrics_definition}
-        metric_set.update(**dimensions)
 
         try:
-            logger.debug(&#34;Validating serialized metrics against CloudWatch EMF schema&#34;, metric_set)
-            fastjsonschema.validate(definition=CLOUDWATCH_EMF_SCHEMA, data=metric_set)
+            logger.debug(&#34;Validating serialized metrics against CloudWatch EMF schema&#34;, embedded_metrics_object)
+            fastjsonschema.validate(definition=CLOUDWATCH_EMF_SCHEMA, data=embedded_metrics_object)
         except fastjsonschema.JsonSchemaException as e:
             message = f&#34;Invalid format. Error: {e.message}, Invalid item: {e.name}&#34;  # noqa: B306, E501
             raise SchemaValidationError(message)
-        return metric_set
+        return embedded_metrics_object
 
     def add_dimension(self, name: str, value: str):
         &#34;&#34;&#34;Adds given dimension to all metrics
@@ -248,6 +265,38 @@ class MetricManager:
             self.dimension_set[name] = value
         else:
             self.dimension_set[name] = str(value)
+
+    def add_metadata(self, key: str, value: Any):
+        &#34;&#34;&#34;Adds high cardinal metadata for metrics object
+
+        This will not be available during metrics visualization.
+        Instead, this will be searchable through logs.
+
+        If you&#39;re looking to add metadata to filter metrics, then
+        use add_dimensions method.
+
+        Example
+        -------
+        **Add metrics metadata**
+
+            metric.add_metadata(key=&#34;booking_id&#34;, value=&#34;booking_id&#34;)
+
+        Parameters
+        ----------
+        name : str
+            Metadata key
+        value : any
+            Metadata value
+        &#34;&#34;&#34;
+        logger.debug(f&#34;Adding metadata: {key}:{value}&#34;)
+
+        # Cast key to str according to EMF spec
+        # Majority of keys are expected to be string already, so
+        # checking before casting improves performance in most cases
+        if isinstance(key, str):
+            self.metadata_set[key] = value
+        else:
+            self.metadata_set[str(key)] = value
 
     def __extract_metric_unit_value(self, unit: Union[str, MetricUnit]) -&gt; str:
         &#34;&#34;&#34;Return metric value from metric unit whether that&#39;s str or MetricUnit enum
@@ -294,7 +343,7 @@ class MetricManager:
 <dl>
 <dt id="aws_lambda_powertools.metrics.base.MetricManager"><code class="flex name class">
 <span>class <span class="ident">MetricManager</span></span>
-<span>(</span><span>metric_set=None, dimension_set=None, namespace=None, service=None)</span>
+<span>(</span><span>metric_set=None, dimension_set=None, namespace=None, metadata_set=None, service=None)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Base class for metric functionality (namespace, metric, dimension, serialization)</p>
@@ -317,8 +366,6 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
 <dd>When metric metric isn't supported by CloudWatch</dd>
 <dt><code>MetricValueError</code></dt>
 <dd>When metric value isn't a number</dd>
-<dt><code>UniqueNamespaceError</code></dt>
-<dd>When an additional namespace is set</dd>
 <dt><code>SchemaValidationError</code></dt>
 <dd>When metric object fails EMF schema validation</dd>
 </dl></section>
@@ -350,14 +397,17 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
         When metric metric isn&#39;t supported by CloudWatch
     MetricValueError
         When metric value isn&#39;t a number
-    UniqueNamespaceError
-        When an additional namespace is set
     SchemaValidationError
         When metric object fails EMF schema validation
     &#34;&#34;&#34;
 
     def __init__(
-        self, metric_set: Dict[str, str] = None, dimension_set: Dict = None, namespace: str = None, service: str = None
+        self,
+        metric_set: Dict[str, str] = None,
+        dimension_set: Dict = None,
+        namespace: str = None,
+        metadata_set: Dict[str, Any] = None,
+        service: str = None,
     ):
         self.metric_set = metric_set if metric_set is not None else {}
         self.dimension_set = dimension_set if dimension_set is not None else {}
@@ -365,30 +415,7 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
         self.service = service or os.environ.get(&#34;POWERTOOLS_SERVICE_NAME&#34;)
         self._metric_units = [unit.value for unit in MetricUnit]
         self._metric_unit_options = list(MetricUnit.__members__)
-
-    def add_namespace(self, name: str):
-        &#34;&#34;&#34;Adds given metric namespace
-
-        Example
-        -------
-        **Add metric namespace**
-
-            metric.add_namespace(name=&#34;ServerlessAirline&#34;)
-
-        Parameters
-        ----------
-        name : str
-            Metric namespace
-        &#34;&#34;&#34;
-        warnings.warn(
-            &#34;add_namespace method is deprecated. Pass namespace to Metrics constructor instead&#34;, DeprecationWarning
-        )
-        if self.namespace is not None:
-            raise UniqueNamespaceError(
-                f&#34;Namespace &#39;{self.namespace}&#39; already set - Only one namespace is allowed across metrics&#34;
-            )
-        logger.debug(f&#34;Adding metrics namespace: {name}&#34;)
-        self.namespace = name
+        self.metadata_set = self.metadata_set if metadata_set is not None else {}
 
     def add_metric(self, name: str, unit: MetricUnit, value: Union[float, int]):
         &#34;&#34;&#34;Adds given metric
@@ -434,7 +461,7 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
             # since we could have more than 100 metrics
             self.metric_set.clear()
 
-    def serialize_metric_set(self, metrics: Dict = None, dimensions: Dict = None) -&gt; Dict:
+    def serialize_metric_set(self, metrics: Dict = None, dimensions: Dict = None, metadata: Dict = None) -&gt; Dict:
         &#34;&#34;&#34;Serializes metric and dimensions set
 
         Parameters
@@ -468,39 +495,48 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
         if dimensions is None:  # pragma: no cover
             dimensions = self.dimension_set
 
+        if metadata is None:  # pragma: no cover
+            metadata = self.metadata_set
+
         if self.service and not self.dimension_set.get(&#34;service&#34;):
             self.dimension_set[&#34;service&#34;] = self.service
 
         logger.debug(&#34;Serializing...&#34;, {&#34;metrics&#34;: metrics, &#34;dimensions&#34;: dimensions})
 
-        dimension_keys: List[str] = list(dimensions.keys())
-        metric_names_unit: List[Dict[str, str]] = []
-        metric_set: Dict[str, str] = {}
+        metric_names_and_units: List[Dict[str, str]] = []  # [ { &#34;Name&#34;: &#34;metric_name&#34;, &#34;Unit&#34;: &#34;Count&#34; } ]
+        metric_names_and_values: Dict[str, str] = {}  # { &#34;metric_name&#34;: 1.0 }
 
         for metric_name in metrics:
             metric: str = metrics[metric_name]
             metric_value: int = metric.get(&#34;Value&#34;, 0)
             metric_unit: str = metric.get(&#34;Unit&#34;, &#34;&#34;)
 
-            metric_names_unit.append({&#34;Name&#34;: metric_name, &#34;Unit&#34;: metric_unit})
-            metric_set.update({metric_name: metric_value})
+            metric_names_and_units.append({&#34;Name&#34;: metric_name, &#34;Unit&#34;: metric_unit})
+            metric_names_and_values.update({metric_name: metric_value})
 
-        metrics_definition = {
-            &#34;CloudWatchMetrics&#34;: [
-                {&#34;Namespace&#34;: self.namespace, &#34;Dimensions&#34;: [dimension_keys], &#34;Metrics&#34;: metric_names_unit}
-            ]
+        embedded_metrics_object = {
+            &#34;_aws&#34;: {
+                &#34;Timestamp&#34;: int(datetime.datetime.now().timestamp() * 1000),  # epoch
+                &#34;CloudWatchMetrics&#34;: [
+                    {
+                        &#34;Namespace&#34;: self.namespace,  # &#34;test_namespace&#34;
+                        &#34;Dimensions&#34;: [list(dimensions.keys())],  # [ &#34;service&#34; ]
+                        &#34;Metrics&#34;: metric_names_and_units,
+                    }
+                ],
+            },
+            **dimensions,  # &#34;service&#34;: &#34;test_service&#34;
+            **metadata,  # &#34;username&#34;: &#34;test&#34;
+            **metric_names_and_values,  # &#34;single_metric&#34;: 1.0
         }
-        metrics_timestamp = {&#34;Timestamp&#34;: int(datetime.datetime.now().timestamp() * 1000)}
-        metric_set[&#34;_aws&#34;] = {**metrics_timestamp, **metrics_definition}
-        metric_set.update(**dimensions)
 
         try:
-            logger.debug(&#34;Validating serialized metrics against CloudWatch EMF schema&#34;, metric_set)
-            fastjsonschema.validate(definition=CLOUDWATCH_EMF_SCHEMA, data=metric_set)
+            logger.debug(&#34;Validating serialized metrics against CloudWatch EMF schema&#34;, embedded_metrics_object)
+            fastjsonschema.validate(definition=CLOUDWATCH_EMF_SCHEMA, data=embedded_metrics_object)
         except fastjsonschema.JsonSchemaException as e:
             message = f&#34;Invalid format. Error: {e.message}, Invalid item: {e.name}&#34;  # noqa: B306, E501
             raise SchemaValidationError(message)
-        return metric_set
+        return embedded_metrics_object
 
     def add_dimension(self, name: str, value: str):
         &#34;&#34;&#34;Adds given dimension to all metrics
@@ -527,6 +563,38 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
             self.dimension_set[name] = value
         else:
             self.dimension_set[name] = str(value)
+
+    def add_metadata(self, key: str, value: Any):
+        &#34;&#34;&#34;Adds high cardinal metadata for metrics object
+
+        This will not be available during metrics visualization.
+        Instead, this will be searchable through logs.
+
+        If you&#39;re looking to add metadata to filter metrics, then
+        use add_dimensions method.
+
+        Example
+        -------
+        **Add metrics metadata**
+
+            metric.add_metadata(key=&#34;booking_id&#34;, value=&#34;booking_id&#34;)
+
+        Parameters
+        ----------
+        name : str
+            Metadata key
+        value : any
+            Metadata value
+        &#34;&#34;&#34;
+        logger.debug(f&#34;Adding metadata: {key}:{value}&#34;)
+
+        # Cast key to str according to EMF spec
+        # Majority of keys are expected to be string already, so
+        # checking before casting improves performance in most cases
+        if isinstance(key, str):
+            self.metadata_set[key] = value
+        else:
+            self.metadata_set[str(key)] = value
 
     def __extract_metric_unit_value(self, unit: Union[str, MetricUnit]) -&gt; str:
         &#34;&#34;&#34;Return metric value from metric unit whether that&#39;s str or MetricUnit enum
@@ -615,6 +683,63 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
         self.dimension_set[name] = str(value)</code></pre>
 </details>
 </dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricManager.add_metadata"><code class="name flex">
+<span>def <span class="ident">add_metadata</span></span>(<span>self, key, value)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Adds high cardinal metadata for metrics object</p>
+<p>This will not be available during metrics visualization.
+Instead, this will be searchable through logs.</p>
+<p>If you're looking to add metadata to filter metrics, then
+use add_dimensions method.</p>
+<h2 id="example">Example</h2>
+<p><strong>Add metrics metadata</strong></p>
+<pre><code>metric.add_metadata(key="booking_id", value="booking_id")
+</code></pre>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>Metadata key</dd>
+<dt><strong><code>value</code></strong> :&ensp;<code>any</code></dt>
+<dd>Metadata value</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_metadata(self, key: str, value: Any):
+    &#34;&#34;&#34;Adds high cardinal metadata for metrics object
+
+    This will not be available during metrics visualization.
+    Instead, this will be searchable through logs.
+
+    If you&#39;re looking to add metadata to filter metrics, then
+    use add_dimensions method.
+
+    Example
+    -------
+    **Add metrics metadata**
+
+        metric.add_metadata(key=&#34;booking_id&#34;, value=&#34;booking_id&#34;)
+
+    Parameters
+    ----------
+    name : str
+        Metadata key
+    value : any
+        Metadata value
+    &#34;&#34;&#34;
+    logger.debug(f&#34;Adding metadata: {key}:{value}&#34;)
+
+    # Cast key to str according to EMF spec
+    # Majority of keys are expected to be string already, so
+    # checking before casting improves performance in most cases
+    if isinstance(key, str):
+        self.metadata_set[key] = value
+    else:
+        self.metadata_set[str(key)] = value</code></pre>
+</details>
+</dd>
 <dt id="aws_lambda_powertools.metrics.base.MetricManager.add_metric"><code class="name flex">
 <span>def <span class="ident">add_metric</span></span>(<span>self, name, unit, value)</span>
 </code></dt>
@@ -631,8 +756,8 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
 <dl>
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
 <dd>Metric name</dd>
-<dt><strong><code>unit</code></strong> :&ensp;<code>MetricUnit</code></dt>
-<dd><a title="aws_lambda_powertools.helper.models.MetricUnit" href="../helper/models.html#aws_lambda_powertools.helper.models.MetricUnit"><code>MetricUnit</code></a></dd>
+<dt><strong><code>unit</code></strong> :&ensp;<a title="aws_lambda_powertools.metrics.base.MetricUnit" href="#aws_lambda_powertools.metrics.base.MetricUnit"><code>MetricUnit</code></a></dt>
+<dd><code>aws_lambda_powertools.helper.models.MetricUnit</code></dd>
 <dt><strong><code>value</code></strong> :&ensp;<code>float</code></dt>
 <dd>Metric value</dd>
 </dl>
@@ -690,51 +815,8 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
         self.metric_set.clear()</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.metrics.base.MetricManager.add_namespace"><code class="name flex">
-<span>def <span class="ident">add_namespace</span></span>(<span>self, name)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Adds given metric namespace</p>
-<h2 id="example">Example</h2>
-<p><strong>Add metric namespace</strong></p>
-<pre><code>metric.add_namespace(name="ServerlessAirline")
-</code></pre>
-<h2 id="parameters">Parameters</h2>
-<dl>
-<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
-<dd>Metric namespace</dd>
-</dl></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def add_namespace(self, name: str):
-    &#34;&#34;&#34;Adds given metric namespace
-
-    Example
-    -------
-    **Add metric namespace**
-
-        metric.add_namespace(name=&#34;ServerlessAirline&#34;)
-
-    Parameters
-    ----------
-    name : str
-        Metric namespace
-    &#34;&#34;&#34;
-    warnings.warn(
-        &#34;add_namespace method is deprecated. Pass namespace to Metrics constructor instead&#34;, DeprecationWarning
-    )
-    if self.namespace is not None:
-        raise UniqueNamespaceError(
-            f&#34;Namespace &#39;{self.namespace}&#39; already set - Only one namespace is allowed across metrics&#34;
-        )
-    logger.debug(f&#34;Adding metrics namespace: {name}&#34;)
-    self.namespace = name</code></pre>
-</details>
-</dd>
 <dt id="aws_lambda_powertools.metrics.base.MetricManager.serialize_metric_set"><code class="name flex">
-<span>def <span class="ident">serialize_metric_set</span></span>(<span>self, metrics=None, dimensions=None)</span>
+<span>def <span class="ident">serialize_metric_set</span></span>(<span>self, metrics=None, dimensions=None, metadata=None)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Serializes metric and dimensions set</p>
@@ -765,7 +847,7 @@ ret = metrics.serialize_metric_set()
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def serialize_metric_set(self, metrics: Dict = None, dimensions: Dict = None) -&gt; Dict:
+<pre><code class="python">def serialize_metric_set(self, metrics: Dict = None, dimensions: Dict = None, metadata: Dict = None) -&gt; Dict:
     &#34;&#34;&#34;Serializes metric and dimensions set
 
     Parameters
@@ -799,40 +881,199 @@ ret = metrics.serialize_metric_set()
     if dimensions is None:  # pragma: no cover
         dimensions = self.dimension_set
 
+    if metadata is None:  # pragma: no cover
+        metadata = self.metadata_set
+
     if self.service and not self.dimension_set.get(&#34;service&#34;):
         self.dimension_set[&#34;service&#34;] = self.service
 
     logger.debug(&#34;Serializing...&#34;, {&#34;metrics&#34;: metrics, &#34;dimensions&#34;: dimensions})
 
-    dimension_keys: List[str] = list(dimensions.keys())
-    metric_names_unit: List[Dict[str, str]] = []
-    metric_set: Dict[str, str] = {}
+    metric_names_and_units: List[Dict[str, str]] = []  # [ { &#34;Name&#34;: &#34;metric_name&#34;, &#34;Unit&#34;: &#34;Count&#34; } ]
+    metric_names_and_values: Dict[str, str] = {}  # { &#34;metric_name&#34;: 1.0 }
 
     for metric_name in metrics:
         metric: str = metrics[metric_name]
         metric_value: int = metric.get(&#34;Value&#34;, 0)
         metric_unit: str = metric.get(&#34;Unit&#34;, &#34;&#34;)
 
-        metric_names_unit.append({&#34;Name&#34;: metric_name, &#34;Unit&#34;: metric_unit})
-        metric_set.update({metric_name: metric_value})
+        metric_names_and_units.append({&#34;Name&#34;: metric_name, &#34;Unit&#34;: metric_unit})
+        metric_names_and_values.update({metric_name: metric_value})
 
-    metrics_definition = {
-        &#34;CloudWatchMetrics&#34;: [
-            {&#34;Namespace&#34;: self.namespace, &#34;Dimensions&#34;: [dimension_keys], &#34;Metrics&#34;: metric_names_unit}
-        ]
+    embedded_metrics_object = {
+        &#34;_aws&#34;: {
+            &#34;Timestamp&#34;: int(datetime.datetime.now().timestamp() * 1000),  # epoch
+            &#34;CloudWatchMetrics&#34;: [
+                {
+                    &#34;Namespace&#34;: self.namespace,  # &#34;test_namespace&#34;
+                    &#34;Dimensions&#34;: [list(dimensions.keys())],  # [ &#34;service&#34; ]
+                    &#34;Metrics&#34;: metric_names_and_units,
+                }
+            ],
+        },
+        **dimensions,  # &#34;service&#34;: &#34;test_service&#34;
+        **metadata,  # &#34;username&#34;: &#34;test&#34;
+        **metric_names_and_values,  # &#34;single_metric&#34;: 1.0
     }
-    metrics_timestamp = {&#34;Timestamp&#34;: int(datetime.datetime.now().timestamp() * 1000)}
-    metric_set[&#34;_aws&#34;] = {**metrics_timestamp, **metrics_definition}
-    metric_set.update(**dimensions)
 
     try:
-        logger.debug(&#34;Validating serialized metrics against CloudWatch EMF schema&#34;, metric_set)
-        fastjsonschema.validate(definition=CLOUDWATCH_EMF_SCHEMA, data=metric_set)
+        logger.debug(&#34;Validating serialized metrics against CloudWatch EMF schema&#34;, embedded_metrics_object)
+        fastjsonschema.validate(definition=CLOUDWATCH_EMF_SCHEMA, data=embedded_metrics_object)
     except fastjsonschema.JsonSchemaException as e:
         message = f&#34;Invalid format. Error: {e.message}, Invalid item: {e.name}&#34;  # noqa: B306, E501
         raise SchemaValidationError(message)
-    return metric_set</code></pre>
+    return embedded_metrics_object</code></pre>
 </details>
+</dd>
+</dl>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit"><code class="flex name class">
+<span>class <span class="ident">MetricUnit</span></span>
+<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>An enumeration.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MetricUnit(Enum):
+    Seconds = &#34;Seconds&#34;
+    Microseconds = &#34;Microseconds&#34;
+    Milliseconds = &#34;Milliseconds&#34;
+    Bytes = &#34;Bytes&#34;
+    Kilobytes = &#34;Kilobytes&#34;
+    Megabytes = &#34;Megabytes&#34;
+    Gigabytes = &#34;Gigabytes&#34;
+    Terabytes = &#34;Terabytes&#34;
+    Bits = &#34;Bits&#34;
+    Kilobits = &#34;Kilobits&#34;
+    Megabits = &#34;Megabits&#34;
+    Gigabits = &#34;Gigabits&#34;
+    Terabits = &#34;Terabits&#34;
+    Percent = &#34;Percent&#34;
+    Count = &#34;Count&#34;
+    BytesPerSecond = &#34;Bytes/Second&#34;
+    KilobytesPerSecond = &#34;Kilobytes/Second&#34;
+    MegabytesPerSecond = &#34;Megabytes/Second&#34;
+    GigabytesPerSecond = &#34;Gigabytes/Second&#34;
+    TerabytesPerSecond = &#34;Terabytes/Second&#34;
+    BitsPerSecond = &#34;Bits/Second&#34;
+    KilobitsPerSecond = &#34;Kilobits/Second&#34;
+    MegabitsPerSecond = &#34;Megabits/Second&#34;
+    GigabitsPerSecond = &#34;Gigabits/Second&#34;
+    TerabitsPerSecond = &#34;Terabits/Second&#34;
+    CountPerSecond = &#34;Count/Second&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.Bits"><code class="name">var <span class="ident">Bits</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.BitsPerSecond"><code class="name">var <span class="ident">BitsPerSecond</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.Bytes"><code class="name">var <span class="ident">Bytes</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.BytesPerSecond"><code class="name">var <span class="ident">BytesPerSecond</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.Count"><code class="name">var <span class="ident">Count</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.CountPerSecond"><code class="name">var <span class="ident">CountPerSecond</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.Gigabits"><code class="name">var <span class="ident">Gigabits</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.GigabitsPerSecond"><code class="name">var <span class="ident">GigabitsPerSecond</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.Gigabytes"><code class="name">var <span class="ident">Gigabytes</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.GigabytesPerSecond"><code class="name">var <span class="ident">GigabytesPerSecond</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.Kilobits"><code class="name">var <span class="ident">Kilobits</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.KilobitsPerSecond"><code class="name">var <span class="ident">KilobitsPerSecond</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.Kilobytes"><code class="name">var <span class="ident">Kilobytes</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.KilobytesPerSecond"><code class="name">var <span class="ident">KilobytesPerSecond</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.Megabits"><code class="name">var <span class="ident">Megabits</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.MegabitsPerSecond"><code class="name">var <span class="ident">MegabitsPerSecond</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.Megabytes"><code class="name">var <span class="ident">Megabytes</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.MegabytesPerSecond"><code class="name">var <span class="ident">MegabytesPerSecond</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.Microseconds"><code class="name">var <span class="ident">Microseconds</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.Milliseconds"><code class="name">var <span class="ident">Milliseconds</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.Percent"><code class="name">var <span class="ident">Percent</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.Seconds"><code class="name">var <span class="ident">Seconds</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.Terabits"><code class="name">var <span class="ident">Terabits</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.TerabitsPerSecond"><code class="name">var <span class="ident">TerabitsPerSecond</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.Terabytes"><code class="name">var <span class="ident">Terabytes</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="aws_lambda_powertools.metrics.base.MetricUnit.TerabytesPerSecond"><code class="name">var <span class="ident">TerabytesPerSecond</span></code></dt>
+<dd>
+<section class="desc"></section>
 </dd>
 </dl>
 </dd>
@@ -856,9 +1097,40 @@ ret = metrics.serialize_metric_set()
 <h4><code><a title="aws_lambda_powertools.metrics.base.MetricManager" href="#aws_lambda_powertools.metrics.base.MetricManager">MetricManager</a></code></h4>
 <ul class="">
 <li><code><a title="aws_lambda_powertools.metrics.base.MetricManager.add_dimension" href="#aws_lambda_powertools.metrics.base.MetricManager.add_dimension">add_dimension</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricManager.add_metadata" href="#aws_lambda_powertools.metrics.base.MetricManager.add_metadata">add_metadata</a></code></li>
 <li><code><a title="aws_lambda_powertools.metrics.base.MetricManager.add_metric" href="#aws_lambda_powertools.metrics.base.MetricManager.add_metric">add_metric</a></code></li>
-<li><code><a title="aws_lambda_powertools.metrics.base.MetricManager.add_namespace" href="#aws_lambda_powertools.metrics.base.MetricManager.add_namespace">add_namespace</a></code></li>
 <li><code><a title="aws_lambda_powertools.metrics.base.MetricManager.serialize_metric_set" href="#aws_lambda_powertools.metrics.base.MetricManager.serialize_metric_set">serialize_metric_set</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.metrics.base.MetricUnit" href="#aws_lambda_powertools.metrics.base.MetricUnit">MetricUnit</a></code></h4>
+<ul class="two-column">
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.Bits" href="#aws_lambda_powertools.metrics.base.MetricUnit.Bits">Bits</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.BitsPerSecond" href="#aws_lambda_powertools.metrics.base.MetricUnit.BitsPerSecond">BitsPerSecond</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.Bytes" href="#aws_lambda_powertools.metrics.base.MetricUnit.Bytes">Bytes</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.BytesPerSecond" href="#aws_lambda_powertools.metrics.base.MetricUnit.BytesPerSecond">BytesPerSecond</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.Count" href="#aws_lambda_powertools.metrics.base.MetricUnit.Count">Count</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.CountPerSecond" href="#aws_lambda_powertools.metrics.base.MetricUnit.CountPerSecond">CountPerSecond</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.Gigabits" href="#aws_lambda_powertools.metrics.base.MetricUnit.Gigabits">Gigabits</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.GigabitsPerSecond" href="#aws_lambda_powertools.metrics.base.MetricUnit.GigabitsPerSecond">GigabitsPerSecond</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.Gigabytes" href="#aws_lambda_powertools.metrics.base.MetricUnit.Gigabytes">Gigabytes</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.GigabytesPerSecond" href="#aws_lambda_powertools.metrics.base.MetricUnit.GigabytesPerSecond">GigabytesPerSecond</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.Kilobits" href="#aws_lambda_powertools.metrics.base.MetricUnit.Kilobits">Kilobits</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.KilobitsPerSecond" href="#aws_lambda_powertools.metrics.base.MetricUnit.KilobitsPerSecond">KilobitsPerSecond</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.Kilobytes" href="#aws_lambda_powertools.metrics.base.MetricUnit.Kilobytes">Kilobytes</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.KilobytesPerSecond" href="#aws_lambda_powertools.metrics.base.MetricUnit.KilobytesPerSecond">KilobytesPerSecond</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.Megabits" href="#aws_lambda_powertools.metrics.base.MetricUnit.Megabits">Megabits</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.MegabitsPerSecond" href="#aws_lambda_powertools.metrics.base.MetricUnit.MegabitsPerSecond">MegabitsPerSecond</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.Megabytes" href="#aws_lambda_powertools.metrics.base.MetricUnit.Megabytes">Megabytes</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.MegabytesPerSecond" href="#aws_lambda_powertools.metrics.base.MetricUnit.MegabytesPerSecond">MegabytesPerSecond</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.Microseconds" href="#aws_lambda_powertools.metrics.base.MetricUnit.Microseconds">Microseconds</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.Milliseconds" href="#aws_lambda_powertools.metrics.base.MetricUnit.Milliseconds">Milliseconds</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.Percent" href="#aws_lambda_powertools.metrics.base.MetricUnit.Percent">Percent</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.Seconds" href="#aws_lambda_powertools.metrics.base.MetricUnit.Seconds">Seconds</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.Terabits" href="#aws_lambda_powertools.metrics.base.MetricUnit.Terabits">Terabits</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.TerabitsPerSecond" href="#aws_lambda_powertools.metrics.base.MetricUnit.TerabitsPerSecond">TerabitsPerSecond</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.Terabytes" href="#aws_lambda_powertools.metrics.base.MetricUnit.Terabytes">Terabytes</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricUnit.TerabytesPerSecond" href="#aws_lambda_powertools.metrics.base.MetricUnit.TerabytesPerSecond">TerabytesPerSecond</a></code></li>
 </ul>
 </li>
 </ul>

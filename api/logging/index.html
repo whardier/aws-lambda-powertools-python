@@ -27,16 +27,23 @@
 </summary>
 <pre><code class="python">&#34;&#34;&#34;Logging utility
 &#34;&#34;&#34;
-from ..helper.models import MetricUnit
-from .logger import Logger, log_metric, logger_inject_lambda_context, logger_setup
+from .logger import Logger
 
-__all__ = [&#34;logger_setup&#34;, &#34;logger_inject_lambda_context&#34;, &#34;log_metric&#34;, &#34;MetricUnit&#34;, &#34;Logger&#34;]</code></pre>
+__all__ = [&#34;Logger&#34;]</code></pre>
 </details>
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
 <dt><code class="name"><a title="aws_lambda_powertools.logging.exceptions" href="exceptions.html">aws_lambda_powertools.logging.exceptions</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="aws_lambda_powertools.logging.formatter" href="formatter.html">aws_lambda_powertools.logging.formatter</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="aws_lambda_powertools.logging.lambda_context" href="lambda_context.html">aws_lambda_powertools.logging.lambda_context</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
@@ -49,226 +56,6 @@ __all__ = [&#34;logger_setup&#34;, &#34;logger_inject_lambda_context&#34;, &#34;
 <section>
 </section>
 <section>
-<h2 class="section-title" id="header-functions">Functions</h2>
-<dl>
-<dt id="aws_lambda_powertools.logging.log_metric"><code class="name flex">
-<span>def <span class="ident">log_metric</span></span>(<span>name, namespace, unit, value=0, service='service_undefined', **dimensions)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Logs a custom metric in a statsD-esque format to stdout.</p>
-<p><strong>This will be removed when GA - Use <a title="aws_lambda_powertools.metrics.metrics.Metrics" href="../metrics/metrics.html#aws_lambda_powertools.metrics.metrics.Metrics"><code>Metrics</code></a> instead</strong></p>
-<p>Creating Custom Metrics synchronously impact on performance/execution time.
-Instead, log_metric prints a metric to CloudWatch Logs.
-That allows us to pick them up asynchronously via another Lambda function and create them as a metric.</p>
-<p>NOTE: It takes up to 9 dimensions by default, and Metric units are conveniently available via MetricUnit Enum.
-If service is not passed as arg or via env var, "service_undefined" will be used as dimension instead.</p>
-<p><strong>Output in CloudWatch Logs</strong>: <code>MONITORING|&lt;metric_value&gt;|&lt;metric_unit&gt;|&lt;metric_name&gt;|&lt;namespace&gt;|&lt;dimensions&gt;</code></p>
-<p>Serverless Application Repository App that creates custom metric from this log output:
-<a href="https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:374852340823:applications~async-custom-metrics">https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:374852340823:applications~async-custom-metrics</a></p>
-<h2 id="environment-variables">Environment variables</h2>
-<dl>
-<dt><strong><code>POWERTOOLS_SERVICE_NAME</code></strong> :&ensp;<code>str</code></dt>
-<dd>service name</dd>
-</dl>
-<h2 id="parameters">Parameters</h2>
-<dl>
-<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
-<dd>metric name, by default None</dd>
-<dt><strong><code>namespace</code></strong> :&ensp;<code>str</code></dt>
-<dd>metric namespace (e.g. application name), by default None</dd>
-<dt><strong><code>unit</code></strong> :&ensp;<a title="aws_lambda_powertools.logging.MetricUnit" href="#aws_lambda_powertools.logging.MetricUnit"><code>MetricUnit</code></a>, <code>by</code> default <a title="aws_lambda_powertools.logging.MetricUnit.Count" href="#aws_lambda_powertools.logging.MetricUnit.Count"><code>MetricUnit.Count</code></a></dt>
-<dd>
-<p>metric unit enum value (e.g. MetricUnit.Seconds), by default None</p>
-<p>API Info: <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_MetricDatum.html">https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_MetricDatum.html</a></p>
-</dd>
-<dt><strong><code>value</code></strong> :&ensp;<code>float</code>, optional</dt>
-<dd>metric value, by default 0</dd>
-<dt><strong><code>service</code></strong> :&ensp;<code>str</code>, optional</dt>
-<dd>service name used as dimension, by default "service_undefined"</dd>
-<dt><strong><code>dimensions</code></strong> :&ensp;<code>dict</code>, optional</dt>
-<dd>keyword arguments as additional dimensions (e.g. <code>customer=customerId</code>)</dd>
-</dl>
-<h2 id="example">Example</h2>
-<p><strong>Log metric to count number of successful payments; define service via env var</strong></p>
-<pre><code>$ export POWERTOOLS_SERVICE_NAME="payment"
-from aws_lambda_powertools.logging import MetricUnit, log_metric
-log_metric(
-    name="SuccessfulPayments",
-    unit=MetricUnit.Count,
-    value=1,
-    namespace="DemoApp"
-)
-</code></pre>
-<p><strong>Log metric to count number of successful payments per campaign &amp; customer</strong></p>
-<pre><code>from aws_lambda_powertools.logging import MetricUnit, log_metric
-log_metric(
-    name="SuccessfulPayments",
-    service="payment",
-    unit=MetricUnit.Count,
-    value=1,
-    namespace="DemoApp",
-    campaign=campaign_id,
-    customer=customer_id
-)
-</code></pre></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def log_metric(
-    name: str, namespace: str, unit: MetricUnit, value: float = 0, service: str = &#34;service_undefined&#34;, **dimensions,
-):
-    &#34;&#34;&#34;Logs a custom metric in a statsD-esque format to stdout.
-
-    **This will be removed when GA - Use `aws_lambda_powertools.metrics.metrics.Metrics` instead**
-
-    Creating Custom Metrics synchronously impact on performance/execution time.
-    Instead, log_metric prints a metric to CloudWatch Logs.
-    That allows us to pick them up asynchronously via another Lambda function and create them as a metric.
-
-    NOTE: It takes up to 9 dimensions by default, and Metric units are conveniently available via MetricUnit Enum.
-    If service is not passed as arg or via env var, &#34;service_undefined&#34; will be used as dimension instead.
-
-    **Output in CloudWatch Logs**: `MONITORING|&lt;metric_value&gt;|&lt;metric_unit&gt;|&lt;metric_name&gt;|&lt;namespace&gt;|&lt;dimensions&gt;`
-
-    Serverless Application Repository App that creates custom metric from this log output:
-    https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:374852340823:applications~async-custom-metrics
-
-    Environment variables
-    ---------------------
-    POWERTOOLS_SERVICE_NAME: str
-        service name
-
-    Parameters
-    ----------
-    name : str
-        metric name, by default None
-    namespace : str
-        metric namespace (e.g. application name), by default None
-    unit : MetricUnit, by default MetricUnit.Count
-        metric unit enum value (e.g. MetricUnit.Seconds), by default None\n
-        API Info: https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_MetricDatum.html
-    value : float, optional
-        metric value, by default 0
-    service : str, optional
-        service name used as dimension, by default &#34;service_undefined&#34;
-    dimensions: dict, optional
-        keyword arguments as additional dimensions (e.g. `customer=customerId`)
-
-    Example
-    -------
-    **Log metric to count number of successful payments; define service via env var**
-
-        $ export POWERTOOLS_SERVICE_NAME=&#34;payment&#34;
-        from aws_lambda_powertools.logging import MetricUnit, log_metric
-        log_metric(
-            name=&#34;SuccessfulPayments&#34;,
-            unit=MetricUnit.Count,
-            value=1,
-            namespace=&#34;DemoApp&#34;
-        )
-
-    **Log metric to count number of successful payments per campaign &amp; customer**
-
-        from aws_lambda_powertools.logging import MetricUnit, log_metric
-        log_metric(
-            name=&#34;SuccessfulPayments&#34;,
-            service=&#34;payment&#34;,
-            unit=MetricUnit.Count,
-            value=1,
-            namespace=&#34;DemoApp&#34;,
-            campaign=campaign_id,
-            customer=customer_id
-        )
-    &#34;&#34;&#34;
-
-    warnings.warn(message=&#34;This method will be removed in GA; use Metrics instead&#34;, category=DeprecationWarning)
-    logger.debug(f&#34;Building new custom metric. Name: {name}, Unit: {unit}, Value: {value}, Dimensions: {dimensions}&#34;)
-    service = os.getenv(&#34;POWERTOOLS_SERVICE_NAME&#34;) or service
-    dimensions = __build_dimensions(**dimensions)
-    unit = build_metric_unit_from_str(unit)
-
-    metric = f&#34;MONITORING|{value}|{unit.name}|{name}|{namespace}|service={service}&#34;
-    if dimensions:
-        metric = f&#34;MONITORING|{value}|{unit.name}|{name}|{namespace}|service={service},{dimensions}&#34;
-
-    print(metric)</code></pre>
-</details>
-</dd>
-<dt id="aws_lambda_powertools.logging.logger_inject_lambda_context"><code class="name flex">
-<span>def <span class="ident">logger_inject_lambda_context</span></span>(<span>lambda_handler=None, log_event=False)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>DEPRECATED</p>
-<p>This will be removed when GA - Use <a title="aws_lambda_powertools.logging.logger.Logger" href="logger.html#aws_lambda_powertools.logging.logger.Logger"><code>Logger</code></a> instead</p>
-<h2 id="example">Example</h2>
-<pre><code>**Logger class - Same UX**
-
-from aws_lambda_powertools import Logger
-logger = Logger(service="payment") # same env var still applies
-@logger.inject_lambda_context
-def handler(evt, ctx):
-    pass
-</code></pre></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def logger_inject_lambda_context(
-    lambda_handler: Callable[[Dict, Any], Any] = None, log_event: bool = False
-) -&gt; DeprecationWarning:
-    &#34;&#34;&#34;DEPRECATED
-
-    This will be removed when GA - Use `aws_lambda_powertools.logging.logger.Logger` instead
-
-    Example
-    -------
-        **Logger class - Same UX**
-
-        from aws_lambda_powertools import Logger
-        logger = Logger(service=&#34;payment&#34;) # same env var still applies
-        @logger.inject_lambda_context
-        def handler(evt, ctx):
-            pass
-    &#34;&#34;&#34;
-    raise DeprecationWarning(&#34;Use Logger instead - This method will be removed when GA&#34;)</code></pre>
-</details>
-</dd>
-<dt id="aws_lambda_powertools.logging.logger_setup"><code class="name flex">
-<span>def <span class="ident">logger_setup</span></span>(<span>service=None, level=None, sampling_rate=0.0, legacy=False, **kwargs)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>DEPRECATED</p>
-<p>This will be removed when GA - Use <a title="aws_lambda_powertools.logging.logger.Logger" href="logger.html#aws_lambda_powertools.logging.logger.Logger"><code>Logger</code></a> instead</p>
-<h2 id="example">Example</h2>
-<pre><code>**Logger class - Same UX**
-
-from aws_lambda_powertools import Logger
-logger = Logger(service="payment") # same env var still applies
-</code></pre></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def logger_setup(
-    service: str = None, level: str = None, sampling_rate: float = 0.0, legacy: bool = False, **kwargs
-) -&gt; DeprecationWarning:
-    &#34;&#34;&#34;DEPRECATED
-
-    This will be removed when GA - Use `aws_lambda_powertools.logging.logger.Logger` instead
-
-    Example
-    -------
-        **Logger class - Same UX**
-
-        from aws_lambda_powertools import Logger
-        logger = Logger(service=&#34;payment&#34;) # same env var still applies
-
-    &#34;&#34;&#34;
-    raise DeprecationWarning(&#34;Use Logger instead - This method will be removed when GA&#34;)</code></pre>
-</details>
-</dd>
-</dl>
 </section>
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
@@ -697,156 +484,6 @@ across future log statements.</p>
 </dd>
 </dl>
 </dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit"><code class="flex name class">
-<span>class <span class="ident">MetricUnit</span></span>
-<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>An enumeration.</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class MetricUnit(Enum):
-    Seconds = &#34;Seconds&#34;
-    Microseconds = &#34;Microseconds&#34;
-    Milliseconds = &#34;Milliseconds&#34;
-    Bytes = &#34;Bytes&#34;
-    Kilobytes = &#34;Kilobytes&#34;
-    Megabytes = &#34;Megabytes&#34;
-    Gigabytes = &#34;Gigabytes&#34;
-    Terabytes = &#34;Terabytes&#34;
-    Bits = &#34;Bits&#34;
-    Kilobits = &#34;Kilobits&#34;
-    Megabits = &#34;Megabits&#34;
-    Gigabits = &#34;Gigabits&#34;
-    Terabits = &#34;Terabits&#34;
-    Percent = &#34;Percent&#34;
-    Count = &#34;Count&#34;
-    BytesPerSecond = &#34;Bytes/Second&#34;
-    KilobytesPerSecond = &#34;Kilobytes/Second&#34;
-    MegabytesPerSecond = &#34;Megabytes/Second&#34;
-    GigabytesPerSecond = &#34;Gigabytes/Second&#34;
-    TerabytesPerSecond = &#34;Terabytes/Second&#34;
-    BitsPerSecond = &#34;Bits/Second&#34;
-    KilobitsPerSecond = &#34;Kilobits/Second&#34;
-    MegabitsPerSecond = &#34;Megabits/Second&#34;
-    GigabitsPerSecond = &#34;Gigabits/Second&#34;
-    TerabitsPerSecond = &#34;Terabits/Second&#34;
-    CountPerSecond = &#34;Count/Second&#34;</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>enum.Enum</li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="aws_lambda_powertools.logging.MetricUnit.Bits"><code class="name">var <span class="ident">Bits</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.BitsPerSecond"><code class="name">var <span class="ident">BitsPerSecond</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.Bytes"><code class="name">var <span class="ident">Bytes</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.BytesPerSecond"><code class="name">var <span class="ident">BytesPerSecond</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.Count"><code class="name">var <span class="ident">Count</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.CountPerSecond"><code class="name">var <span class="ident">CountPerSecond</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.Gigabits"><code class="name">var <span class="ident">Gigabits</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.GigabitsPerSecond"><code class="name">var <span class="ident">GigabitsPerSecond</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.Gigabytes"><code class="name">var <span class="ident">Gigabytes</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.GigabytesPerSecond"><code class="name">var <span class="ident">GigabytesPerSecond</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.Kilobits"><code class="name">var <span class="ident">Kilobits</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.KilobitsPerSecond"><code class="name">var <span class="ident">KilobitsPerSecond</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.Kilobytes"><code class="name">var <span class="ident">Kilobytes</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.KilobytesPerSecond"><code class="name">var <span class="ident">KilobytesPerSecond</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.Megabits"><code class="name">var <span class="ident">Megabits</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.MegabitsPerSecond"><code class="name">var <span class="ident">MegabitsPerSecond</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.Megabytes"><code class="name">var <span class="ident">Megabytes</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.MegabytesPerSecond"><code class="name">var <span class="ident">MegabytesPerSecond</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.Microseconds"><code class="name">var <span class="ident">Microseconds</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.Milliseconds"><code class="name">var <span class="ident">Milliseconds</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.Percent"><code class="name">var <span class="ident">Percent</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.Seconds"><code class="name">var <span class="ident">Seconds</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.Terabits"><code class="name">var <span class="ident">Terabits</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.TerabitsPerSecond"><code class="name">var <span class="ident">TerabitsPerSecond</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.Terabytes"><code class="name">var <span class="ident">Terabytes</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt id="aws_lambda_powertools.logging.MetricUnit.TerabytesPerSecond"><code class="name">var <span class="ident">TerabytesPerSecond</span></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-</dl>
-</dd>
 </dl>
 </section>
 </article>
@@ -864,14 +501,9 @@ across future log statements.</p>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
 <li><code><a title="aws_lambda_powertools.logging.exceptions" href="exceptions.html">aws_lambda_powertools.logging.exceptions</a></code></li>
+<li><code><a title="aws_lambda_powertools.logging.formatter" href="formatter.html">aws_lambda_powertools.logging.formatter</a></code></li>
+<li><code><a title="aws_lambda_powertools.logging.lambda_context" href="lambda_context.html">aws_lambda_powertools.logging.lambda_context</a></code></li>
 <li><code><a title="aws_lambda_powertools.logging.logger" href="logger.html">aws_lambda_powertools.logging.logger</a></code></li>
-</ul>
-</li>
-<li><h3><a href="#header-functions">Functions</a></h3>
-<ul class="">
-<li><code><a title="aws_lambda_powertools.logging.log_metric" href="#aws_lambda_powertools.logging.log_metric">log_metric</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.logger_inject_lambda_context" href="#aws_lambda_powertools.logging.logger_inject_lambda_context">logger_inject_lambda_context</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.logger_setup" href="#aws_lambda_powertools.logging.logger_setup">logger_setup</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
@@ -881,37 +513,6 @@ across future log statements.</p>
 <ul class="">
 <li><code><a title="aws_lambda_powertools.logging.Logger.inject_lambda_context" href="#aws_lambda_powertools.logging.Logger.inject_lambda_context">inject_lambda_context</a></code></li>
 <li><code><a title="aws_lambda_powertools.logging.Logger.structure_logs" href="#aws_lambda_powertools.logging.Logger.structure_logs">structure_logs</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="aws_lambda_powertools.logging.MetricUnit" href="#aws_lambda_powertools.logging.MetricUnit">MetricUnit</a></code></h4>
-<ul class="two-column">
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.Bits" href="#aws_lambda_powertools.logging.MetricUnit.Bits">Bits</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.BitsPerSecond" href="#aws_lambda_powertools.logging.MetricUnit.BitsPerSecond">BitsPerSecond</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.Bytes" href="#aws_lambda_powertools.logging.MetricUnit.Bytes">Bytes</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.BytesPerSecond" href="#aws_lambda_powertools.logging.MetricUnit.BytesPerSecond">BytesPerSecond</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.Count" href="#aws_lambda_powertools.logging.MetricUnit.Count">Count</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.CountPerSecond" href="#aws_lambda_powertools.logging.MetricUnit.CountPerSecond">CountPerSecond</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.Gigabits" href="#aws_lambda_powertools.logging.MetricUnit.Gigabits">Gigabits</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.GigabitsPerSecond" href="#aws_lambda_powertools.logging.MetricUnit.GigabitsPerSecond">GigabitsPerSecond</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.Gigabytes" href="#aws_lambda_powertools.logging.MetricUnit.Gigabytes">Gigabytes</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.GigabytesPerSecond" href="#aws_lambda_powertools.logging.MetricUnit.GigabytesPerSecond">GigabytesPerSecond</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.Kilobits" href="#aws_lambda_powertools.logging.MetricUnit.Kilobits">Kilobits</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.KilobitsPerSecond" href="#aws_lambda_powertools.logging.MetricUnit.KilobitsPerSecond">KilobitsPerSecond</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.Kilobytes" href="#aws_lambda_powertools.logging.MetricUnit.Kilobytes">Kilobytes</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.KilobytesPerSecond" href="#aws_lambda_powertools.logging.MetricUnit.KilobytesPerSecond">KilobytesPerSecond</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.Megabits" href="#aws_lambda_powertools.logging.MetricUnit.Megabits">Megabits</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.MegabitsPerSecond" href="#aws_lambda_powertools.logging.MetricUnit.MegabitsPerSecond">MegabitsPerSecond</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.Megabytes" href="#aws_lambda_powertools.logging.MetricUnit.Megabytes">Megabytes</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.MegabytesPerSecond" href="#aws_lambda_powertools.logging.MetricUnit.MegabytesPerSecond">MegabytesPerSecond</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.Microseconds" href="#aws_lambda_powertools.logging.MetricUnit.Microseconds">Microseconds</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.Milliseconds" href="#aws_lambda_powertools.logging.MetricUnit.Milliseconds">Milliseconds</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.Percent" href="#aws_lambda_powertools.logging.MetricUnit.Percent">Percent</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.Seconds" href="#aws_lambda_powertools.logging.MetricUnit.Seconds">Seconds</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.Terabits" href="#aws_lambda_powertools.logging.MetricUnit.Terabits">Terabits</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.TerabitsPerSecond" href="#aws_lambda_powertools.logging.MetricUnit.TerabitsPerSecond">TerabitsPerSecond</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.Terabytes" href="#aws_lambda_powertools.logging.MetricUnit.Terabytes">Terabytes</a></code></li>
-<li><code><a title="aws_lambda_powertools.logging.MetricUnit.TerabytesPerSecond" href="#aws_lambda_powertools.logging.MetricUnit.TerabytesPerSecond">TerabytesPerSecond</a></code></li>
 </ul>
 </li>
 </ul>

@@ -27,8 +27,8 @@
 </summary>
 <pre><code class="python">&#34;&#34;&#34;CloudWatch Embedded Metric Format utility
 &#34;&#34;&#34;
-from ..helper.models import MetricUnit
-from .exceptions import MetricUnitError, MetricValueError, SchemaValidationError, UniqueNamespaceError
+from .base import MetricUnit
+from .exceptions import MetricUnitError, MetricValueError, SchemaValidationError
 from .metric import single_metric
 from .metrics import Metrics
 
@@ -39,7 +39,6 @@ __all__ = [
     &#34;MetricUnitError&#34;,
     &#34;SchemaValidationError&#34;,
     &#34;MetricValueError&#34;,
-    &#34;UniqueNamespaceError&#34;,
 ]</code></pre>
 </details>
 </section>
@@ -96,7 +95,7 @@ with single_metric(name="ColdStart", unit=MetricUnit.Count, value=1) as metric:
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
 <dd>Metric name</dd>
 <dt><strong><code>unit</code></strong> :&ensp;<a title="aws_lambda_powertools.metrics.MetricUnit" href="#aws_lambda_powertools.metrics.MetricUnit"><code>MetricUnit</code></a></dt>
-<dd><a title="aws_lambda_powertools.helper.models.MetricUnit" href="../helper/models.html#aws_lambda_powertools.helper.models.MetricUnit"><code>MetricUnit</code></a></dd>
+<dd><code>aws_lambda_powertools.helper.models.MetricUnit</code></dd>
 <dt><strong><code>value</code></strong> :&ensp;<code>float</code></dt>
 <dd>Metric value</dd>
 <dt><strong><code>namespace</code></strong> :&ensp;<code>str</code></dt>
@@ -481,20 +480,28 @@ def do_something():
 
     _metrics = {}
     _dimensions = {}
+    _metadata = {}
 
     def __init__(self, service: str = None, namespace: str = None):
         self.metric_set = self._metrics
         self.dimension_set = self._dimensions
         self.service = service
         self.namespace = namespace
+        self.metadata_set = self._metadata
+
         super().__init__(
-            metric_set=self.metric_set, dimension_set=self.dimension_set, namespace=self.namespace, service=self.service
+            metric_set=self.metric_set,
+            dimension_set=self.dimension_set,
+            namespace=self.namespace,
+            metadata_set=self.metadata_set,
+            service=self.service,
         )
 
     def clear_metrics(self):
         logger.debug(&#34;Clearing out existing metric set from memory&#34;)
         self.metric_set.clear()
         self.dimension_set.clear()
+        self.metadata_set.clear()
 
     def log_metrics(
         self,
@@ -515,7 +522,8 @@ def do_something():
 
             @tracer.capture_lambda_handler
             @metrics.log_metrics
-                def handler(event, context)
+                def handler(event, context):
+                    ...
 
         Parameters
         ----------
@@ -594,7 +602,8 @@ def do_something():
 <pre><code class="python">def clear_metrics(self):
     logger.debug(&#34;Clearing out existing metric set from memory&#34;)
     self.metric_set.clear()
-    self.dimension_set.clear()</code></pre>
+    self.dimension_set.clear()
+    self.metadata_set.clear()</code></pre>
 </details>
 </dd>
 <dt id="aws_lambda_powertools.metrics.Metrics.log_metrics"><code class="name flex">
@@ -610,7 +619,8 @@ tracer = Tracer(service="payment")
 
 @tracer.capture_lambda_handler
 @metrics.log_metrics
-    def handler(event, context)
+    def handler(event, context):
+        ...
 </code></pre>
 <h2 id="parameters">Parameters</h2>
 <dl>
@@ -649,7 +659,8 @@ tracer = Tracer(service="payment")
 
         @tracer.capture_lambda_handler
         @metrics.log_metrics
-            def handler(event, context)
+            def handler(event, context):
+                ...
 
     Parameters
     ----------
@@ -702,8 +713,8 @@ tracer = Tracer(service="payment")
 <li><code><b><a title="aws_lambda_powertools.metrics.base.MetricManager" href="base.html#aws_lambda_powertools.metrics.base.MetricManager">MetricManager</a></b></code>:
 <ul class="hlist">
 <li><code><a title="aws_lambda_powertools.metrics.base.MetricManager.add_dimension" href="base.html#aws_lambda_powertools.metrics.base.MetricManager.add_dimension">add_dimension</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricManager.add_metadata" href="base.html#aws_lambda_powertools.metrics.base.MetricManager.add_metadata">add_metadata</a></code></li>
 <li><code><a title="aws_lambda_powertools.metrics.base.MetricManager.add_metric" href="base.html#aws_lambda_powertools.metrics.base.MetricManager.add_metric">add_metric</a></code></li>
-<li><code><a title="aws_lambda_powertools.metrics.base.MetricManager.add_namespace" href="base.html#aws_lambda_powertools.metrics.base.MetricManager.add_namespace">add_namespace</a></code></li>
 <li><code><a title="aws_lambda_powertools.metrics.base.MetricManager.serialize_metric_set" href="base.html#aws_lambda_powertools.metrics.base.MetricManager.serialize_metric_set">serialize_metric_set</a></code></li>
 </ul>
 </li>
@@ -721,27 +732,6 @@ tracer = Tracer(service="payment")
 </summary>
 <pre><code class="python">class SchemaValidationError(Exception):
     &#34;&#34;&#34;When serialization fail schema validation&#34;&#34;&#34;
-
-    pass</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>builtins.Exception</li>
-<li>builtins.BaseException</li>
-</ul>
-</dd>
-<dt id="aws_lambda_powertools.metrics.UniqueNamespaceError"><code class="flex name class">
-<span>class <span class="ident">UniqueNamespaceError</span></span>
-<span>(</span><span>...)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>When an additional namespace is set</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class UniqueNamespaceError(Exception):
-    &#34;&#34;&#34;When an additional namespace is set&#34;&#34;&#34;
 
     pass</code></pre>
 </details>
@@ -826,9 +816,6 @@ tracer = Tracer(service="payment")
 </li>
 <li>
 <h4><code><a title="aws_lambda_powertools.metrics.SchemaValidationError" href="#aws_lambda_powertools.metrics.SchemaValidationError">SchemaValidationError</a></code></h4>
-</li>
-<li>
-<h4><code><a title="aws_lambda_powertools.metrics.UniqueNamespaceError" href="#aws_lambda_powertools.metrics.UniqueNamespaceError">UniqueNamespaceError</a></code></h4>
 </li>
 </ul>
 </li>

@@ -422,7 +422,8 @@ tracer = Tracer()
 
             tracer = Tracer(service=&#34;payment&#34;)
             @tracer.capture_lambda_handler
-            def handler(event, context)
+            def handler(event, context):
+                ...
 
         Parameters
         ----------
@@ -454,8 +455,10 @@ tracer = Tracer()
                         function_name=lambda_handler_name, data=response, subsegment=subsegment
                     )
                 except Exception as err:
-                    logger.exception(&#34;Exception received from lambda handler&#34;)
-                    self._add_full_exception_as_metadata(function_name=self.service, error=err, subsegment=subsegment)
+                    logger.exception(f&#34;Exception received from {lambda_handler_name}&#34;)
+                    self._add_full_exception_as_metadata(
+                        function_name=lambda_handler_name, error=err, subsegment=subsegment
+                    )
                     raise
 
                 return response
@@ -717,7 +720,8 @@ and also capture any exception any Lambda function throws or its response as met
 <p><strong>Lambda function using capture_lambda_handler decorator</strong></p>
 <pre><code>tracer = Tracer(service="payment")
 @tracer.capture_lambda_handler
-def handler(event, context)
+def handler(event, context):
+    ...
 </code></pre>
 <h2 id="parameters">Parameters</h2>
 <dl>
@@ -745,7 +749,8 @@ def handler(event, context)
 
         tracer = Tracer(service=&#34;payment&#34;)
         @tracer.capture_lambda_handler
-        def handler(event, context)
+        def handler(event, context):
+            ...
 
     Parameters
     ----------
@@ -777,8 +782,10 @@ def handler(event, context)
                     function_name=lambda_handler_name, data=response, subsegment=subsegment
                 )
             except Exception as err:
-                logger.exception(&#34;Exception received from lambda handler&#34;)
-                self._add_full_exception_as_metadata(function_name=self.service, error=err, subsegment=subsegment)
+                logger.exception(f&#34;Exception received from {lambda_handler_name}&#34;)
+                self._add_full_exception_as_metadata(
+                    function_name=lambda_handler_name, error=err, subsegment=subsegment
+                )
                 raise
 
             return response

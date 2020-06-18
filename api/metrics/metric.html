@@ -29,8 +29,7 @@ import logging
 from contextlib import contextmanager
 from typing import Dict
 
-from ..helper.models import MetricUnit
-from .base import MetricManager
+from .base import MetricManager, MetricUnit
 
 logger = logging.getLogger(__name__)
 
@@ -178,7 +177,7 @@ with single_metric(name="ColdStart", unit=MetricUnit.Count, value=1) as metric:
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
 <dd>Metric name</dd>
 <dt><strong><code>unit</code></strong> :&ensp;<code>MetricUnit</code></dt>
-<dd><a title="aws_lambda_powertools.helper.models.MetricUnit" href="../helper/models.html#aws_lambda_powertools.helper.models.MetricUnit"><code>MetricUnit</code></a></dd>
+<dd><code>aws_lambda_powertools.helper.models.MetricUnit</code></dd>
 <dt><strong><code>value</code></strong> :&ensp;<code>float</code></dt>
 <dd>Metric value</dd>
 <dt><strong><code>namespace</code></strong> :&ensp;<code>str</code></dt>
@@ -262,7 +261,7 @@ def single_metric(name: str, unit: MetricUnit, value: float, namespace: str = No
 <dl>
 <dt id="aws_lambda_powertools.metrics.metric.SingleMetric"><code class="flex name class">
 <span>class <span class="ident">SingleMetric</span></span>
-<span>(</span><span>metric_set=None, dimension_set=None, namespace=None, service=None)</span>
+<span>(</span><span>metric_set=None, dimension_set=None, namespace=None, metadata_set=None, service=None)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>SingleMetric creates an EMF object with a single metric.</p>
@@ -395,7 +394,7 @@ print(json.dumps(metric.serialize_metric_set(), indent=4))
 <li><code><b><a title="aws_lambda_powertools.metrics.base.MetricManager" href="base.html#aws_lambda_powertools.metrics.base.MetricManager">MetricManager</a></b></code>:
 <ul class="hlist">
 <li><code><a title="aws_lambda_powertools.metrics.base.MetricManager.add_dimension" href="base.html#aws_lambda_powertools.metrics.base.MetricManager.add_dimension">add_dimension</a></code></li>
-<li><code><a title="aws_lambda_powertools.metrics.base.MetricManager.add_namespace" href="base.html#aws_lambda_powertools.metrics.base.MetricManager.add_namespace">add_namespace</a></code></li>
+<li><code><a title="aws_lambda_powertools.metrics.base.MetricManager.add_metadata" href="base.html#aws_lambda_powertools.metrics.base.MetricManager.add_metadata">add_metadata</a></code></li>
 <li><code><a title="aws_lambda_powertools.metrics.base.MetricManager.serialize_metric_set" href="base.html#aws_lambda_powertools.metrics.base.MetricManager.serialize_metric_set">serialize_metric_set</a></code></li>
 </ul>
 </li>
