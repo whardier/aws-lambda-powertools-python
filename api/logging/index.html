@@ -72,7 +72,7 @@ It also accepts both service name or level explicitly via env vars</p>
 <dl>
 <dt><strong><code>POWERTOOLS_SERVICE_NAME</code></strong> :&ensp;<code>str</code></dt>
 <dd>service name</dd>
-<dt><strong><code>LOG_LEVEL</code></strong> :&ensp;<code>str</code>, <code>int</code></dt>
+<dt><strong><code>LOG_LEVEL</code></strong> :&ensp;<code>str</code></dt>
 <dd>logging level (e.g. INFO, DEBUG)</dd>
 <dt><strong><code>POWERTOOLS_LOGGER_SAMPLE_RATE</code></strong> :&ensp;<code>float</code></dt>
 <dd>samping rate ranging from 0 to 1, 1 being 100% sampling</dd>
@@ -81,7 +81,7 @@ It also accepts both service name or level explicitly via env vars</p>
 <dl>
 <dt><strong><code>service</code></strong> :&ensp;<code>str</code>, optional</dt>
 <dd>service name to be appended in logs, by default "service_undefined"</dd>
-<dt><strong><code>level</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dt><strong><code>level</code></strong> :&ensp;<code>str</code>, <code>int</code> optional</dt>
 <dd>logging.level, by default "INFO"</dd>
 <dt><strong><code>child</code></strong> :&ensp;<code>bool</code>, optional</dt>
 <dd>create a child Logger named <service>.<caller_file_name>, False by default</dd>
@@ -144,7 +144,7 @@ $ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
     ---------------------
     POWERTOOLS_SERVICE_NAME : str
         service name
-    LOG_LEVEL: str, int
+    LOG_LEVEL: str
         logging level (e.g. INFO, DEBUG)
     POWERTOOLS_LOGGER_SAMPLE_RATE: float
         samping rate ranging from 0 to 1, 1 being 100% sampling
@@ -153,7 +153,7 @@ $ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
     ----------
     service : str, optional
         service name to be appended in logs, by default &#34;service_undefined&#34;
-    level : str, optional
+    level : str, int optional
         logging.level, by default &#34;INFO&#34;
     child: bool, optional
         create a child Logger named &lt;service&gt;.&lt;caller_file_name&gt;, False by default
@@ -232,8 +232,11 @@ $ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
         # https://github.com/awslabs/aws-lambda-powertools-python/issues/97
         return getattr(self._logger, name)
 
-    def _get_log_level(self, level: str):
+    def _get_log_level(self, level: Union[str, int]) -&gt; Union[str, int]:
         &#34;&#34;&#34; Returns preferred log level set by the customer in upper case &#34;&#34;&#34;
+        if isinstance(level, int):
+            return level
+
         log_level: str = level or os.getenv(&#34;LOG_LEVEL&#34;)
         log_level = log_level.upper() if log_level is not None else logging.INFO
 
