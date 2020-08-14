@@ -82,6 +82,9 @@ class JsonFormatter(logging.Formatter):
         self.format_dict.update(kwargs)
         self.default_json_formatter = kwargs.pop(&#34;json_default&#34;, json_formatter)
 
+    def update_formatter(self, **kwargs):
+        self.format_dict.update(kwargs)
+
     def format(self, record):  # noqa: A003
         record_dict = record.__dict__.copy()
         record_dict[&#34;asctime&#34;] = self.formatTime(record, self.datefmt)
@@ -234,6 +237,9 @@ coerces the value to a string.</p>
         self.format_dict.update(kwargs)
         self.default_json_formatter = kwargs.pop(&#34;json_default&#34;, json_formatter)
 
+    def update_formatter(self, **kwargs):
+        self.format_dict.update(kwargs)
+
     def format(self, record):  # noqa: A003
         record_dict = record.__dict__.copy()
         record_dict[&#34;asctime&#34;] = self.formatTime(record, self.datefmt)
@@ -342,6 +348,19 @@ it is formatted using formatException() and appended to the message.</p></sectio
     return json_record</code></pre>
 </details>
 </dd>
+<dt id="aws_lambda_powertools.logging.formatter.JsonFormatter.update_formatter"><code class="name flex">
+<span>def <span class="ident">update_formatter</span></span>(<span>self, **kwargs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def update_formatter(self, **kwargs):
+    self.format_dict.update(kwargs)</code></pre>
+</details>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -369,6 +388,7 @@ it is formatted using formatException() and appended to the message.</p></sectio
 <h4><code><a title="aws_lambda_powertools.logging.formatter.JsonFormatter" href="#aws_lambda_powertools.logging.formatter.JsonFormatter">JsonFormatter</a></code></h4>
 <ul class="">
 <li><code><a title="aws_lambda_powertools.logging.formatter.JsonFormatter.format" href="#aws_lambda_powertools.logging.formatter.JsonFormatter.format">format</a></code></li>
+<li><code><a title="aws_lambda_powertools.logging.formatter.JsonFormatter.update_formatter" href="#aws_lambda_powertools.logging.formatter.JsonFormatter.update_formatter">update_formatter</a></code></li>
 </ul>
 </li>
 </ul>
