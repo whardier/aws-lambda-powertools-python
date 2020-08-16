@@ -129,12 +129,13 @@ $ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
 <dl>
 <dt><code>InvalidLoggerSamplingRateError</code></dt>
 <dd>When sampling rate provided is not a float</dd>
-</dl></section>
+</dl>
+<p>Initialize the logger with a name and an optional level.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class Logger:
+<pre><code class="python">class Logger(logging.Logger):  # lgtm [py/missing-call-to-init]
     &#34;&#34;&#34;Creates and setups a logger to format statements in JSON.
 
     Includes service name and any additional key=value into logs
@@ -287,7 +288,8 @@ $ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
                 self.log_level = logging.DEBUG
         except ValueError:
             raise InvalidLoggerSamplingRateError(
-                f&#34;Expected a float value ranging 0 to 1, but received {self.sampling_rate} instead. Please review POWERTOOLS_LOGGER_SAMPLE_RATE environment variable.&#34;  # noqa E501
+                f&#34;Expected a float value ranging 0 to 1, but received {self.sampling_rate} instead.&#34;
+                f&#34;Please review POWERTOOLS_LOGGER_SAMPLE_RATE environment variable.&#34;
             )
 
     def inject_lambda_context(self, lambda_handler: Callable[[Dict, Any], Any] = None, log_event: bool = False):
@@ -379,6 +381,11 @@ $ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
                 # Set a new formatter for a logger handler
                 handler.setFormatter(JsonFormatter(**self._default_log_keys, **kwargs))</code></pre>
 </details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>logging.Logger</li>
+<li>logging.Filterer</li>
+</ul>
 <h3>Methods</h3>
 <dl>
 <dt id="aws_lambda_powertools.logging.Logger.inject_lambda_context"><code class="name flex">
