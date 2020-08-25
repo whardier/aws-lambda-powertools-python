@@ -81,7 +81,7 @@ __all__ = [
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="aws_lambda_powertools.utilities.parameters.get_parameter"><code class="name flex">
-<span>def <span class="ident">get_parameter</span></span>(<span>name, transform=None, **sdk_options)</span>
+<span>def <span class="ident">get_parameter</span></span>(<span>name, transform=None, decrypt=False, **sdk_options)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Retrieve a parameter value from AWS Systems Manager (SSM) Parameter Store</p>
@@ -91,6 +91,8 @@ __all__ = [
 <dd>Name of the parameter</dd>
 <dt><strong><code>transform</code></strong> :&ensp;<code>str</code>, optional</dt>
 <dd>Transforms the content from a JSON object ('json') or base64 binary string ('binary')</dd>
+<dt><strong><code>decrypt</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>If the parameter values should be decrypted</dd>
 <dt><strong><code>sdk_options</code></strong> :&ensp;<code>dict</code>, optional</dt>
 <dd>Dictionary of options that will be passed to the Parameter Store get_parameter API call</dd>
 </dl>
@@ -123,7 +125,9 @@ My parameter value
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_parameter(name: str, transform: Optional[str] = None, **sdk_options) -&gt; Union[str, list, dict, bytes]:
+<pre><code class="python">def get_parameter(
+    name: str, transform: Optional[str] = None, decrypt: bool = False, **sdk_options
+) -&gt; Union[str, list, dict, bytes]:
     &#34;&#34;&#34;
     Retrieve a parameter value from AWS Systems Manager (SSM) Parameter Store
 
@@ -133,6 +137,8 @@ My parameter value
         Name of the parameter
     transform: str, optional
         Transforms the content from a JSON object (&#39;json&#39;) or base64 binary string (&#39;binary&#39;)
+    decrypt: bool, optional
+        If the parameter values should be decrypted
     sdk_options: dict, optional
         Dictionary of options that will be passed to the Parameter Store get_parameter API call
 
@@ -169,7 +175,10 @@ My parameter value
     if &#34;ssm&#34; not in DEFAULT_PROVIDERS:
         DEFAULT_PROVIDERS[&#34;ssm&#34;] = SSMProvider()
 
-    return DEFAULT_PROVIDERS[&#34;ssm&#34;].get(name, transform=transform)</code></pre>
+    # Add to `decrypt` sdk_options to we can have an explicit option for this
+    sdk_options[&#34;decrypt&#34;] = decrypt
+
+    return DEFAULT_PROVIDERS[&#34;ssm&#34;].get(name, transform=transform, **sdk_options)</code></pre>
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parameters.get_parameters"><code class="name flex">
@@ -183,10 +192,10 @@ My parameter value
 <dd>Path to retrieve the parameters</dd>
 <dt><strong><code>transform</code></strong> :&ensp;<code>str</code>, optional</dt>
 <dd>Transforms the content from a JSON object ('json') or base64 binary string ('binary')</dd>
-<dt><strong><code>decrypt</code></strong> :&ensp;<code>bool</code>, optional</dt>
-<dd>If the parameter values should be decrypted</dd>
 <dt><strong><code>recursive</code></strong> :&ensp;<code>bool</code>, optional</dt>
 <dd>If this should retrieve the parameter values recursively or not, defaults to True</dd>
+<dt><strong><code>decrypt</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>If the parameter values should be decrypted</dd>
 <dt><strong><code>sdk_options</code></strong> :&ensp;<code>dict</code>, optional</dt>
 <dd>Dictionary of options that will be passed to the Parameter Store get_parameters_by_path API call</dd>
 </dl>
@@ -231,10 +240,10 @@ a given path.</dd>
         Path to retrieve the parameters
     transform: str, optional
         Transforms the content from a JSON object (&#39;json&#39;) or base64 binary string (&#39;binary&#39;)
-    decrypt: bool, optional
-        If the parameter values should be decrypted
     recursive: bool, optional
         If this should retrieve the parameter values recursively or not, defaults to True
+    decrypt: bool, optional
+        If the parameter values should be decrypted
     sdk_options: dict, optional
         Dictionary of options that will be passed to the Parameter Store get_parameters_by_path API call
 
@@ -271,7 +280,10 @@ a given path.</dd>
     if &#34;ssm&#34; not in DEFAULT_PROVIDERS:
         DEFAULT_PROVIDERS[&#34;ssm&#34;] = SSMProvider()
 
-    return DEFAULT_PROVIDERS[&#34;ssm&#34;].get_multiple(path, transform=transform, recursive=recursive, decrypt=decrypt)</code></pre>
+    sdk_options[&#34;recursive&#34;] = recursive
+    sdk_options[&#34;decrypt&#34;] = decrypt
+
+    return DEFAULT_PROVIDERS[&#34;ssm&#34;].get_multiple(path, transform=transform, **sdk_options)</code></pre>
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parameters.get_secret"><code class="name flex">
@@ -394,6 +406,9 @@ a given name.</dd>
 
         self.store = {}
 
+    def _has_not_expired(self, key: Tuple[str, Optional[str]]) -&gt; bool:
+        return key in self.store and self.store[key].ttl &gt;= datetime.now()
+
     def get(
         self, name: str, max_age: int = DEFAULT_MAX_AGE_SECS, transform: Optional[str] = None, **sdk_options
     ) -&gt; Union[str, list, dict, bytes]:
@@ -433,24 +448,26 @@ a given name.</dd>
         # an acceptable tradeoff.
         key = (name, transform)
 
-        if key not in self.store or self.store[key].ttl &lt; datetime.now():
-            try:
-                value = self._get(name, **sdk_options)
-            # Encapsulate all errors into a generic GetParameterError
-            except Exception as exc:
-                raise GetParameterError(str(exc))
+        if self._has_not_expired(key):
+            return self.store[key].value
 
-            if transform is not None:
-                value = transform_value(value, transform)
+        try:
+            value = self._get(name, **sdk_options)
+        # Encapsulate all errors into a generic GetParameterError
+        except Exception as exc:
+            raise GetParameterError(str(exc))
 
-            self.store[key] = ExpirableValue(value, datetime.now() + timedelta(seconds=max_age),)
+        if transform is not None:
+            value = transform_value(value, transform)
 
-        return self.store[key].value
+        self.store[key] = ExpirableValue(value, datetime.now() + timedelta(seconds=max_age),)
+
+        return value
 
     @abstractmethod
     def _get(self, name: str, **sdk_options) -&gt; str:
         &#34;&#34;&#34;
-        Retrieve paramater value from the underlying parameter store
+        Retrieve parameter value from the underlying parameter store
         &#34;&#34;&#34;
         raise NotImplementedError()
 
@@ -492,29 +509,22 @@ a given name.</dd>
 
         key = (path, transform)
 
-        if key not in self.store or self.store[key].ttl &lt; datetime.now():
-            try:
-                values = self._get_multiple(path, **sdk_options)
-            # Encapsulate all errors into a generic GetParameterError
-            except Exception as exc:
-                raise GetParameterError(str(exc))
+        if self._has_not_expired(key):
+            return self.store[key].value
 
-            if transform is not None:
-                new_values = {}
-                for key, value in values.items():
-                    try:
-                        new_values[key] = transform_value(value, transform)
-                    except Exception as exc:
-                        if raise_on_transform_error:
-                            raise exc
-                        else:
-                            new_values[key] = None
+        try:
+            values: Dict[str, Union[str, bytes, dict, None]] = self._get_multiple(path, **sdk_options)
+        # Encapsulate all errors into a generic GetParameterError
+        except Exception as exc:
+            raise GetParameterError(str(exc))
 
-                values = new_values
+        if transform is not None:
+            for (key, value) in values.items():
+                values[key] = transform_value(value, transform, raise_on_transform_error)
 
-            self.store[key] = ExpirableValue(values, datetime.now() + timedelta(seconds=max_age),)
+        self.store[key] = ExpirableValue(values, datetime.now() + timedelta(seconds=max_age),)
 
-        return self.store[key].value
+        return values
 
     @abstractmethod
     def _get_multiple(self, path: str, **sdk_options) -&gt; Dict[str, str]:
@@ -611,19 +621,21 @@ a given name.</dd>
     # an acceptable tradeoff.
     key = (name, transform)
 
-    if key not in self.store or self.store[key].ttl &lt; datetime.now():
-        try:
-            value = self._get(name, **sdk_options)
-        # Encapsulate all errors into a generic GetParameterError
-        except Exception as exc:
-            raise GetParameterError(str(exc))
+    if self._has_not_expired(key):
+        return self.store[key].value
 
-        if transform is not None:
-            value = transform_value(value, transform)
+    try:
+        value = self._get(name, **sdk_options)
+    # Encapsulate all errors into a generic GetParameterError
+    except Exception as exc:
+        raise GetParameterError(str(exc))
 
-        self.store[key] = ExpirableValue(value, datetime.now() + timedelta(seconds=max_age),)
+    if transform is not None:
+        value = transform_value(value, transform)
 
-    return self.store[key].value</code></pre>
+    self.store[key] = ExpirableValue(value, datetime.now() + timedelta(seconds=max_age),)
+
+    return value</code></pre>
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parameters.BaseProvider.get_multiple"><code class="name flex">
@@ -697,29 +709,22 @@ a given path.</dd>
 
     key = (path, transform)
 
-    if key not in self.store or self.store[key].ttl &lt; datetime.now():
-        try:
-            values = self._get_multiple(path, **sdk_options)
-        # Encapsulate all errors into a generic GetParameterError
-        except Exception as exc:
-            raise GetParameterError(str(exc))
+    if self._has_not_expired(key):
+        return self.store[key].value
 
-        if transform is not None:
-            new_values = {}
-            for key, value in values.items():
-                try:
-                    new_values[key] = transform_value(value, transform)
-                except Exception as exc:
-                    if raise_on_transform_error:
-                        raise exc
-                    else:
-                        new_values[key] = None
+    try:
+        values: Dict[str, Union[str, bytes, dict, None]] = self._get_multiple(path, **sdk_options)
+    # Encapsulate all errors into a generic GetParameterError
+    except Exception as exc:
+        raise GetParameterError(str(exc))
 
-            values = new_values
+    if transform is not None:
+        for (key, value) in values.items():
+            values[key] = transform_value(value, transform, raise_on_transform_error)
 
-        self.store[key] = ExpirableValue(values, datetime.now() + timedelta(seconds=max_age),)
+    self.store[key] = ExpirableValue(values, datetime.now() + timedelta(seconds=max_age),)
 
-    return self.store[key].value</code></pre>
+    return values</code></pre>
 </details>
 </dd>
 </dl>
@@ -1236,6 +1241,46 @@ My parameter value
 
         super().__init__()
 
+    def get(
+        self,
+        name: str,
+        max_age: int = DEFAULT_MAX_AGE_SECS,
+        transform: Optional[str] = None,
+        decrypt: bool = False,
+        **sdk_options
+    ) -&gt; Union[str, list, dict, bytes]:
+        &#34;&#34;&#34;
+        Retrieve a parameter value or return the cached value
+
+        Parameters
+        ----------
+        name: str
+            Parameter name
+        max_age: int
+            Maximum age of the cached value
+        transform: str
+            Optional transformation of the parameter value. Supported values
+            are &#34;json&#34; for JSON strings and &#34;binary&#34; for base 64 encoded
+            values.
+        decrypt: bool, optional
+            If the parameter value should be decrypted
+        sdk_options: dict, optional
+            Arguments that will be passed directly to the underlying API call
+
+        Raises
+        ------
+        GetParameterError
+            When the parameter provider fails to retrieve a parameter value for
+            a given name.
+        TransformParameterError
+            When the parameter provider fails to transform a parameter value.
+        &#34;&#34;&#34;
+
+        # Add to `decrypt` sdk_options to we can have an explicit option for this
+        sdk_options[&#34;decrypt&#34;] = decrypt
+
+        return super().get(name, max_age, transform, **sdk_options)
+
     def _get(self, name: str, decrypt: bool = False, **sdk_options) -&gt; str:
         &#34;&#34;&#34;
         Retrieve a parameter value from AWS Systems Manager Parameter Store
@@ -1305,11 +1350,86 @@ My parameter value
 <section class="desc"></section>
 </dd>
 </dl>
+<h3>Methods</h3>
+<dl>
+<dt id="aws_lambda_powertools.utilities.parameters.SSMProvider.get"><code class="name flex">
+<span>def <span class="ident">get</span></span>(<span>self, name, max_age=5, transform=None, decrypt=False, **sdk_options)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Retrieve a parameter value or return the cached value</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>Parameter name</dd>
+<dt><strong><code>max_age</code></strong> :&ensp;<code>int</code></dt>
+<dd>Maximum age of the cached value</dd>
+<dt><strong><code>transform</code></strong> :&ensp;<code>str</code></dt>
+<dd>Optional transformation of the parameter value. Supported values
+are "json" for JSON strings and "binary" for base 64 encoded
+values.</dd>
+<dt><strong><code>decrypt</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>If the parameter value should be decrypted</dd>
+<dt><strong><code>sdk_options</code></strong> :&ensp;<code>dict</code>, optional</dt>
+<dd>Arguments that will be passed directly to the underlying API call</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<dl>
+<dt><a title="aws_lambda_powertools.utilities.parameters.GetParameterError" href="#aws_lambda_powertools.utilities.parameters.GetParameterError"><code>GetParameterError</code></a></dt>
+<dd>When the parameter provider fails to retrieve a parameter value for
+a given name.</dd>
+<dt><a title="aws_lambda_powertools.utilities.parameters.TransformParameterError" href="#aws_lambda_powertools.utilities.parameters.TransformParameterError"><code>TransformParameterError</code></a></dt>
+<dd>When the parameter provider fails to transform a parameter value.</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get(
+    self,
+    name: str,
+    max_age: int = DEFAULT_MAX_AGE_SECS,
+    transform: Optional[str] = None,
+    decrypt: bool = False,
+    **sdk_options
+) -&gt; Union[str, list, dict, bytes]:
+    &#34;&#34;&#34;
+    Retrieve a parameter value or return the cached value
+
+    Parameters
+    ----------
+    name: str
+        Parameter name
+    max_age: int
+        Maximum age of the cached value
+    transform: str
+        Optional transformation of the parameter value. Supported values
+        are &#34;json&#34; for JSON strings and &#34;binary&#34; for base 64 encoded
+        values.
+    decrypt: bool, optional
+        If the parameter value should be decrypted
+    sdk_options: dict, optional
+        Arguments that will be passed directly to the underlying API call
+
+    Raises
+    ------
+    GetParameterError
+        When the parameter provider fails to retrieve a parameter value for
+        a given name.
+    TransformParameterError
+        When the parameter provider fails to transform a parameter value.
+    &#34;&#34;&#34;
+
+    # Add to `decrypt` sdk_options to we can have an explicit option for this
+    sdk_options[&#34;decrypt&#34;] = decrypt
+
+    return super().get(name, max_age, transform, **sdk_options)</code></pre>
+</details>
+</dd>
+</dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
 <li><code><b><a title="aws_lambda_powertools.utilities.parameters.base.BaseProvider" href="base.html#aws_lambda_powertools.utilities.parameters.base.BaseProvider">BaseProvider</a></b></code>:
 <ul class="hlist">
-<li><code><a title="aws_lambda_powertools.utilities.parameters.base.BaseProvider.get" href="base.html#aws_lambda_powertools.utilities.parameters.base.BaseProvider.get">get</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.parameters.base.BaseProvider.get_multiple" href="base.html#aws_lambda_powertools.utilities.parameters.base.BaseProvider.get_multiple">get_multiple</a></code></li>
 </ul>
 </li>
@@ -1428,7 +1548,7 @@ My parameter value
         ----------
         name: str
             Name of the parameter
-        sdk_options: dict
+        sdk_options: dict, optional
             Dictionary of options that will be passed to the Secrets Manager get_secret_value API call
         &#34;&#34;&#34;
 
@@ -1540,6 +1660,7 @@ My parameter value
 <h4><code><a title="aws_lambda_powertools.utilities.parameters.SSMProvider" href="#aws_lambda_powertools.utilities.parameters.SSMProvider">SSMProvider</a></code></h4>
 <ul class="">
 <li><code><a title="aws_lambda_powertools.utilities.parameters.SSMProvider.client" href="#aws_lambda_powertools.utilities.parameters.SSMProvider.client">client</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.parameters.SSMProvider.get" href="#aws_lambda_powertools.utilities.parameters.SSMProvider.get">get</a></code></li>
 </ul>
 </li>
 <li>

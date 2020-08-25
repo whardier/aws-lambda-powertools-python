@@ -203,7 +203,7 @@ class MetricManager:
         if self.service and not self.dimension_set.get(&#34;service&#34;):
             self.dimension_set[&#34;service&#34;] = self.service
 
-        logger.debug(&#34;Serializing...&#34;, {&#34;metrics&#34;: metrics, &#34;dimensions&#34;: dimensions})
+        logger.debug({&#34;details&#34;: &#34;Serializing metrics&#34;, &#34;metrics&#34;: metrics, &#34;dimensions&#34;: dimensions})
 
         metric_names_and_units: List[Dict[str, str]] = []  # [ { &#34;Name&#34;: &#34;metric_name&#34;, &#34;Unit&#34;: &#34;Count&#34; } ]
         metric_names_and_values: Dict[str, str] = {}  # { &#34;metric_name&#34;: 1.0 }
@@ -233,7 +233,7 @@ class MetricManager:
         }
 
         try:
-            logger.debug(&#34;Validating serialized metrics against CloudWatch EMF schema&#34;, embedded_metrics_object)
+            logger.debug(&#34;Validating serialized metrics against CloudWatch EMF schema&#34;)
             fastjsonschema.validate(definition=CLOUDWATCH_EMF_SCHEMA, data=embedded_metrics_object)
         except fastjsonschema.JsonSchemaException as e:
             message = f&#34;Invalid format. Error: {e.message}, Invalid item: {e.name}&#34;  # noqa: B306, E501
@@ -501,7 +501,7 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
         if self.service and not self.dimension_set.get(&#34;service&#34;):
             self.dimension_set[&#34;service&#34;] = self.service
 
-        logger.debug(&#34;Serializing...&#34;, {&#34;metrics&#34;: metrics, &#34;dimensions&#34;: dimensions})
+        logger.debug({&#34;details&#34;: &#34;Serializing metrics&#34;, &#34;metrics&#34;: metrics, &#34;dimensions&#34;: dimensions})
 
         metric_names_and_units: List[Dict[str, str]] = []  # [ { &#34;Name&#34;: &#34;metric_name&#34;, &#34;Unit&#34;: &#34;Count&#34; } ]
         metric_names_and_values: Dict[str, str] = {}  # { &#34;metric_name&#34;: 1.0 }
@@ -531,7 +531,7 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
         }
 
         try:
-            logger.debug(&#34;Validating serialized metrics against CloudWatch EMF schema&#34;, embedded_metrics_object)
+            logger.debug(&#34;Validating serialized metrics against CloudWatch EMF schema&#34;)
             fastjsonschema.validate(definition=CLOUDWATCH_EMF_SCHEMA, data=embedded_metrics_object)
         except fastjsonschema.JsonSchemaException as e:
             message = f&#34;Invalid format. Error: {e.message}, Invalid item: {e.name}&#34;  # noqa: B306, E501
@@ -887,7 +887,7 @@ ret = metrics.serialize_metric_set()
     if self.service and not self.dimension_set.get(&#34;service&#34;):
         self.dimension_set[&#34;service&#34;] = self.service
 
-    logger.debug(&#34;Serializing...&#34;, {&#34;metrics&#34;: metrics, &#34;dimensions&#34;: dimensions})
+    logger.debug({&#34;details&#34;: &#34;Serializing metrics&#34;, &#34;metrics&#34;: metrics, &#34;dimensions&#34;: dimensions})
 
     metric_names_and_units: List[Dict[str, str]] = []  # [ { &#34;Name&#34;: &#34;metric_name&#34;, &#34;Unit&#34;: &#34;Count&#34; } ]
     metric_names_and_values: Dict[str, str] = {}  # { &#34;metric_name&#34;: 1.0 }
@@ -917,7 +917,7 @@ ret = metrics.serialize_metric_set()
     }
 
     try:
-        logger.debug(&#34;Validating serialized metrics against CloudWatch EMF schema&#34;, embedded_metrics_object)
+        logger.debug(&#34;Validating serialized metrics against CloudWatch EMF schema&#34;)
         fastjsonschema.validate(definition=CLOUDWATCH_EMF_SCHEMA, data=embedded_metrics_object)
     except fastjsonschema.JsonSchemaException as e:
         message = f&#34;Invalid format. Error: {e.message}, Invalid item: {e.name}&#34;  # noqa: B306, E501
