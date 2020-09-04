@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.5" />
-<title>aws_lambda_powertools.utilities API documentation</title>
-<meta name="description" content="General utilities for Powertools" />
+<title>aws_lambda_powertools.utilities.typing.lambda_client_context API documentation</title>
+<meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -17,41 +17,122 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>aws_lambda_powertools.utilities</code></h1>
+<h1 class="title">Module <code>aws_lambda_powertools.utilities.typing.lambda_client_context</code></h1>
 </header>
 <section id="section-intro">
-<p>General utilities for Powertools</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python"># -*- coding: utf-8 -*-
+from typing import Any, Dict
 
-&#34;&#34;&#34;General utilities for Powertools&#34;&#34;&#34;</code></pre>
+from aws_lambda_powertools.utilities.typing.lambda_client_context_mobile_client import LambdaClientContextMobileClient
+
+
+class LambdaClientContext(object):
+    _client: LambdaClientContextMobileClient
+    _custom: Dict[str, Any]
+    _env: Dict[str, Any]
+
+    @property
+    def client(self) -&gt; LambdaClientContextMobileClient:
+        &#34;&#34;&#34;Client context that&#39;s provided to Lambda by the client application.&#34;&#34;&#34;
+        return self._client
+
+    @property
+    def custom(self) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;A dict of custom values set by the mobile client application.&#34;&#34;&#34;
+        return self._custom
+
+    @property
+    def env(self) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;A dict of environment information provided by the AWS SDK.&#34;&#34;&#34;
+        return self._env</code></pre>
 </details>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt><code class="name"><a title="aws_lambda_powertools.utilities.batch" href="batch/index.html">aws_lambda_powertools.utilities.batch</a></code></dt>
+<dt id="aws_lambda_powertools.utilities.typing.lambda_client_context.LambdaClientContext"><code class="flex name class">
+<span>class <span class="ident">LambdaClientContext</span></span>
+</code></dt>
 <dd>
-<section class="desc"><p>Batch processing utility</p></section>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class LambdaClientContext(object):
+    _client: LambdaClientContextMobileClient
+    _custom: Dict[str, Any]
+    _env: Dict[str, Any]
+
+    @property
+    def client(self) -&gt; LambdaClientContextMobileClient:
+        &#34;&#34;&#34;Client context that&#39;s provided to Lambda by the client application.&#34;&#34;&#34;
+        return self._client
+
+    @property
+    def custom(self) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;A dict of custom values set by the mobile client application.&#34;&#34;&#34;
+        return self._custom
+
+    @property
+    def env(self) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;A dict of environment information provided by the AWS SDK.&#34;&#34;&#34;
+        return self._env</code></pre>
+</details>
+<h3>Instance variables</h3>
+<dl>
+<dt id="aws_lambda_powertools.utilities.typing.lambda_client_context.LambdaClientContext.client"><code class="name">var <span class="ident">client</span></code></dt>
+<dd>
+<section class="desc"><p>Client context that's provided to Lambda by the client application.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def client(self) -&gt; LambdaClientContextMobileClient:
+    &#34;&#34;&#34;Client context that&#39;s provided to Lambda by the client application.&#34;&#34;&#34;
+    return self._client</code></pre>
+</details>
 </dd>
-<dt><code class="name"><a title="aws_lambda_powertools.utilities.parameters" href="parameters/index.html">aws_lambda_powertools.utilities.parameters</a></code></dt>
+<dt id="aws_lambda_powertools.utilities.typing.lambda_client_context.LambdaClientContext.custom"><code class="name">var <span class="ident">custom</span></code></dt>
 <dd>
-<section class="desc"><p>Parameter retrieval and caching utility</p></section>
+<section class="desc"><p>A dict of custom values set by the mobile client application.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def custom(self) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;A dict of custom values set by the mobile client application.&#34;&#34;&#34;
+    return self._custom</code></pre>
+</details>
 </dd>
-<dt><code class="name"><a title="aws_lambda_powertools.utilities.typing" href="typing/index.html">aws_lambda_powertools.utilities.typing</a></code></dt>
+<dt id="aws_lambda_powertools.utilities.typing.lambda_client_context.LambdaClientContext.env"><code class="name">var <span class="ident">env</span></code></dt>
 <dd>
-<section class="desc"><p>Typing for developer ease in the IDE</p></section>
+<section class="desc"><p>A dict of environment information provided by the AWS SDK.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def env(self) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;A dict of environment information provided by the AWS SDK.&#34;&#34;&#34;
+    return self._env</code></pre>
+</details>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -62,14 +143,19 @@
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="aws_lambda_powertools" href="../index.html">aws_lambda_powertools</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.typing" href="index.html">aws_lambda_powertools.utilities.typing</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
-<li><code><a title="aws_lambda_powertools.utilities.batch" href="batch/index.html">aws_lambda_powertools.utilities.batch</a></code></li>
-<li><code><a title="aws_lambda_powertools.utilities.parameters" href="parameters/index.html">aws_lambda_powertools.utilities.parameters</a></code></li>
-<li><code><a title="aws_lambda_powertools.utilities.typing" href="typing/index.html">aws_lambda_powertools.utilities.typing</a></code></li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.typing.lambda_client_context.LambdaClientContext" href="#aws_lambda_powertools.utilities.typing.lambda_client_context.LambdaClientContext">LambdaClientContext</a></code></h4>
+<ul class="">
+<li><code><a title="aws_lambda_powertools.utilities.typing.lambda_client_context.LambdaClientContext.client" href="#aws_lambda_powertools.utilities.typing.lambda_client_context.LambdaClientContext.client">client</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.typing.lambda_client_context.LambdaClientContext.custom" href="#aws_lambda_powertools.utilities.typing.lambda_client_context.LambdaClientContext.custom">custom</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.typing.lambda_client_context.LambdaClientContext.env" href="#aws_lambda_powertools.utilities.typing.lambda_client_context.LambdaClientContext.env">env</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

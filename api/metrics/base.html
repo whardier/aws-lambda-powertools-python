@@ -138,7 +138,7 @@ class MetricManager:
             Metric name
         unit : MetricUnit
             `aws_lambda_powertools.helper.models.MetricUnit`
-        value : float
+        value : Union[float, int]
             Metric value
 
         Raises
@@ -172,6 +172,8 @@ class MetricManager:
             Dictionary of metrics to serialize, by default None
         dimensions : Dict, optional
             Dictionary of dimensions to serialize, by default None
+        metadata: Dict, optional
+            Dictionary of metadata to serialize, by default None
 
         Example
         -------
@@ -209,7 +211,7 @@ class MetricManager:
         metric_names_and_values: Dict[str, str] = {}  # { &#34;metric_name&#34;: 1.0 }
 
         for metric_name in metrics:
-            metric: str = metrics[metric_name]
+            metric: dict = metrics[metric_name]
             metric_value: int = metric.get(&#34;Value&#34;, 0)
             metric_unit: str = metric.get(&#34;Unit&#34;, &#34;&#34;)
 
@@ -283,7 +285,7 @@ class MetricManager:
 
         Parameters
         ----------
-        name : str
+        key : str
             Metadata key
         value : any
             Metadata value
@@ -436,7 +438,7 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
             Metric name
         unit : MetricUnit
             `aws_lambda_powertools.helper.models.MetricUnit`
-        value : float
+        value : Union[float, int]
             Metric value
 
         Raises
@@ -470,6 +472,8 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
             Dictionary of metrics to serialize, by default None
         dimensions : Dict, optional
             Dictionary of dimensions to serialize, by default None
+        metadata: Dict, optional
+            Dictionary of metadata to serialize, by default None
 
         Example
         -------
@@ -507,7 +511,7 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
         metric_names_and_values: Dict[str, str] = {}  # { &#34;metric_name&#34;: 1.0 }
 
         for metric_name in metrics:
-            metric: str = metrics[metric_name]
+            metric: dict = metrics[metric_name]
             metric_value: int = metric.get(&#34;Value&#34;, 0)
             metric_unit: str = metric.get(&#34;Unit&#34;, &#34;&#34;)
 
@@ -581,7 +585,7 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
 
         Parameters
         ----------
-        name : str
+        key : str
             Metadata key
         value : any
             Metadata value
@@ -698,7 +702,7 @@ use add_dimensions method.</p>
 </code></pre>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dt><strong><code>key</code></strong> :&ensp;<code>str</code></dt>
 <dd>Metadata key</dd>
 <dt><strong><code>value</code></strong> :&ensp;<code>any</code></dt>
 <dd>Metadata value</dd>
@@ -724,7 +728,7 @@ use add_dimensions method.</p>
 
     Parameters
     ----------
-    name : str
+    key : str
         Metadata key
     value : any
         Metadata value
@@ -758,7 +762,7 @@ use add_dimensions method.</p>
 <dd>Metric name</dd>
 <dt><strong><code>unit</code></strong> :&ensp;<a title="aws_lambda_powertools.metrics.base.MetricUnit" href="#aws_lambda_powertools.metrics.base.MetricUnit"><code>MetricUnit</code></a></dt>
 <dd><code>aws_lambda_powertools.helper.models.MetricUnit</code></dd>
-<dt><strong><code>value</code></strong> :&ensp;<code>float</code></dt>
+<dt><strong><code>value</code></strong> :&ensp;<code>Union</code>[<code>float</code>, <code>int</code>]</dt>
 <dd>Metric value</dd>
 </dl>
 <h2 id="raises">Raises</h2>
@@ -789,7 +793,7 @@ use add_dimensions method.</p>
         Metric name
     unit : MetricUnit
         `aws_lambda_powertools.helper.models.MetricUnit`
-    value : float
+    value : Union[float, int]
         Metric value
 
     Raises
@@ -826,6 +830,8 @@ use add_dimensions method.</p>
 <dd>Dictionary of metrics to serialize, by default None</dd>
 <dt><strong><code>dimensions</code></strong> :&ensp;<code>Dict</code>, optional</dt>
 <dd>Dictionary of dimensions to serialize, by default None</dd>
+<dt><strong><code>metadata</code></strong> :&ensp;<code>Dict</code>, optional</dt>
+<dd>Dictionary of metadata to serialize, by default None</dd>
 </dl>
 <h2 id="example">Example</h2>
 <p><strong>Serialize metrics into EMF format</strong></p>
@@ -856,6 +862,8 @@ ret = metrics.serialize_metric_set()
         Dictionary of metrics to serialize, by default None
     dimensions : Dict, optional
         Dictionary of dimensions to serialize, by default None
+    metadata: Dict, optional
+        Dictionary of metadata to serialize, by default None
 
     Example
     -------
@@ -893,7 +901,7 @@ ret = metrics.serialize_metric_set()
     metric_names_and_values: Dict[str, str] = {}  # { &#34;metric_name&#34;: 1.0 }
 
     for metric_name in metrics:
-        metric: str = metrics[metric_name]
+        metric: dict = metrics[metric_name]
         metric_value: int = metric.get(&#34;Value&#34;, 0)
         metric_unit: str = metric.get(&#34;Unit&#34;, &#34;&#34;)
 
