@@ -61,7 +61,7 @@ class AttributeValue(DictWrapper):
         Example:
             &gt;&gt;&gt; {&#34;BOOL&#34;: True}
         &#34;&#34;&#34;
-        item = self.get(&#34;bool&#34;)
+        item = self.get(&#34;BOOL&#34;)
         return None if item is None else bool(item)
 
     @property
@@ -309,7 +309,7 @@ class DynamoDBStreamEvent(DictWrapper):
         Example:
             &gt;&gt;&gt; {&#34;BOOL&#34;: True}
         &#34;&#34;&#34;
-        item = self.get(&#34;bool&#34;)
+        item = self.get(&#34;BOOL&#34;)
         return None if item is None else bool(item)
 
     @property
@@ -423,7 +423,7 @@ def bool_value(self) -&gt; Optional[bool]:
     Example:
         &gt;&gt;&gt; {&#34;BOOL&#34;: True}
     &#34;&#34;&#34;
-    item = self.get(&#34;bool&#34;)
+    item = self.get(&#34;BOOL&#34;)
     return None if item is None else bool(item)</code></pre>
 </details>
 </dd>
