@@ -39,6 +39,10 @@ __all__ = [&#34;Logger&#34;]</code></pre>
 <dd>
 <section class="desc"></section>
 </dd>
+<dt><code class="name"><a title="aws_lambda_powertools.logging.filters" href="filters.html">aws_lambda_powertools.logging.filters</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
 <dt><code class="name"><a title="aws_lambda_powertools.logging.formatter" href="formatter.html">aws_lambda_powertools.logging.formatter</a></code></dt>
 <dd>
 <section class="desc"></section>
@@ -244,13 +248,6 @@ $ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
     def _init_logger(self, **kwargs):
         &#34;&#34;&#34;Configures new logger&#34;&#34;&#34;
 
-        # Lambda by default configures the root logger handler
-        # therefore, we need to remove it to prevent messages being logged twice
-        # when customers use our Logger
-        logger.debug(&#34;Removing Lambda root handler whether it exists&#34;)
-        root_logger = logging.getLogger()
-        root_logger.handlers.clear()
-
         # Skip configuration if it&#39;s a child logger to prevent
         # multiple handlers being attached as well as different sampling mechanisms
         # and multiple messages from being logged as handlers can be duplicated
@@ -259,6 +256,13 @@ $ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
             self._logger.setLevel(self.log_level)
             self._logger.addHandler(self._handler)
             self.structure_logs(**kwargs)
+
+            logger.debug(&#34;Adding filter in root logger to suppress child logger records to bubble up&#34;)
+            for handler in logging.root.handlers:
+                # It&#39;ll add a filter to suppress any child logger from self.service
+                # Where service is Order, it&#39;ll reject parent logger Order,
+                # and child loggers such as Order.checkout, Order.shared
+                handler.addFilter(SuppressFilter(self.service))
 
     def _configure_sampling(self):
         &#34;&#34;&#34;Dynamically set log level based on sampling rate
@@ -574,6 +578,7 @@ across future log statements.</p>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
 <li><code><a title="aws_lambda_powertools.logging.exceptions" href="exceptions.html">aws_lambda_powertools.logging.exceptions</a></code></li>
+<li><code><a title="aws_lambda_powertools.logging.filters" href="filters.html">aws_lambda_powertools.logging.filters</a></code></li>
 <li><code><a title="aws_lambda_powertools.logging.formatter" href="formatter.html">aws_lambda_powertools.logging.formatter</a></code></li>
 <li><code><a title="aws_lambda_powertools.logging.lambda_context" href="lambda_context.html">aws_lambda_powertools.logging.lambda_context</a></code></li>
 <li><code><a title="aws_lambda_powertools.logging.logger" href="logger.html">aws_lambda_powertools.logging.logger</a></code></li>

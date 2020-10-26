@@ -94,7 +94,7 @@ class PreSignUpTriggerEventRequest(DictWrapper):
     @property
     def client_metadata(self) -&gt; Optional[Dict[str, str]]:
         &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function
-        that you specify for the pre sign-up data_classes.&#34;&#34;&#34;
+        that you specify for the pre sign-up trigger.&#34;&#34;&#34;
         return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)
 
 
@@ -161,7 +161,7 @@ class PostConfirmationTriggerEventRequest(DictWrapper):
     @property
     def client_metadata(self) -&gt; Optional[Dict[str, str]]:
         &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function
-        that you specify for the post confirmation data_classes.&#34;&#34;&#34;
+        that you specify for the post confirmation trigger.&#34;&#34;&#34;
         return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)
 
 
@@ -198,7 +198,7 @@ class UserMigrationTriggerEventRequest(DictWrapper):
     @property
     def client_metadata(self) -&gt; Optional[Dict[str, str]]:
         &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function
-        that you specify for the pre sign-up data_classes.&#34;&#34;&#34;
+        that you specify for the pre sign-up trigger.&#34;&#34;&#34;
         return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)
 
 
@@ -309,7 +309,7 @@ class CustomMessageTriggerEventRequest(DictWrapper):
     @property
     def client_metadata(self) -&gt; Optional[Dict[str, str]]:
         &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function
-        that you specify for the pre sign-up data_classes.&#34;&#34;&#34;
+        that you specify for the pre sign-up trigger.&#34;&#34;&#34;
         return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)
 
 
@@ -355,9 +355,9 @@ class CustomMessageTriggerEvent(BaseTriggerEvent):
     - `CustomMessage_AdminCreateUser` To send the temporary password to a new user.
     - `CustomMessage_ResendCode` To resend the confirmation code to an existing user.
     - `CustomMessage_ForgotPassword` To send the confirmation code for Forgot Password request.
-    - `CustomMessage_UpdateUserAttribute` When a user&#39;s email or phone number is changed, this data_classes sends a
+    - `CustomMessage_UpdateUserAttribute` When a user&#39;s email or phone number is changed, this trigger sends a
        verification code automatically to the user. Cannot be used for other attributes.
-    - `CustomMessage_VerifyUserAttribute`  This data_classes sends a verification code to the user when they manually
+    - `CustomMessage_VerifyUserAttribute`  This trigger sends a verification code to the user when they manually
        request it for a new email or phone number.
     - `CustomMessage_Authentication` To send MFA code during authentication.
 
@@ -395,7 +395,7 @@ class PreAuthenticationTriggerEventRequest(DictWrapper):
 class PreAuthenticationTriggerEvent(BaseTriggerEvent):
     &#34;&#34;&#34;Pre Authentication Lambda Trigger
 
-    Amazon Cognito invokes this data_classes when a user attempts to sign in, allowing custom validation
+    Amazon Cognito invokes this trigger when a user attempts to sign in, allowing custom validation
     to accept or deny the authentication request.
 
     Notes:
@@ -430,14 +430,14 @@ class PostAuthenticationTriggerEventRequest(DictWrapper):
     @property
     def client_metadata(self) -&gt; Optional[Dict[str, str]]:
         &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function
-        that you specify for the post authentication data_classes.&#34;&#34;&#34;
+        that you specify for the post authentication trigger.&#34;&#34;&#34;
         return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)
 
 
 class PostAuthenticationTriggerEvent(BaseTriggerEvent):
     &#34;&#34;&#34;Post Authentication Lambda Trigger
 
-    Amazon Cognito invokes this data_classes after signing in a user, allowing you to add custom logic
+    Amazon Cognito invokes this trigger after signing in a user, allowing you to add custom logic
     after authentication.
 
     Notes:
@@ -488,7 +488,7 @@ class PreTokenGenerationTriggerEventRequest(DictWrapper):
     @property
     def client_metadata(self) -&gt; Optional[Dict[str, str]]:
         &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function
-        that you specify for the pre token generation data_classes.&#34;&#34;&#34;
+        that you specify for the pre token generation trigger.&#34;&#34;&#34;
         return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)
 
 
@@ -557,7 +557,7 @@ class PreTokenGenerationTriggerEventResponse(DictWrapper):
 class PreTokenGenerationTriggerEvent(BaseTriggerEvent):
     &#34;&#34;&#34;Pre Token Generation Lambda Trigger
 
-    Amazon Cognito invokes this data_classes before token generation allowing you to customize identity token claims.
+    Amazon Cognito invokes this trigger before token generation allowing you to customize identity token claims.
 
     Notes:
     ----
@@ -583,7 +583,270 @@ class PreTokenGenerationTriggerEvent(BaseTriggerEvent):
     @property
     def response(self) -&gt; PreTokenGenerationTriggerEventResponse:
         &#34;&#34;&#34;Pre Token Generation Response Parameters&#34;&#34;&#34;
-        return PreTokenGenerationTriggerEventResponse(self._data)</code></pre>
+        return PreTokenGenerationTriggerEventResponse(self._data)
+
+
+class ChallengeResult(DictWrapper):
+    @property
+    def challenge_name(self) -&gt; str:
+        &#34;&#34;&#34;The challenge type.
+
+        One of: CUSTOM_CHALLENGE, SRP_A, PASSWORD_VERIFIER, SMS_MFA, DEVICE_SRP_AUTH,
+        DEVICE_PASSWORD_VERIFIER, or ADMIN_NO_SRP_AUTH.&#34;&#34;&#34;
+        return self[&#34;challengeName&#34;]
+
+    @property
+    def challenge_result(self) -&gt; bool:
+        &#34;&#34;&#34;Set to true if the user successfully completed the challenge, or false otherwise.&#34;&#34;&#34;
+        return bool(self[&#34;challengeResult&#34;])
+
+    @property
+    def challenge_metadata(self) -&gt; Optional[str]:
+        &#34;&#34;&#34;Your name for the custom challenge. Used only if challengeName is CUSTOM_CHALLENGE.&#34;&#34;&#34;
+        return self.get(&#34;challengeMetadata&#34;)
+
+
+class DefineAuthChallengeTriggerEventRequest(DictWrapper):
+    @property
+    def user_attributes(self) -&gt; Dict[str, str]:
+        &#34;&#34;&#34;One or more name-value pairs representing user attributes. The attribute names are the keys.&#34;&#34;&#34;
+        return self[&#34;request&#34;][&#34;userAttributes&#34;]
+
+    @property
+    def user_not_found(self) -&gt; Optional[bool]:
+        &#34;&#34;&#34;A Boolean that is populated when PreventUserExistenceErrors is set to ENABLED for your user pool client.
+        A value of true means that the user id (user name, email address, etc.) did not match any existing users. &#34;&#34;&#34;
+        return self[&#34;request&#34;].get(&#34;userNotFound&#34;)
+
+    @property
+    def session(self) -&gt; List[ChallengeResult]:
+        &#34;&#34;&#34;An array of ChallengeResult elements, each of which contains the following elements:&#34;&#34;&#34;
+        return [ChallengeResult(result) for result in self[&#34;request&#34;][&#34;session&#34;]]
+
+    @property
+    def client_metadata(self) -&gt; Optional[Dict[str, str]]:
+        &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function that you specify
+        for the define auth challenge trigger.&#34;&#34;&#34;
+        return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)
+
+
+class DefineAuthChallengeTriggerEventResponse(DictWrapper):
+    @property
+    def challenge_name(self) -&gt; str:
+        return self[&#34;response&#34;][&#34;challengeName&#34;]
+
+    @property
+    def fail_authentication(self) -&gt; bool:
+        return bool(self[&#34;response&#34;][&#34;failAuthentication&#34;])
+
+    @property
+    def issue_tokens(self) -&gt; bool:
+        return bool(self[&#34;response&#34;][&#34;issueTokens&#34;])
+
+    @challenge_name.setter
+    def challenge_name(self, value: str):
+        &#34;&#34;&#34;A string containing the name of the next challenge.
+        If you want to present a new challenge to your user, specify the challenge name here.&#34;&#34;&#34;
+        self[&#34;response&#34;][&#34;challengeName&#34;] = value
+
+    @fail_authentication.setter
+    def fail_authentication(self, value: bool):
+        &#34;&#34;&#34;Set to true if you want to terminate the current authentication process, or false otherwise.&#34;&#34;&#34;
+        self[&#34;response&#34;][&#34;failAuthentication&#34;] = value
+
+    @issue_tokens.setter
+    def issue_tokens(self, value: bool):
+        &#34;&#34;&#34;Set to true if you determine that the user has been sufficiently authenticated by
+        completing the challenges, or false otherwise.&#34;&#34;&#34;
+        self[&#34;response&#34;][&#34;issueTokens&#34;] = value
+
+
+class DefineAuthChallengeTriggerEvent(BaseTriggerEvent):
+    &#34;&#34;&#34;Define Auth Challenge Lambda Trigger
+
+    Amazon Cognito invokes this trigger to initiate the custom authentication flow.
+
+    Notes:
+    ----
+    `triggerSource` can be one of the following:
+
+    - `DefineAuthChallenge_Authentication` Define Auth Challenge.
+
+    Documentation:
+    --------------
+    - https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-define-auth-challenge.html
+    &#34;&#34;&#34;
+
+    @property
+    def request(self) -&gt; DefineAuthChallengeTriggerEventRequest:
+        &#34;&#34;&#34;Define Auth Challenge Request Parameters&#34;&#34;&#34;
+        return DefineAuthChallengeTriggerEventRequest(self._data)
+
+    @property
+    def response(self) -&gt; DefineAuthChallengeTriggerEventResponse:
+        &#34;&#34;&#34;Define Auth Challenge Response Parameters&#34;&#34;&#34;
+        return DefineAuthChallengeTriggerEventResponse(self._data)
+
+
+class CreateAuthChallengeTriggerEventRequest(DictWrapper):
+    @property
+    def user_attributes(self) -&gt; Dict[str, str]:
+        &#34;&#34;&#34;One or more name-value pairs representing user attributes. The attribute names are the keys.&#34;&#34;&#34;
+        return self[&#34;request&#34;][&#34;userAttributes&#34;]
+
+    @property
+    def user_not_found(self) -&gt; Optional[bool]:
+        &#34;&#34;&#34;This boolean is populated when PreventUserExistenceErrors is set to ENABLED for your User Pool client.&#34;&#34;&#34;
+        return self[&#34;request&#34;].get(&#34;userNotFound&#34;)
+
+    @property
+    def challenge_name(self) -&gt; str:
+        &#34;&#34;&#34;The name of the new challenge.&#34;&#34;&#34;
+        return self[&#34;request&#34;][&#34;challengeName&#34;]
+
+    @property
+    def session(self) -&gt; List[ChallengeResult]:
+        &#34;&#34;&#34;An array of ChallengeResult elements, each of which contains the following elements:&#34;&#34;&#34;
+        return [ChallengeResult(result) for result in self[&#34;request&#34;][&#34;session&#34;]]
+
+    @property
+    def client_metadata(self) -&gt; Optional[Dict[str, str]]:
+        &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function that you
+        specify for the create auth challenge trigger..&#34;&#34;&#34;
+        return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)
+
+
+class CreateAuthChallengeTriggerEventResponse(DictWrapper):
+    @property
+    def public_challenge_parameters(self) -&gt; Dict[str, str]:
+        return self[&#34;response&#34;][&#34;publicChallengeParameters&#34;]
+
+    @property
+    def private_challenge_parameters(self) -&gt; Dict[str, str]:
+        return self[&#34;response&#34;][&#34;privateChallengeParameters&#34;]
+
+    @property
+    def challenge_metadata(self) -&gt; str:
+        return self[&#34;response&#34;][&#34;challengeMetadata&#34;]
+
+    @public_challenge_parameters.setter
+    def public_challenge_parameters(self, value: Dict[str, str]):
+        &#34;&#34;&#34;One or more key-value pairs for the client app to use in the challenge to be presented to the user.
+        This parameter should contain all of the necessary information to accurately present the challenge to
+        the user.&#34;&#34;&#34;
+        self[&#34;response&#34;][&#34;publicChallengeParameters&#34;] = value
+
+    @private_challenge_parameters.setter
+    def private_challenge_parameters(self, value: Dict[str, str]):
+        &#34;&#34;&#34;This parameter is only used by the Verify Auth Challenge Response Lambda trigger.
+        This parameter should contain all of the information that is required to validate the user&#39;s
+        response to the challenge. In other words, the publicChallengeParameters parameter contains the
+        question that is presented to the user and privateChallengeParameters contains the valid answers
+        for the question.&#34;&#34;&#34;
+        self[&#34;response&#34;][&#34;privateChallengeParameters&#34;] = value
+
+    @challenge_metadata.setter
+    def challenge_metadata(self, value: str):
+        &#34;&#34;&#34;Your name for the custom challenge, if this is a custom challenge.&#34;&#34;&#34;
+        self[&#34;response&#34;][&#34;challengeMetadata&#34;] = value
+
+
+class CreateAuthChallengeTriggerEvent(BaseTriggerEvent):
+    &#34;&#34;&#34;Create Auth Challenge Lambda Trigger
+
+    Amazon Cognito invokes this trigger after Define Auth Challenge if a custom challenge has been
+    specified as part of the Define Auth Challenge trigger.
+    It creates a custom authentication flow.
+
+    Notes:
+    ----
+    `triggerSource` can be one of the following:
+
+    - `CreateAuthChallenge_Authentication` Create Auth Challenge.
+
+    Documentation:
+    --------------
+    - https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-create-auth-challenge.html
+    &#34;&#34;&#34;
+
+    @property
+    def request(self) -&gt; CreateAuthChallengeTriggerEventRequest:
+        &#34;&#34;&#34;Create Auth Challenge Request Parameters&#34;&#34;&#34;
+        return CreateAuthChallengeTriggerEventRequest(self._data)
+
+    @property
+    def response(self) -&gt; CreateAuthChallengeTriggerEventResponse:
+        &#34;&#34;&#34;Create Auth Challenge Response Parameters&#34;&#34;&#34;
+        return CreateAuthChallengeTriggerEventResponse(self._data)
+
+
+class VerifyAuthChallengeResponseTriggerEventRequest(DictWrapper):
+    @property
+    def user_attributes(self) -&gt; Dict[str, str]:
+        &#34;&#34;&#34;One or more name-value pairs representing user attributes. The attribute names are the keys.&#34;&#34;&#34;
+        return self[&#34;request&#34;][&#34;userAttributes&#34;]
+
+    @property
+    def private_challenge_parameters(self) -&gt; Dict[str, str]:
+        &#34;&#34;&#34;This parameter comes from the Create Auth Challenge trigger, and is
+        compared against a user’s challengeAnswer to determine whether the user passed the challenge.&#34;&#34;&#34;
+        return self[&#34;request&#34;][&#34;privateChallengeParameters&#34;]
+
+    @property
+    def challenge_answer(self) -&gt; Any:
+        &#34;&#34;&#34;The answer from the user&#39;s response to the challenge.&#34;&#34;&#34;
+        return self[&#34;request&#34;][&#34;challengeAnswer&#34;]
+
+    @property
+    def client_metadata(self) -&gt; Optional[Dict[str, str]]:
+        &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function that
+        you specify for the verify auth challenge trigger.&#34;&#34;&#34;
+        return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)
+
+    @property
+    def user_not_found(self) -&gt; Optional[bool]:
+        &#34;&#34;&#34;This boolean is populated when PreventUserExistenceErrors is set to ENABLED for your User Pool client.&#34;&#34;&#34;
+        return self[&#34;request&#34;].get(&#34;userNotFound&#34;)
+
+
+class VerifyAuthChallengeResponseTriggerEventResponse(DictWrapper):
+    @property
+    def answer_correct(self) -&gt; bool:
+        return bool(self[&#34;response&#34;][&#34;answerCorrect&#34;])
+
+    @answer_correct.setter
+    def answer_correct(self, value: bool):
+        &#34;&#34;&#34;Set to true if the user has successfully completed the challenge, or false otherwise.&#34;&#34;&#34;
+        self[&#34;response&#34;][&#34;answerCorrect&#34;] = value
+
+
+class VerifyAuthChallengeResponseTriggerEvent(BaseTriggerEvent):
+    &#34;&#34;&#34;Verify Auth Challenge Response Lambda Trigger
+
+    Amazon Cognito invokes this trigger to verify if the response from the end user for a custom
+    Auth Challenge is valid or not.
+    It is part of a user pool custom authentication flow.
+
+    Notes:
+    ----
+    `triggerSource` can be one of the following:
+
+    - `VerifyAuthChallengeResponse_Authentication` Verify Auth Challenge Response.
+
+    Documentation:
+    --------------
+    - https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-verify-auth-challenge-response.html
+    &#34;&#34;&#34;
+
+    @property
+    def request(self) -&gt; VerifyAuthChallengeResponseTriggerEventRequest:
+        &#34;&#34;&#34;Verify Auth Challenge Request Parameters&#34;&#34;&#34;
+        return VerifyAuthChallengeResponseTriggerEventRequest(self._data)
+
+    @property
+    def response(self) -&gt; VerifyAuthChallengeResponseTriggerEventResponse:
+        &#34;&#34;&#34;Verify Auth Challenge Response Parameters&#34;&#34;&#34;
+        return VerifyAuthChallengeResponseTriggerEventResponse(self._data)</code></pre>
 </details>
 </section>
 <section>
@@ -651,13 +914,16 @@ class PreTokenGenerationTriggerEvent(BaseTriggerEvent):
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
+<li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEvent" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEvent">CreateAuthChallengeTriggerEvent</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEvent" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEvent">CustomMessageTriggerEvent</a></li>
+<li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEvent" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEvent">DefineAuthChallengeTriggerEvent</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostAuthenticationTriggerEvent" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostAuthenticationTriggerEvent">PostAuthenticationTriggerEvent</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostConfirmationTriggerEvent" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostConfirmationTriggerEvent">PostConfirmationTriggerEvent</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreAuthenticationTriggerEvent" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreAuthenticationTriggerEvent">PreAuthenticationTriggerEvent</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEvent" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEvent">PreSignUpTriggerEvent</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEvent" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEvent">PreTokenGenerationTriggerEvent</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEvent" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEvent">UserMigrationTriggerEvent</a></li>
+<li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEvent" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEvent">VerifyAuthChallengeResponseTriggerEvent</a></li>
 </ul>
 <h3>Instance variables</h3>
 <dl>
@@ -792,6 +1058,87 @@ def aws_sdk_version(self) -&gt; str:
 def client_id(self) -&gt; str:
     &#34;&#34;&#34;The ID of the client associated with the user pool.&#34;&#34;&#34;
     return self[&#34;callerContext&#34;][&#34;clientId&#34;]</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult"><code class="flex name class">
+<span>class <span class="ident">ChallengeResult</span></span>
+<span>(</span><span>data)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ChallengeResult(DictWrapper):
+    @property
+    def challenge_name(self) -&gt; str:
+        &#34;&#34;&#34;The challenge type.
+
+        One of: CUSTOM_CHALLENGE, SRP_A, PASSWORD_VERIFIER, SMS_MFA, DEVICE_SRP_AUTH,
+        DEVICE_PASSWORD_VERIFIER, or ADMIN_NO_SRP_AUTH.&#34;&#34;&#34;
+        return self[&#34;challengeName&#34;]
+
+    @property
+    def challenge_result(self) -&gt; bool:
+        &#34;&#34;&#34;Set to true if the user successfully completed the challenge, or false otherwise.&#34;&#34;&#34;
+        return bool(self[&#34;challengeResult&#34;])
+
+    @property
+    def challenge_metadata(self) -&gt; Optional[str]:
+        &#34;&#34;&#34;Your name for the custom challenge. Used only if challengeName is CUSTOM_CHALLENGE.&#34;&#34;&#34;
+        return self.get(&#34;challengeMetadata&#34;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult.challenge_metadata"><code class="name">var <span class="ident">challenge_metadata</span></code></dt>
+<dd>
+<section class="desc"><p>Your name for the custom challenge. Used only if challengeName is CUSTOM_CHALLENGE.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def challenge_metadata(self) -&gt; Optional[str]:
+    &#34;&#34;&#34;Your name for the custom challenge. Used only if challengeName is CUSTOM_CHALLENGE.&#34;&#34;&#34;
+    return self.get(&#34;challengeMetadata&#34;)</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult.challenge_name"><code class="name">var <span class="ident">challenge_name</span></code></dt>
+<dd>
+<section class="desc"><p>The challenge type.</p>
+<p>One of: CUSTOM_CHALLENGE, SRP_A, PASSWORD_VERIFIER, SMS_MFA, DEVICE_SRP_AUTH,
+DEVICE_PASSWORD_VERIFIER, or ADMIN_NO_SRP_AUTH.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def challenge_name(self) -&gt; str:
+    &#34;&#34;&#34;The challenge type.
+
+    One of: CUSTOM_CHALLENGE, SRP_A, PASSWORD_VERIFIER, SMS_MFA, DEVICE_SRP_AUTH,
+    DEVICE_PASSWORD_VERIFIER, or ADMIN_NO_SRP_AUTH.&#34;&#34;&#34;
+    return self[&#34;challengeName&#34;]</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult.challenge_result"><code class="name">var <span class="ident">challenge_result</span></code></dt>
+<dd>
+<section class="desc"><p>Set to true if the user successfully completed the challenge, or false otherwise.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def challenge_result(self) -&gt; bool:
+    &#34;&#34;&#34;Set to true if the user successfully completed the challenge, or false otherwise.&#34;&#34;&#34;
+    return bool(self[&#34;challengeResult&#34;])</code></pre>
 </details>
 </dd>
 </dl>
@@ -952,6 +1299,304 @@ def group_configuration(self) -&gt; Optional[GroupOverrideDetails]:
 </dd>
 </dl>
 </dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEvent"><code class="flex name class">
+<span>class <span class="ident">CreateAuthChallengeTriggerEvent</span></span>
+<span>(</span><span>data)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create Auth Challenge Lambda Trigger</p>
+<p>Amazon Cognito invokes this trigger after Define Auth Challenge if a custom challenge has been
+specified as part of the Define Auth Challenge trigger.
+It creates a custom authentication flow.</p>
+<h2 id="notes">Notes:</h2>
+<p><code>triggerSource</code> can be one of the following:</p>
+<ul>
+<li><code>CreateAuthChallenge_Authentication</code> Create Auth Challenge.</li>
+</ul>
+<h2 id="documentation">Documentation:</h2>
+<ul>
+<li><a href="https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-create-auth-challenge.html">https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-create-auth-challenge.html</a></li>
+</ul></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CreateAuthChallengeTriggerEvent(BaseTriggerEvent):
+    &#34;&#34;&#34;Create Auth Challenge Lambda Trigger
+
+    Amazon Cognito invokes this trigger after Define Auth Challenge if a custom challenge has been
+    specified as part of the Define Auth Challenge trigger.
+    It creates a custom authentication flow.
+
+    Notes:
+    ----
+    `triggerSource` can be one of the following:
+
+    - `CreateAuthChallenge_Authentication` Create Auth Challenge.
+
+    Documentation:
+    --------------
+    - https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-create-auth-challenge.html
+    &#34;&#34;&#34;
+
+    @property
+    def request(self) -&gt; CreateAuthChallengeTriggerEventRequest:
+        &#34;&#34;&#34;Create Auth Challenge Request Parameters&#34;&#34;&#34;
+        return CreateAuthChallengeTriggerEventRequest(self._data)
+
+    @property
+    def response(self) -&gt; CreateAuthChallengeTriggerEventResponse:
+        &#34;&#34;&#34;Create Auth Challenge Response Parameters&#34;&#34;&#34;
+        return CreateAuthChallengeTriggerEventResponse(self._data)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent">BaseTriggerEvent</a></li>
+<li><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEvent.request"><code class="name">var <span class="ident">request</span></code></dt>
+<dd>
+<section class="desc"><p>Create Auth Challenge Request Parameters</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def request(self) -&gt; CreateAuthChallengeTriggerEventRequest:
+    &#34;&#34;&#34;Create Auth Challenge Request Parameters&#34;&#34;&#34;
+    return CreateAuthChallengeTriggerEventRequest(self._data)</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEvent.response"><code class="name">var <span class="ident">response</span></code></dt>
+<dd>
+<section class="desc"><p>Create Auth Challenge Response Parameters</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def response(self) -&gt; CreateAuthChallengeTriggerEventResponse:
+    &#34;&#34;&#34;Create Auth Challenge Response Parameters&#34;&#34;&#34;
+    return CreateAuthChallengeTriggerEventResponse(self._data)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent">BaseTriggerEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.caller_context" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.caller_context">caller_context</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.region" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.region">region</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.trigger_source" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.trigger_source">trigger_source</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.user_name" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.user_name">user_name</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.user_pool_id" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.user_pool_id">user_pool_id</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.version" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.version">version</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest"><code class="flex name class">
+<span>class <span class="ident">CreateAuthChallengeTriggerEventRequest</span></span>
+<span>(</span><span>data)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CreateAuthChallengeTriggerEventRequest(DictWrapper):
+    @property
+    def user_attributes(self) -&gt; Dict[str, str]:
+        &#34;&#34;&#34;One or more name-value pairs representing user attributes. The attribute names are the keys.&#34;&#34;&#34;
+        return self[&#34;request&#34;][&#34;userAttributes&#34;]
+
+    @property
+    def user_not_found(self) -&gt; Optional[bool]:
+        &#34;&#34;&#34;This boolean is populated when PreventUserExistenceErrors is set to ENABLED for your User Pool client.&#34;&#34;&#34;
+        return self[&#34;request&#34;].get(&#34;userNotFound&#34;)
+
+    @property
+    def challenge_name(self) -&gt; str:
+        &#34;&#34;&#34;The name of the new challenge.&#34;&#34;&#34;
+        return self[&#34;request&#34;][&#34;challengeName&#34;]
+
+    @property
+    def session(self) -&gt; List[ChallengeResult]:
+        &#34;&#34;&#34;An array of ChallengeResult elements, each of which contains the following elements:&#34;&#34;&#34;
+        return [ChallengeResult(result) for result in self[&#34;request&#34;][&#34;session&#34;]]
+
+    @property
+    def client_metadata(self) -&gt; Optional[Dict[str, str]]:
+        &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function that you
+        specify for the create auth challenge trigger..&#34;&#34;&#34;
+        return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.challenge_name"><code class="name">var <span class="ident">challenge_name</span></code></dt>
+<dd>
+<section class="desc"><p>The name of the new challenge.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def challenge_name(self) -&gt; str:
+    &#34;&#34;&#34;The name of the new challenge.&#34;&#34;&#34;
+    return self[&#34;request&#34;][&#34;challengeName&#34;]</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span></code></dt>
+<dd>
+<section class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function that you
+specify for the create auth challenge trigger..</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def client_metadata(self) -&gt; Optional[Dict[str, str]]:
+    &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function that you
+    specify for the create auth challenge trigger..&#34;&#34;&#34;
+    return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.session"><code class="name">var <span class="ident">session</span></code></dt>
+<dd>
+<section class="desc"><p>An array of ChallengeResult elements, each of which contains the following elements:</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def session(self) -&gt; List[ChallengeResult]:
+    &#34;&#34;&#34;An array of ChallengeResult elements, each of which contains the following elements:&#34;&#34;&#34;
+    return [ChallengeResult(result) for result in self[&#34;request&#34;][&#34;session&#34;]]</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.user_attributes"><code class="name">var <span class="ident">user_attributes</span></code></dt>
+<dd>
+<section class="desc"><p>One or more name-value pairs representing user attributes. The attribute names are the keys.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def user_attributes(self) -&gt; Dict[str, str]:
+    &#34;&#34;&#34;One or more name-value pairs representing user attributes. The attribute names are the keys.&#34;&#34;&#34;
+    return self[&#34;request&#34;][&#34;userAttributes&#34;]</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.user_not_found"><code class="name">var <span class="ident">user_not_found</span></code></dt>
+<dd>
+<section class="desc"><p>This boolean is populated when PreventUserExistenceErrors is set to ENABLED for your User Pool client.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def user_not_found(self) -&gt; Optional[bool]:
+    &#34;&#34;&#34;This boolean is populated when PreventUserExistenceErrors is set to ENABLED for your User Pool client.&#34;&#34;&#34;
+    return self[&#34;request&#34;].get(&#34;userNotFound&#34;)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventResponse"><code class="flex name class">
+<span>class <span class="ident">CreateAuthChallengeTriggerEventResponse</span></span>
+<span>(</span><span>data)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CreateAuthChallengeTriggerEventResponse(DictWrapper):
+    @property
+    def public_challenge_parameters(self) -&gt; Dict[str, str]:
+        return self[&#34;response&#34;][&#34;publicChallengeParameters&#34;]
+
+    @property
+    def private_challenge_parameters(self) -&gt; Dict[str, str]:
+        return self[&#34;response&#34;][&#34;privateChallengeParameters&#34;]
+
+    @property
+    def challenge_metadata(self) -&gt; str:
+        return self[&#34;response&#34;][&#34;challengeMetadata&#34;]
+
+    @public_challenge_parameters.setter
+    def public_challenge_parameters(self, value: Dict[str, str]):
+        &#34;&#34;&#34;One or more key-value pairs for the client app to use in the challenge to be presented to the user.
+        This parameter should contain all of the necessary information to accurately present the challenge to
+        the user.&#34;&#34;&#34;
+        self[&#34;response&#34;][&#34;publicChallengeParameters&#34;] = value
+
+    @private_challenge_parameters.setter
+    def private_challenge_parameters(self, value: Dict[str, str]):
+        &#34;&#34;&#34;This parameter is only used by the Verify Auth Challenge Response Lambda trigger.
+        This parameter should contain all of the information that is required to validate the user&#39;s
+        response to the challenge. In other words, the publicChallengeParameters parameter contains the
+        question that is presented to the user and privateChallengeParameters contains the valid answers
+        for the question.&#34;&#34;&#34;
+        self[&#34;response&#34;][&#34;privateChallengeParameters&#34;] = value
+
+    @challenge_metadata.setter
+    def challenge_metadata(self, value: str):
+        &#34;&#34;&#34;Your name for the custom challenge, if this is a custom challenge.&#34;&#34;&#34;
+        self[&#34;response&#34;][&#34;challengeMetadata&#34;] = value</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventResponse.challenge_metadata"><code class="name">var <span class="ident">challenge_metadata</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def challenge_metadata(self) -&gt; str:
+    return self[&#34;response&#34;][&#34;challengeMetadata&#34;]</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventResponse.private_challenge_parameters"><code class="name">var <span class="ident">private_challenge_parameters</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def private_challenge_parameters(self) -&gt; Dict[str, str]:
+    return self[&#34;response&#34;][&#34;privateChallengeParameters&#34;]</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventResponse.public_challenge_parameters"><code class="name">var <span class="ident">public_challenge_parameters</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def public_challenge_parameters(self) -&gt; Dict[str, str]:
+    return self[&#34;response&#34;][&#34;publicChallengeParameters&#34;]</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEvent"><code class="flex name class">
 <span>class <span class="ident">CustomMessageTriggerEvent</span></span>
 <span>(</span><span>data)</span>
@@ -965,10 +1610,10 @@ def group_configuration(self) -&gt; Optional[GroupOverrideDetails]:
 <li><code>CustomMessage_AdminCreateUser</code> To send the temporary password to a new user.</li>
 <li><code>CustomMessage_ResendCode</code> To resend the confirmation code to an existing user.</li>
 <li><code>CustomMessage_ForgotPassword</code> To send the confirmation code for Forgot Password request.</li>
-<li><code>CustomMessage_UpdateUserAttribute</code> When a user's email or phone number is changed, this data_classes sends a
+<li><code>CustomMessage_UpdateUserAttribute</code> When a user's email or phone number is changed, this trigger sends a
 verification code automatically to the user. Cannot be used for other attributes.</li>
 <li><code>CustomMessage_VerifyUserAttribute</code>
-This data_classes sends a verification code to the user when they manually
+This trigger sends a verification code to the user when they manually
 request it for a new email or phone number.</li>
 <li><code>CustomMessage_Authentication</code> To send MFA code during authentication.</li>
 </ul>
@@ -991,9 +1636,9 @@ request it for a new email or phone number.</li>
     - `CustomMessage_AdminCreateUser` To send the temporary password to a new user.
     - `CustomMessage_ResendCode` To resend the confirmation code to an existing user.
     - `CustomMessage_ForgotPassword` To send the confirmation code for Forgot Password request.
-    - `CustomMessage_UpdateUserAttribute` When a user&#39;s email or phone number is changed, this data_classes sends a
+    - `CustomMessage_UpdateUserAttribute` When a user&#39;s email or phone number is changed, this trigger sends a
        verification code automatically to the user. Cannot be used for other attributes.
-    - `CustomMessage_VerifyUserAttribute`  This data_classes sends a verification code to the user when they manually
+    - `CustomMessage_VerifyUserAttribute`  This trigger sends a verification code to the user when they manually
        request it for a new email or phone number.
     - `CustomMessage_Authentication` To send MFA code during authentication.
 
@@ -1085,7 +1730,7 @@ def response(self) -&gt; CustomMessageTriggerEventResponse:
     @property
     def client_metadata(self) -&gt; Optional[Dict[str, str]]:
         &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function
-        that you specify for the pre sign-up data_classes.&#34;&#34;&#34;
+        that you specify for the pre sign-up trigger.&#34;&#34;&#34;
         return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -1097,7 +1742,7 @@ def response(self) -&gt; CustomMessageTriggerEventResponse:
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span></code></dt>
 <dd>
 <section class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function
-that you specify for the pre sign-up data_classes.</p></section>
+that you specify for the pre sign-up trigger.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1105,7 +1750,7 @@ that you specify for the pre sign-up data_classes.</p></section>
 <pre><code class="python">@property
 def client_metadata(self) -&gt; Optional[Dict[str, str]]:
     &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function
-    that you specify for the pre sign-up data_classes.&#34;&#34;&#34;
+    that you specify for the pre sign-up trigger.&#34;&#34;&#34;
     return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
 </details>
 </dd>
@@ -1234,6 +1879,281 @@ def sms_message(self) -&gt; str:
 </dd>
 </dl>
 </dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEvent"><code class="flex name class">
+<span>class <span class="ident">DefineAuthChallengeTriggerEvent</span></span>
+<span>(</span><span>data)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Define Auth Challenge Lambda Trigger</p>
+<p>Amazon Cognito invokes this trigger to initiate the custom authentication flow.</p>
+<h2 id="notes">Notes:</h2>
+<p><code>triggerSource</code> can be one of the following:</p>
+<ul>
+<li><code>DefineAuthChallenge_Authentication</code> Define Auth Challenge.</li>
+</ul>
+<h2 id="documentation">Documentation:</h2>
+<ul>
+<li><a href="https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-define-auth-challenge.html">https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-define-auth-challenge.html</a></li>
+</ul></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DefineAuthChallengeTriggerEvent(BaseTriggerEvent):
+    &#34;&#34;&#34;Define Auth Challenge Lambda Trigger
+
+    Amazon Cognito invokes this trigger to initiate the custom authentication flow.
+
+    Notes:
+    ----
+    `triggerSource` can be one of the following:
+
+    - `DefineAuthChallenge_Authentication` Define Auth Challenge.
+
+    Documentation:
+    --------------
+    - https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-define-auth-challenge.html
+    &#34;&#34;&#34;
+
+    @property
+    def request(self) -&gt; DefineAuthChallengeTriggerEventRequest:
+        &#34;&#34;&#34;Define Auth Challenge Request Parameters&#34;&#34;&#34;
+        return DefineAuthChallengeTriggerEventRequest(self._data)
+
+    @property
+    def response(self) -&gt; DefineAuthChallengeTriggerEventResponse:
+        &#34;&#34;&#34;Define Auth Challenge Response Parameters&#34;&#34;&#34;
+        return DefineAuthChallengeTriggerEventResponse(self._data)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent">BaseTriggerEvent</a></li>
+<li><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEvent.request"><code class="name">var <span class="ident">request</span></code></dt>
+<dd>
+<section class="desc"><p>Define Auth Challenge Request Parameters</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def request(self) -&gt; DefineAuthChallengeTriggerEventRequest:
+    &#34;&#34;&#34;Define Auth Challenge Request Parameters&#34;&#34;&#34;
+    return DefineAuthChallengeTriggerEventRequest(self._data)</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEvent.response"><code class="name">var <span class="ident">response</span></code></dt>
+<dd>
+<section class="desc"><p>Define Auth Challenge Response Parameters</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def response(self) -&gt; DefineAuthChallengeTriggerEventResponse:
+    &#34;&#34;&#34;Define Auth Challenge Response Parameters&#34;&#34;&#34;
+    return DefineAuthChallengeTriggerEventResponse(self._data)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent">BaseTriggerEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.caller_context" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.caller_context">caller_context</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.region" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.region">region</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.trigger_source" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.trigger_source">trigger_source</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.user_name" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.user_name">user_name</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.user_pool_id" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.user_pool_id">user_pool_id</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.version" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.version">version</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest"><code class="flex name class">
+<span>class <span class="ident">DefineAuthChallengeTriggerEventRequest</span></span>
+<span>(</span><span>data)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DefineAuthChallengeTriggerEventRequest(DictWrapper):
+    @property
+    def user_attributes(self) -&gt; Dict[str, str]:
+        &#34;&#34;&#34;One or more name-value pairs representing user attributes. The attribute names are the keys.&#34;&#34;&#34;
+        return self[&#34;request&#34;][&#34;userAttributes&#34;]
+
+    @property
+    def user_not_found(self) -&gt; Optional[bool]:
+        &#34;&#34;&#34;A Boolean that is populated when PreventUserExistenceErrors is set to ENABLED for your user pool client.
+        A value of true means that the user id (user name, email address, etc.) did not match any existing users. &#34;&#34;&#34;
+        return self[&#34;request&#34;].get(&#34;userNotFound&#34;)
+
+    @property
+    def session(self) -&gt; List[ChallengeResult]:
+        &#34;&#34;&#34;An array of ChallengeResult elements, each of which contains the following elements:&#34;&#34;&#34;
+        return [ChallengeResult(result) for result in self[&#34;request&#34;][&#34;session&#34;]]
+
+    @property
+    def client_metadata(self) -&gt; Optional[Dict[str, str]]:
+        &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function that you specify
+        for the define auth challenge trigger.&#34;&#34;&#34;
+        return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span></code></dt>
+<dd>
+<section class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function that you specify
+for the define auth challenge trigger.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def client_metadata(self) -&gt; Optional[Dict[str, str]]:
+    &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function that you specify
+    for the define auth challenge trigger.&#34;&#34;&#34;
+    return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest.session"><code class="name">var <span class="ident">session</span></code></dt>
+<dd>
+<section class="desc"><p>An array of ChallengeResult elements, each of which contains the following elements:</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def session(self) -&gt; List[ChallengeResult]:
+    &#34;&#34;&#34;An array of ChallengeResult elements, each of which contains the following elements:&#34;&#34;&#34;
+    return [ChallengeResult(result) for result in self[&#34;request&#34;][&#34;session&#34;]]</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest.user_attributes"><code class="name">var <span class="ident">user_attributes</span></code></dt>
+<dd>
+<section class="desc"><p>One or more name-value pairs representing user attributes. The attribute names are the keys.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def user_attributes(self) -&gt; Dict[str, str]:
+    &#34;&#34;&#34;One or more name-value pairs representing user attributes. The attribute names are the keys.&#34;&#34;&#34;
+    return self[&#34;request&#34;][&#34;userAttributes&#34;]</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest.user_not_found"><code class="name">var <span class="ident">user_not_found</span></code></dt>
+<dd>
+<section class="desc"><p>A Boolean that is populated when PreventUserExistenceErrors is set to ENABLED for your user pool client.
+A value of true means that the user id (user name, email address, etc.) did not match any existing users.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def user_not_found(self) -&gt; Optional[bool]:
+    &#34;&#34;&#34;A Boolean that is populated when PreventUserExistenceErrors is set to ENABLED for your user pool client.
+    A value of true means that the user id (user name, email address, etc.) did not match any existing users. &#34;&#34;&#34;
+    return self[&#34;request&#34;].get(&#34;userNotFound&#34;)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventResponse"><code class="flex name class">
+<span>class <span class="ident">DefineAuthChallengeTriggerEventResponse</span></span>
+<span>(</span><span>data)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DefineAuthChallengeTriggerEventResponse(DictWrapper):
+    @property
+    def challenge_name(self) -&gt; str:
+        return self[&#34;response&#34;][&#34;challengeName&#34;]
+
+    @property
+    def fail_authentication(self) -&gt; bool:
+        return bool(self[&#34;response&#34;][&#34;failAuthentication&#34;])
+
+    @property
+    def issue_tokens(self) -&gt; bool:
+        return bool(self[&#34;response&#34;][&#34;issueTokens&#34;])
+
+    @challenge_name.setter
+    def challenge_name(self, value: str):
+        &#34;&#34;&#34;A string containing the name of the next challenge.
+        If you want to present a new challenge to your user, specify the challenge name here.&#34;&#34;&#34;
+        self[&#34;response&#34;][&#34;challengeName&#34;] = value
+
+    @fail_authentication.setter
+    def fail_authentication(self, value: bool):
+        &#34;&#34;&#34;Set to true if you want to terminate the current authentication process, or false otherwise.&#34;&#34;&#34;
+        self[&#34;response&#34;][&#34;failAuthentication&#34;] = value
+
+    @issue_tokens.setter
+    def issue_tokens(self, value: bool):
+        &#34;&#34;&#34;Set to true if you determine that the user has been sufficiently authenticated by
+        completing the challenges, or false otherwise.&#34;&#34;&#34;
+        self[&#34;response&#34;][&#34;issueTokens&#34;] = value</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventResponse.challenge_name"><code class="name">var <span class="ident">challenge_name</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def challenge_name(self) -&gt; str:
+    return self[&#34;response&#34;][&#34;challengeName&#34;]</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventResponse.fail_authentication"><code class="name">var <span class="ident">fail_authentication</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def fail_authentication(self) -&gt; bool:
+    return bool(self[&#34;response&#34;][&#34;failAuthentication&#34;])</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventResponse.issue_tokens"><code class="name">var <span class="ident">issue_tokens</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def issue_tokens(self) -&gt; bool:
+    return bool(self[&#34;response&#34;][&#34;issueTokens&#34;])</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.GroupOverrideDetails"><code class="flex name class">
 <span>class <span class="ident">GroupOverrideDetails</span></span>
 <span>(</span><span>data)</span>
@@ -1313,7 +2233,7 @@ def preferred_role(self) -&gt; Optional[str]:
 </code></dt>
 <dd>
 <section class="desc"><p>Post Authentication Lambda Trigger</p>
-<p>Amazon Cognito invokes this data_classes after signing in a user, allowing you to add custom logic
+<p>Amazon Cognito invokes this trigger after signing in a user, allowing you to add custom logic
 after authentication.</p>
 <h2 id="notes">Notes:</h2>
 <p><code>triggerSource</code> can be one of the following:</p>
@@ -1331,7 +2251,7 @@ after authentication.</p>
 <pre><code class="python">class PostAuthenticationTriggerEvent(BaseTriggerEvent):
     &#34;&#34;&#34;Post Authentication Lambda Trigger
 
-    Amazon Cognito invokes this data_classes after signing in a user, allowing you to add custom logic
+    Amazon Cognito invokes this trigger after signing in a user, allowing you to add custom logic
     after authentication.
 
     Notes:
@@ -1410,7 +2330,7 @@ def request(self) -&gt; PostAuthenticationTriggerEventRequest:
     @property
     def client_metadata(self) -&gt; Optional[Dict[str, str]]:
         &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function
-        that you specify for the post authentication data_classes.&#34;&#34;&#34;
+        that you specify for the post authentication trigger.&#34;&#34;&#34;
         return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -1422,7 +2342,7 @@ def request(self) -&gt; PostAuthenticationTriggerEventRequest:
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostAuthenticationTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span></code></dt>
 <dd>
 <section class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function
-that you specify for the post authentication data_classes.</p></section>
+that you specify for the post authentication trigger.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1430,7 +2350,7 @@ that you specify for the post authentication data_classes.</p></section>
 <pre><code class="python">@property
 def client_metadata(self) -&gt; Optional[Dict[str, str]]:
     &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function
-    that you specify for the post authentication data_classes.&#34;&#34;&#34;
+    that you specify for the post authentication trigger.&#34;&#34;&#34;
     return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
 </details>
 </dd>
@@ -1556,7 +2476,7 @@ def request(self) -&gt; PostConfirmationTriggerEventRequest:
     @property
     def client_metadata(self) -&gt; Optional[Dict[str, str]]:
         &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function
-        that you specify for the post confirmation data_classes.&#34;&#34;&#34;
+        that you specify for the post confirmation trigger.&#34;&#34;&#34;
         return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -1568,7 +2488,7 @@ def request(self) -&gt; PostConfirmationTriggerEventRequest:
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostConfirmationTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span></code></dt>
 <dd>
 <section class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function
-that you specify for the post confirmation data_classes.</p></section>
+that you specify for the post confirmation trigger.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1576,7 +2496,7 @@ that you specify for the post confirmation data_classes.</p></section>
 <pre><code class="python">@property
 def client_metadata(self) -&gt; Optional[Dict[str, str]]:
     &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function
-    that you specify for the post confirmation data_classes.&#34;&#34;&#34;
+    that you specify for the post confirmation trigger.&#34;&#34;&#34;
     return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
 </details>
 </dd>
@@ -1601,7 +2521,7 @@ def user_attributes(self) -&gt; Dict[str, str]:
 </code></dt>
 <dd>
 <section class="desc"><p>Pre Authentication Lambda Trigger</p>
-<p>Amazon Cognito invokes this data_classes when a user attempts to sign in, allowing custom validation
+<p>Amazon Cognito invokes this trigger when a user attempts to sign in, allowing custom validation
 to accept or deny the authentication request.</p>
 <h2 id="notes">Notes:</h2>
 <p><code>triggerSource</code> can be one of the following:</p>
@@ -1619,7 +2539,7 @@ to accept or deny the authentication request.</p>
 <pre><code class="python">class PreAuthenticationTriggerEvent(BaseTriggerEvent):
     &#34;&#34;&#34;Pre Authentication Lambda Trigger
 
-    Amazon Cognito invokes this data_classes when a user attempts to sign in, allowing custom validation
+    Amazon Cognito invokes this trigger when a user attempts to sign in, allowing custom validation
     to accept or deny the authentication request.
 
     Notes:
@@ -1861,7 +2781,7 @@ def response(self) -&gt; PreSignUpTriggerEventResponse:
     @property
     def client_metadata(self) -&gt; Optional[Dict[str, str]]:
         &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function
-        that you specify for the pre sign-up data_classes.&#34;&#34;&#34;
+        that you specify for the pre sign-up trigger.&#34;&#34;&#34;
         return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -1873,7 +2793,7 @@ def response(self) -&gt; PreSignUpTriggerEventResponse:
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span></code></dt>
 <dd>
 <section class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function
-that you specify for the pre sign-up data_classes.</p></section>
+that you specify for the pre sign-up trigger.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1881,7 +2801,7 @@ that you specify for the pre sign-up data_classes.</p></section>
 <pre><code class="python">@property
 def client_metadata(self) -&gt; Optional[Dict[str, str]]:
     &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function
-    that you specify for the pre sign-up data_classes.&#34;&#34;&#34;
+    that you specify for the pre sign-up trigger.&#34;&#34;&#34;
     return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
 </details>
 </dd>
@@ -2001,7 +2921,7 @@ def auto_verify_phone(self) -&gt; bool:
 </code></dt>
 <dd>
 <section class="desc"><p>Pre Token Generation Lambda Trigger</p>
-<p>Amazon Cognito invokes this data_classes before token generation allowing you to customize identity token claims.</p>
+<p>Amazon Cognito invokes this trigger before token generation allowing you to customize identity token claims.</p>
 <h2 id="notes">Notes:</h2>
 <p><code>triggerSource</code> can be one of the following:</p>
 <ul>
@@ -2023,7 +2943,7 @@ when the user has to change a temporary password.</li>
 <pre><code class="python">class PreTokenGenerationTriggerEvent(BaseTriggerEvent):
     &#34;&#34;&#34;Pre Token Generation Lambda Trigger
 
-    Amazon Cognito invokes this data_classes before token generation allowing you to customize identity token claims.
+    Amazon Cognito invokes this trigger before token generation allowing you to customize identity token claims.
 
     Notes:
     ----
@@ -2123,7 +3043,7 @@ def response(self) -&gt; PreTokenGenerationTriggerEventResponse:
     @property
     def client_metadata(self) -&gt; Optional[Dict[str, str]]:
         &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function
-        that you specify for the pre token generation data_classes.&#34;&#34;&#34;
+        that you specify for the pre token generation trigger.&#34;&#34;&#34;
         return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -2135,7 +3055,7 @@ def response(self) -&gt; PreTokenGenerationTriggerEventResponse:
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span></code></dt>
 <dd>
 <section class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function
-that you specify for the pre token generation data_classes.</p></section>
+that you specify for the pre token generation trigger.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2143,7 +3063,7 @@ that you specify for the pre token generation data_classes.</p></section>
 <pre><code class="python">@property
 def client_metadata(self) -&gt; Optional[Dict[str, str]]:
     &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function
-    that you specify for the pre token generation data_classes.&#34;&#34;&#34;
+    that you specify for the pre token generation trigger.&#34;&#34;&#34;
     return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
 </details>
 </dd>
@@ -2326,7 +3246,7 @@ def response(self) -&gt; UserMigrationTriggerEventResponse:
     @property
     def client_metadata(self) -&gt; Optional[Dict[str, str]]:
         &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function
-        that you specify for the pre sign-up data_classes.&#34;&#34;&#34;
+        that you specify for the pre sign-up trigger.&#34;&#34;&#34;
         return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -2338,7 +3258,7 @@ def response(self) -&gt; UserMigrationTriggerEventResponse:
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span></code></dt>
 <dd>
 <section class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function
-that you specify for the pre sign-up data_classes.</p></section>
+that you specify for the pre sign-up trigger.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2346,7 +3266,7 @@ that you specify for the pre sign-up data_classes.</p></section>
 <pre><code class="python">@property
 def client_metadata(self) -&gt; Optional[Dict[str, str]]:
     &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function
-    that you specify for the pre sign-up data_classes.&#34;&#34;&#34;
+    that you specify for the pre sign-up trigger.&#34;&#34;&#34;
     return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
 </details>
 </dd>
@@ -2518,6 +3438,259 @@ def user_attributes(self) -&gt; Dict[str, str]:
 </dd>
 </dl>
 </dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEvent"><code class="flex name class">
+<span>class <span class="ident">VerifyAuthChallengeResponseTriggerEvent</span></span>
+<span>(</span><span>data)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Verify Auth Challenge Response Lambda Trigger</p>
+<p>Amazon Cognito invokes this trigger to verify if the response from the end user for a custom
+Auth Challenge is valid or not.
+It is part of a user pool custom authentication flow.</p>
+<h2 id="notes">Notes:</h2>
+<p><code>triggerSource</code> can be one of the following:</p>
+<ul>
+<li><code>VerifyAuthChallengeResponse_Authentication</code> Verify Auth Challenge Response.</li>
+</ul>
+<h2 id="documentation">Documentation:</h2>
+<ul>
+<li><a href="https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-verify-auth-challenge-response.html">https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-verify-auth-challenge-response.html</a></li>
+</ul></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class VerifyAuthChallengeResponseTriggerEvent(BaseTriggerEvent):
+    &#34;&#34;&#34;Verify Auth Challenge Response Lambda Trigger
+
+    Amazon Cognito invokes this trigger to verify if the response from the end user for a custom
+    Auth Challenge is valid or not.
+    It is part of a user pool custom authentication flow.
+
+    Notes:
+    ----
+    `triggerSource` can be one of the following:
+
+    - `VerifyAuthChallengeResponse_Authentication` Verify Auth Challenge Response.
+
+    Documentation:
+    --------------
+    - https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-verify-auth-challenge-response.html
+    &#34;&#34;&#34;
+
+    @property
+    def request(self) -&gt; VerifyAuthChallengeResponseTriggerEventRequest:
+        &#34;&#34;&#34;Verify Auth Challenge Request Parameters&#34;&#34;&#34;
+        return VerifyAuthChallengeResponseTriggerEventRequest(self._data)
+
+    @property
+    def response(self) -&gt; VerifyAuthChallengeResponseTriggerEventResponse:
+        &#34;&#34;&#34;Verify Auth Challenge Response Parameters&#34;&#34;&#34;
+        return VerifyAuthChallengeResponseTriggerEventResponse(self._data)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent">BaseTriggerEvent</a></li>
+<li><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEvent.request"><code class="name">var <span class="ident">request</span></code></dt>
+<dd>
+<section class="desc"><p>Verify Auth Challenge Request Parameters</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def request(self) -&gt; VerifyAuthChallengeResponseTriggerEventRequest:
+    &#34;&#34;&#34;Verify Auth Challenge Request Parameters&#34;&#34;&#34;
+    return VerifyAuthChallengeResponseTriggerEventRequest(self._data)</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEvent.response"><code class="name">var <span class="ident">response</span></code></dt>
+<dd>
+<section class="desc"><p>Verify Auth Challenge Response Parameters</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def response(self) -&gt; VerifyAuthChallengeResponseTriggerEventResponse:
+    &#34;&#34;&#34;Verify Auth Challenge Response Parameters&#34;&#34;&#34;
+    return VerifyAuthChallengeResponseTriggerEventResponse(self._data)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent">BaseTriggerEvent</a></b></code>:
+<ul class="hlist">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.caller_context" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.caller_context">caller_context</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.region" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.region">region</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.trigger_source" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.trigger_source">trigger_source</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.user_name" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.user_name">user_name</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.user_pool_id" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.user_pool_id">user_pool_id</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.version" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.version">version</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest"><code class="flex name class">
+<span>class <span class="ident">VerifyAuthChallengeResponseTriggerEventRequest</span></span>
+<span>(</span><span>data)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class VerifyAuthChallengeResponseTriggerEventRequest(DictWrapper):
+    @property
+    def user_attributes(self) -&gt; Dict[str, str]:
+        &#34;&#34;&#34;One or more name-value pairs representing user attributes. The attribute names are the keys.&#34;&#34;&#34;
+        return self[&#34;request&#34;][&#34;userAttributes&#34;]
+
+    @property
+    def private_challenge_parameters(self) -&gt; Dict[str, str]:
+        &#34;&#34;&#34;This parameter comes from the Create Auth Challenge trigger, and is
+        compared against a user’s challengeAnswer to determine whether the user passed the challenge.&#34;&#34;&#34;
+        return self[&#34;request&#34;][&#34;privateChallengeParameters&#34;]
+
+    @property
+    def challenge_answer(self) -&gt; Any:
+        &#34;&#34;&#34;The answer from the user&#39;s response to the challenge.&#34;&#34;&#34;
+        return self[&#34;request&#34;][&#34;challengeAnswer&#34;]
+
+    @property
+    def client_metadata(self) -&gt; Optional[Dict[str, str]]:
+        &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function that
+        you specify for the verify auth challenge trigger.&#34;&#34;&#34;
+        return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)
+
+    @property
+    def user_not_found(self) -&gt; Optional[bool]:
+        &#34;&#34;&#34;This boolean is populated when PreventUserExistenceErrors is set to ENABLED for your User Pool client.&#34;&#34;&#34;
+        return self[&#34;request&#34;].get(&#34;userNotFound&#34;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.challenge_answer"><code class="name">var <span class="ident">challenge_answer</span></code></dt>
+<dd>
+<section class="desc"><p>The answer from the user's response to the challenge.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def challenge_answer(self) -&gt; Any:
+    &#34;&#34;&#34;The answer from the user&#39;s response to the challenge.&#34;&#34;&#34;
+    return self[&#34;request&#34;][&#34;challengeAnswer&#34;]</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span></code></dt>
+<dd>
+<section class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function that
+you specify for the verify auth challenge trigger.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def client_metadata(self) -&gt; Optional[Dict[str, str]]:
+    &#34;&#34;&#34;One or more key-value pairs that you can provide as custom input to the Lambda function that
+    you specify for the verify auth challenge trigger.&#34;&#34;&#34;
+    return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.private_challenge_parameters"><code class="name">var <span class="ident">private_challenge_parameters</span></code></dt>
+<dd>
+<section class="desc"><p>This parameter comes from the Create Auth Challenge trigger, and is
+compared against a user’s challengeAnswer to determine whether the user passed the challenge.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def private_challenge_parameters(self) -&gt; Dict[str, str]:
+    &#34;&#34;&#34;This parameter comes from the Create Auth Challenge trigger, and is
+    compared against a user’s challengeAnswer to determine whether the user passed the challenge.&#34;&#34;&#34;
+    return self[&#34;request&#34;][&#34;privateChallengeParameters&#34;]</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.user_attributes"><code class="name">var <span class="ident">user_attributes</span></code></dt>
+<dd>
+<section class="desc"><p>One or more name-value pairs representing user attributes. The attribute names are the keys.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def user_attributes(self) -&gt; Dict[str, str]:
+    &#34;&#34;&#34;One or more name-value pairs representing user attributes. The attribute names are the keys.&#34;&#34;&#34;
+    return self[&#34;request&#34;][&#34;userAttributes&#34;]</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.user_not_found"><code class="name">var <span class="ident">user_not_found</span></code></dt>
+<dd>
+<section class="desc"><p>This boolean is populated when PreventUserExistenceErrors is set to ENABLED for your User Pool client.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def user_not_found(self) -&gt; Optional[bool]:
+    &#34;&#34;&#34;This boolean is populated when PreventUserExistenceErrors is set to ENABLED for your User Pool client.&#34;&#34;&#34;
+    return self[&#34;request&#34;].get(&#34;userNotFound&#34;)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventResponse"><code class="flex name class">
+<span>class <span class="ident">VerifyAuthChallengeResponseTriggerEventResponse</span></span>
+<span>(</span><span>data)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class VerifyAuthChallengeResponseTriggerEventResponse(DictWrapper):
+    @property
+    def answer_correct(self) -&gt; bool:
+        return bool(self[&#34;response&#34;][&#34;answerCorrect&#34;])
+
+    @answer_correct.setter
+    def answer_correct(self, value: bool):
+        &#34;&#34;&#34;Set to true if the user has successfully completed the challenge, or false otherwise.&#34;&#34;&#34;
+        self[&#34;response&#34;][&#34;answerCorrect&#34;] = value</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventResponse.answer_correct"><code class="name">var <span class="ident">answer_correct</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def answer_correct(self) -&gt; bool:
+    return bool(self[&#34;response&#34;][&#34;answerCorrect&#34;])</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 </article>
@@ -2553,6 +3726,14 @@ def user_attributes(self) -&gt; Dict[str, str]:
 </ul>
 </li>
 <li>
+<h4><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult">ChallengeResult</a></code></h4>
+<ul class="">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult.challenge_metadata" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult.challenge_metadata">challenge_metadata</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult.challenge_name" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult.challenge_name">challenge_name</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult.challenge_result" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult.challenge_result">challenge_result</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails">ClaimsOverrideDetails</a></code></h4>
 <ul class="">
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails.claims_to_add_or_override" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails.claims_to_add_or_override">claims_to_add_or_override</a></code></li>
@@ -2561,6 +3742,31 @@ def user_attributes(self) -&gt; Dict[str, str]:
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails.set_group_configuration_groups_to_override" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails.set_group_configuration_groups_to_override">set_group_configuration_groups_to_override</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails.set_group_configuration_iam_roles_to_override" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails.set_group_configuration_iam_roles_to_override">set_group_configuration_iam_roles_to_override</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails.set_group_configuration_preferred_role" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails.set_group_configuration_preferred_role">set_group_configuration_preferred_role</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEvent" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEvent">CreateAuthChallengeTriggerEvent</a></code></h4>
+<ul class="">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEvent.request" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEvent.request">request</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEvent.response" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEvent.response">response</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest">CreateAuthChallengeTriggerEventRequest</a></code></h4>
+<ul class="">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.challenge_name" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.challenge_name">challenge_name</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.client_metadata" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.client_metadata">client_metadata</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.session" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.session">session</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.user_attributes" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.user_attributes">user_attributes</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.user_not_found" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.user_not_found">user_not_found</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventResponse" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventResponse">CreateAuthChallengeTriggerEventResponse</a></code></h4>
+<ul class="">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventResponse.challenge_metadata" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventResponse.challenge_metadata">challenge_metadata</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventResponse.private_challenge_parameters" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventResponse.private_challenge_parameters">private_challenge_parameters</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventResponse.public_challenge_parameters" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventResponse.public_challenge_parameters">public_challenge_parameters</a></code></li>
 </ul>
 </li>
 <li>
@@ -2585,6 +3791,30 @@ def user_attributes(self) -&gt; Dict[str, str]:
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventResponse.email_message" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventResponse.email_message">email_message</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventResponse.email_subject" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventResponse.email_subject">email_subject</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventResponse.sms_message" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventResponse.sms_message">sms_message</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEvent" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEvent">DefineAuthChallengeTriggerEvent</a></code></h4>
+<ul class="">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEvent.request" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEvent.request">request</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEvent.response" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEvent.response">response</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest">DefineAuthChallengeTriggerEventRequest</a></code></h4>
+<ul class="">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest.client_metadata" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest.client_metadata">client_metadata</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest.session" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest.session">session</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest.user_attributes" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest.user_attributes">user_attributes</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest.user_not_found" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest.user_not_found">user_not_found</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventResponse" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventResponse">DefineAuthChallengeTriggerEventResponse</a></code></h4>
+<ul class="">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventResponse.challenge_name" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventResponse.challenge_name">challenge_name</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventResponse.fail_authentication" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventResponse.fail_authentication">fail_authentication</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventResponse.issue_tokens" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventResponse.issue_tokens">issue_tokens</a></code></li>
 </ul>
 </li>
 <li>
@@ -2703,6 +3933,29 @@ def user_attributes(self) -&gt; Dict[str, str]:
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventResponse.force_alias_creation" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventResponse.force_alias_creation">force_alias_creation</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventResponse.message_action" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventResponse.message_action">message_action</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventResponse.user_attributes" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventResponse.user_attributes">user_attributes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEvent" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEvent">VerifyAuthChallengeResponseTriggerEvent</a></code></h4>
+<ul class="">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEvent.request" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEvent.request">request</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEvent.response" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEvent.response">response</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest">VerifyAuthChallengeResponseTriggerEventRequest</a></code></h4>
+<ul class="">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.challenge_answer" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.challenge_answer">challenge_answer</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.client_metadata" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.client_metadata">client_metadata</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.private_challenge_parameters" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.private_challenge_parameters">private_challenge_parameters</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.user_attributes" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.user_attributes">user_attributes</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.user_not_found" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.user_not_found">user_not_found</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventResponse" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventResponse">VerifyAuthChallengeResponseTriggerEventResponse</a></code></h4>
+<ul class="">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventResponse.answer_correct" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventResponse.answer_correct">answer_correct</a></code></li>
 </ul>
 </li>
 </ul>

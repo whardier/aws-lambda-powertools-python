@@ -74,7 +74,9 @@ class BaseProxyEvent(DictWrapper):
         params = self.query_string_parameters
         return default_value if params is None else params.get(name, default_value)
 
-    def get_header_value(self, name: str, default_value: Optional[str] = None) -&gt; Optional[str]:
+    def get_header_value(
+        self, name: str, default_value: Optional[str] = None, case_sensitive: Optional[bool] = False
+    ) -&gt; Optional[str]:
         &#34;&#34;&#34;Get header value by name
 
         Parameters
@@ -83,12 +85,17 @@ class BaseProxyEvent(DictWrapper):
             Header name
         default_value: str, optional
             Default value if no value was found by name
+        case_sensitive: bool
+            Whether to use a case sensitive look up
         Returns
         -------
         str, optional
             Header value
         &#34;&#34;&#34;
-        return self.headers.get(name, default_value)</code></pre>
+        if case_sensitive:
+            return self.headers.get(name, default_value)
+
+        return next((value for key, value in self.headers.items() if name.lower() == key.lower()), default_value)</code></pre>
 </details>
 </section>
 <section>
@@ -144,7 +151,9 @@ class BaseProxyEvent(DictWrapper):
         params = self.query_string_parameters
         return default_value if params is None else params.get(name, default_value)
 
-    def get_header_value(self, name: str, default_value: Optional[str] = None) -&gt; Optional[str]:
+    def get_header_value(
+        self, name: str, default_value: Optional[str] = None, case_sensitive: Optional[bool] = False
+    ) -&gt; Optional[str]:
         &#34;&#34;&#34;Get header value by name
 
         Parameters
@@ -153,12 +162,17 @@ class BaseProxyEvent(DictWrapper):
             Header name
         default_value: str, optional
             Default value if no value was found by name
+        case_sensitive: bool
+            Whether to use a case sensitive look up
         Returns
         -------
         str, optional
             Header value
         &#34;&#34;&#34;
-        return self.headers.get(name, default_value)</code></pre>
+        if case_sensitive:
+            return self.headers.get(name, default_value)
+
+        return next((value for key, value in self.headers.items() if name.lower() == key.lower()), default_value)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -224,7 +238,7 @@ def query_string_parameters(self) -&gt; Optional[Dict[str, str]]:
 <h3>Methods</h3>
 <dl>
 <dt id="aws_lambda_powertools.utilities.data_classes.common.BaseProxyEvent.get_header_value"><code class="name flex">
-<span>def <span class="ident">get_header_value</span></span>(<span>self, name, default_value=None)</span>
+<span>def <span class="ident">get_header_value</span></span>(<span>self, name, default_value=None, case_sensitive=False)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Get header value by name</p>
@@ -234,6 +248,8 @@ def query_string_parameters(self) -&gt; Optional[Dict[str, str]]:
 <dd>Header name</dd>
 <dt><strong><code>default_value</code></strong> :&ensp;<code>str</code>, optional</dt>
 <dd>Default value if no value was found by name</dd>
+<dt><strong><code>case_sensitive</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether to use a case sensitive look up</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>
@@ -244,7 +260,9 @@ def query_string_parameters(self) -&gt; Optional[Dict[str, str]]:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_header_value(self, name: str, default_value: Optional[str] = None) -&gt; Optional[str]:
+<pre><code class="python">def get_header_value(
+    self, name: str, default_value: Optional[str] = None, case_sensitive: Optional[bool] = False
+) -&gt; Optional[str]:
     &#34;&#34;&#34;Get header value by name
 
     Parameters
@@ -253,12 +271,17 @@ def query_string_parameters(self) -&gt; Optional[Dict[str, str]]:
         Header name
     default_value: str, optional
         Default value if no value was found by name
+    case_sensitive: bool
+        Whether to use a case sensitive look up
     Returns
     -------
     str, optional
         Header value
     &#34;&#34;&#34;
-    return self.headers.get(name, default_value)</code></pre>
+    if case_sensitive:
+        return self.headers.get(name, default_value)
+
+    return next((value for key, value in self.headers.items() if name.lower() == key.lower()), default_value)</code></pre>
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.common.BaseProxyEvent.get_query_string_value"><code class="name flex">
@@ -338,9 +361,14 @@ def query_string_parameters(self) -&gt; Optional[Dict[str, str]]:
 <li><a title="aws_lambda_powertools.utilities.data_classes.cloud_watch_logs_event.CloudWatchLogsLogEvent" href="cloud_watch_logs_event.html#aws_lambda_powertools.utilities.data_classes.cloud_watch_logs_event.CloudWatchLogsLogEvent">CloudWatchLogsLogEvent</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent" href="cognito_user_pool_event.html#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent">BaseTriggerEvent</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CallerContext" href="cognito_user_pool_event.html#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CallerContext">CallerContext</a></li>
+<li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult" href="cognito_user_pool_event.html#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult">ChallengeResult</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails" href="cognito_user_pool_event.html#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails">ClaimsOverrideDetails</a></li>
+<li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest" href="cognito_user_pool_event.html#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest">CreateAuthChallengeTriggerEventRequest</a></li>
+<li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventResponse" href="cognito_user_pool_event.html#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventResponse">CreateAuthChallengeTriggerEventResponse</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventRequest" href="cognito_user_pool_event.html#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventRequest">CustomMessageTriggerEventRequest</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventResponse" href="cognito_user_pool_event.html#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventResponse">CustomMessageTriggerEventResponse</a></li>
+<li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest" href="cognito_user_pool_event.html#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest">DefineAuthChallengeTriggerEventRequest</a></li>
+<li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventResponse" href="cognito_user_pool_event.html#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventResponse">DefineAuthChallengeTriggerEventResponse</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.GroupOverrideDetails" href="cognito_user_pool_event.html#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.GroupOverrideDetails">GroupOverrideDetails</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostAuthenticationTriggerEventRequest" href="cognito_user_pool_event.html#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostAuthenticationTriggerEventRequest">PostAuthenticationTriggerEventRequest</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostConfirmationTriggerEventRequest" href="cognito_user_pool_event.html#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostConfirmationTriggerEventRequest">PostConfirmationTriggerEventRequest</a></li>
@@ -351,6 +379,8 @@ def query_string_parameters(self) -&gt; Optional[Dict[str, str]]:
 <li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEventResponse" href="cognito_user_pool_event.html#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEventResponse">PreTokenGenerationTriggerEventResponse</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventRequest" href="cognito_user_pool_event.html#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventRequest">UserMigrationTriggerEventRequest</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventResponse" href="cognito_user_pool_event.html#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventResponse">UserMigrationTriggerEventResponse</a></li>
+<li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest" href="cognito_user_pool_event.html#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest">VerifyAuthChallengeResponseTriggerEventRequest</a></li>
+<li><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventResponse" href="cognito_user_pool_event.html#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventResponse">VerifyAuthChallengeResponseTriggerEventResponse</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.common.BaseProxyEvent" href="#aws_lambda_powertools.utilities.data_classes.common.BaseProxyEvent">BaseProxyEvent</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.dynamo_db_stream_event.AttributeValue" href="dynamo_db_stream_event.html#aws_lambda_powertools.utilities.data_classes.dynamo_db_stream_event.AttributeValue">AttributeValue</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.dynamo_db_stream_event.DynamoDBRecord" href="dynamo_db_stream_event.html#aws_lambda_powertools.utilities.data_classes.dynamo_db_stream_event.DynamoDBRecord">DynamoDBRecord</a></li>
