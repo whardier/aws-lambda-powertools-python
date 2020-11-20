@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.5" />
-<title>aws_lambda_powertools.utilities.parser.envelopes.base API documentation</title>
+<title>aws_lambda_powertools.utilities.parser.envelopes.sns API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,7 +17,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>aws_lambda_powertools.utilities.parser.envelopes.base</code></h1>
+<h1 class="title">Module <code>aws_lambda_powertools.utilities.parser.envelopes.sns</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
@@ -25,68 +25,47 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">import logging
-from abc import ABC, abstractmethod
-from typing import Any, Dict, Optional, TypeVar, Union
+from typing import Any, Dict, List, Optional, Union
 
+from ..models import SnsModel
 from ..types import Model
+from .base import BaseEnvelope
 
 logger = logging.getLogger(__name__)
 
 
-class BaseEnvelope(ABC):
-    &#34;&#34;&#34;ABC implementation for creating a supported Envelope&#34;&#34;&#34;
+class SnsEnvelope(BaseEnvelope):
+    &#34;&#34;&#34;SNS Envelope to extract array of Records
 
-    @staticmethod
-    def _parse(data: Optional[Union[Dict[str, Any], Any]], model: Model) -&gt; Union[Model, None]:
-        &#34;&#34;&#34;Parses envelope data against model provided
+    The record&#39;s body parameter is a string, though it can also be a JSON encoded string.
+    Regardless of its type it&#39;ll be parsed into a BaseModel object.
+
+    Note: Records will be parsed the same way so if model is str,
+    all items in the list will be parsed as str and npt as JSON (and vice versa)
+    &#34;&#34;&#34;
+
+    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model) -&gt; List[Optional[Model]]:
+        &#34;&#34;&#34;Parses records found with model provided
 
         Parameters
         ----------
         data : Dict
-            Data to be parsed and validated
+            Lambda event to be parsed
         model : Model
-            Data model to parse and validate data against
+            Data model provided to parse after extracting data using envelope
 
         Returns
         -------
-        Any
-            Parsed data
+        List
+            List of records parsed with model provided
         &#34;&#34;&#34;
-        if data is None:
-            logger.debug(&#34;Skipping parsing as event is None&#34;)
-            return data
-
-        logger.debug(&#34;parsing event against model&#34;)
-        if isinstance(data, str):
-            logger.debug(&#34;parsing event as string&#34;)
-            return model.parse_raw(data)
-
-        return model.parse_obj(data)
-
-    @abstractmethod
-    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model):
-        &#34;&#34;&#34;Implementation to parse data against envelope model, then against the data model
-
-        NOTE: Call `_parse` method to fully parse data with model provided.
-
-        Example
-        -------
-
-        **EventBridge envelope implementation example**
-
-        def parse(...):
-            # 1. parses data against envelope model
-            parsed_envelope = EventBridgeModel(**data)
-
-            # 2. parses portion of data within the envelope against model
-            return self._parse(data=parsed_envelope.detail, model=data_model)
-        &#34;&#34;&#34;
-        return NotImplemented  # pragma: no cover
-
-
-# Generic to support type annotations throughout parser
-# Note: Can&#39;t be defined under types.py due to circular dependency
-Envelope = TypeVar(&#34;Envelope&#34;, bound=BaseEnvelope)</code></pre>
+        logger.debug(f&#34;Parsing incoming data with SNS model {SnsModel}&#34;)
+        parsed_envelope = SnsModel.parse_obj(data)
+        output = []
+        logger.debug(f&#34;Parsing SNS records in `body` with {model}&#34;)
+        for record in parsed_envelope.Records:
+            output.append(self._parse(data=record.Sns.Message, model=model))
+        return output</code></pre>
 </details>
 </section>
 <section>
@@ -98,115 +77,102 @@ Envelope = TypeVar(&#34;Envelope&#34;, bound=BaseEnvelope)</code></pre>
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="aws_lambda_powertools.utilities.parser.envelopes.base.BaseEnvelope"><code class="flex name class">
-<span>class <span class="ident">BaseEnvelope</span></span>
+<dt id="aws_lambda_powertools.utilities.parser.envelopes.sns.SnsEnvelope"><code class="flex name class">
+<span>class <span class="ident">SnsEnvelope</span></span>
 </code></dt>
 <dd>
-<section class="desc"><p>ABC implementation for creating a supported Envelope</p></section>
+<section class="desc"><p>SNS Envelope to extract array of Records</p>
+<p>The record's body parameter is a string, though it can also be a JSON encoded string.
+Regardless of its type it'll be parsed into a BaseModel object.</p>
+<p>Note: Records will be parsed the same way so if model is str,
+all items in the list will be parsed as str and npt as JSON (and vice versa)</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class BaseEnvelope(ABC):
-    &#34;&#34;&#34;ABC implementation for creating a supported Envelope&#34;&#34;&#34;
+<pre><code class="python">class SnsEnvelope(BaseEnvelope):
+    &#34;&#34;&#34;SNS Envelope to extract array of Records
 
-    @staticmethod
-    def _parse(data: Optional[Union[Dict[str, Any], Any]], model: Model) -&gt; Union[Model, None]:
-        &#34;&#34;&#34;Parses envelope data against model provided
+    The record&#39;s body parameter is a string, though it can also be a JSON encoded string.
+    Regardless of its type it&#39;ll be parsed into a BaseModel object.
+
+    Note: Records will be parsed the same way so if model is str,
+    all items in the list will be parsed as str and npt as JSON (and vice versa)
+    &#34;&#34;&#34;
+
+    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model) -&gt; List[Optional[Model]]:
+        &#34;&#34;&#34;Parses records found with model provided
 
         Parameters
         ----------
         data : Dict
-            Data to be parsed and validated
+            Lambda event to be parsed
         model : Model
-            Data model to parse and validate data against
+            Data model provided to parse after extracting data using envelope
 
         Returns
         -------
-        Any
-            Parsed data
+        List
+            List of records parsed with model provided
         &#34;&#34;&#34;
-        if data is None:
-            logger.debug(&#34;Skipping parsing as event is None&#34;)
-            return data
-
-        logger.debug(&#34;parsing event against model&#34;)
-        if isinstance(data, str):
-            logger.debug(&#34;parsing event as string&#34;)
-            return model.parse_raw(data)
-
-        return model.parse_obj(data)
-
-    @abstractmethod
-    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model):
-        &#34;&#34;&#34;Implementation to parse data against envelope model, then against the data model
-
-        NOTE: Call `_parse` method to fully parse data with model provided.
-
-        Example
-        -------
-
-        **EventBridge envelope implementation example**
-
-        def parse(...):
-            # 1. parses data against envelope model
-            parsed_envelope = EventBridgeModel(**data)
-
-            # 2. parses portion of data within the envelope against model
-            return self._parse(data=parsed_envelope.detail, model=data_model)
-        &#34;&#34;&#34;
-        return NotImplemented  # pragma: no cover</code></pre>
+        logger.debug(f&#34;Parsing incoming data with SNS model {SnsModel}&#34;)
+        parsed_envelope = SnsModel.parse_obj(data)
+        output = []
+        logger.debug(f&#34;Parsing SNS records in `body` with {model}&#34;)
+        for record in parsed_envelope.Records:
+            output.append(self._parse(data=record.Sns.Message, model=model))
+        return output</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
+<li><a title="aws_lambda_powertools.utilities.parser.envelopes.base.BaseEnvelope" href="base.html#aws_lambda_powertools.utilities.parser.envelopes.base.BaseEnvelope">BaseEnvelope</a></li>
 <li>abc.ABC</li>
-</ul>
-<h3>Subclasses</h3>
-<ul class="hlist">
-<li><a title="aws_lambda_powertools.utilities.parser.envelopes.dynamodb.DynamoDBStreamEnvelope" href="dynamodb.html#aws_lambda_powertools.utilities.parser.envelopes.dynamodb.DynamoDBStreamEnvelope">DynamoDBStreamEnvelope</a></li>
-<li><a title="aws_lambda_powertools.utilities.parser.envelopes.event_bridge.EventBridgeEnvelope" href="event_bridge.html#aws_lambda_powertools.utilities.parser.envelopes.event_bridge.EventBridgeEnvelope">EventBridgeEnvelope</a></li>
-<li><a title="aws_lambda_powertools.utilities.parser.envelopes.sns.SnsEnvelope" href="sns.html#aws_lambda_powertools.utilities.parser.envelopes.sns.SnsEnvelope">SnsEnvelope</a></li>
-<li><a title="aws_lambda_powertools.utilities.parser.envelopes.sqs.SqsEnvelope" href="sqs.html#aws_lambda_powertools.utilities.parser.envelopes.sqs.SqsEnvelope">SqsEnvelope</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.parser.envelopes.base.BaseEnvelope.parse"><code class="name flex">
+<dt id="aws_lambda_powertools.utilities.parser.envelopes.sns.SnsEnvelope.parse"><code class="name flex">
 <span>def <span class="ident">parse</span></span>(<span>self, data, model)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Implementation to parse data against envelope model, then against the data model</p>
-<p>NOTE: Call <code>_parse</code> method to fully parse data with model provided.</p>
-<h2 id="example">Example</h2>
-<p><strong>EventBridge envelope implementation example</strong></p>
-<p>def parse(&hellip;):
-# 1. parses data against envelope model
-parsed_envelope = EventBridgeModel(**data)</p>
-<pre><code># 2. parses portion of data within the envelope against model
-return self._parse(data=parsed_envelope.detail, model=data_model)
-</code></pre></section>
+<section class="desc"><p>Parses records found with model provided</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>data</code></strong> :&ensp;<code>Dict</code></dt>
+<dd>Lambda event to be parsed</dd>
+<dt><strong><code>model</code></strong> :&ensp;<code>Model</code></dt>
+<dd>Data model provided to parse after extracting data using envelope</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>List</code></dt>
+<dd>List of records parsed with model provided</dd>
+</dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@abstractmethod
-def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model):
-    &#34;&#34;&#34;Implementation to parse data against envelope model, then against the data model
+<pre><code class="python">def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model) -&gt; List[Optional[Model]]:
+    &#34;&#34;&#34;Parses records found with model provided
 
-    NOTE: Call `_parse` method to fully parse data with model provided.
+    Parameters
+    ----------
+    data : Dict
+        Lambda event to be parsed
+    model : Model
+        Data model provided to parse after extracting data using envelope
 
-    Example
+    Returns
     -------
-
-    **EventBridge envelope implementation example**
-
-    def parse(...):
-        # 1. parses data against envelope model
-        parsed_envelope = EventBridgeModel(**data)
-
-        # 2. parses portion of data within the envelope against model
-        return self._parse(data=parsed_envelope.detail, model=data_model)
+    List
+        List of records parsed with model provided
     &#34;&#34;&#34;
-    return NotImplemented  # pragma: no cover</code></pre>
+    logger.debug(f&#34;Parsing incoming data with SNS model {SnsModel}&#34;)
+    parsed_envelope = SnsModel.parse_obj(data)
+    output = []
+    logger.debug(f&#34;Parsing SNS records in `body` with {model}&#34;)
+    for record in parsed_envelope.Records:
+        output.append(self._parse(data=record.Sns.Message, model=model))
+    return output</code></pre>
 </details>
 </dd>
 </dl>
@@ -228,9 +194,9 @@ def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model):
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="aws_lambda_powertools.utilities.parser.envelopes.base.BaseEnvelope" href="#aws_lambda_powertools.utilities.parser.envelopes.base.BaseEnvelope">BaseEnvelope</a></code></h4>
+<h4><code><a title="aws_lambda_powertools.utilities.parser.envelopes.sns.SnsEnvelope" href="#aws_lambda_powertools.utilities.parser.envelopes.sns.SnsEnvelope">SnsEnvelope</a></code></h4>
 <ul class="">
-<li><code><a title="aws_lambda_powertools.utilities.parser.envelopes.base.BaseEnvelope.parse" href="#aws_lambda_powertools.utilities.parser.envelopes.base.BaseEnvelope.parse">parse</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.parser.envelopes.sns.SnsEnvelope.parse" href="#aws_lambda_powertools.utilities.parser.envelopes.sns.SnsEnvelope.parse">parse</a></code></li>
 </ul>
 </li>
 </ul>

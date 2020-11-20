@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.5" />
-<title>aws_lambda_powertools.utilities.parser.models.event_bridge API documentation</title>
+<title>aws_lambda_powertools.utilities.parser.models.sns API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,7 +17,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>aws_lambda_powertools.utilities.parser.models.event_bridge</code></h1>
+<h1 class="title">Module <code>aws_lambda_powertools.utilities.parser.models.sns</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
@@ -25,22 +25,41 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from pydantic.networks import HttpUrl
+from typing_extensions import Literal
 
 
-class EventBridgeModel(BaseModel):
-    version: str
-    id: str  # noqa: A003,VNE003
-    source: str
-    account: str
-    time: datetime
-    region: str
-    resources: List[str]
-    detail_type: str = Field(None, alias=&#34;detail-type&#34;)
-    detail: Dict[str, Any]
-    replay_name: Optional[str] = Field(None, alias=&#34;replay-name&#34;)</code></pre>
+class SnsMsgAttributeModel(BaseModel):
+    Type: str
+    Value: str
+
+
+class SnsNotificationModel(BaseModel):
+    Subject: Optional[str]
+    TopicArn: str
+    UnsubscribeUrl: HttpUrl
+    Type: Literal[&#34;Notification&#34;]
+    MessageAttributes: Dict[str, SnsMsgAttributeModel]
+    Message: str
+    MessageId: str
+    SigningCertUrl: HttpUrl
+    Signature: str
+    Timestamp: datetime
+    SignatureVersion: str
+
+
+class SnsRecordModel(BaseModel):
+    EventSource: Literal[&#34;aws:sns&#34;]
+    EventVersion: str
+    EventSubscriptionArn: str
+    Sns: SnsNotificationModel
+
+
+class SnsModel(BaseModel):
+    Records: List[SnsRecordModel]</code></pre>
 </details>
 </section>
 <section>
@@ -52,9 +71,9 @@ class EventBridgeModel(BaseModel):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="aws_lambda_powertools.utilities.parser.models.event_bridge.EventBridgeModel"><code class="flex name class">
-<span>class <span class="ident">EventBridgeModel</span></span>
-<span>(</span><span>*, version, id, source, account, time, region, resources, detail, **extra_data)</span>
+<dt id="aws_lambda_powertools.utilities.parser.models.sns.SnsModel"><code class="flex name class">
+<span>class <span class="ident">SnsModel</span></span>
+<span>(</span><span>*, Records)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
@@ -63,17 +82,82 @@ class EventBridgeModel(BaseModel):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class EventBridgeModel(BaseModel):
-    version: str
-    id: str  # noqa: A003,VNE003
-    source: str
-    account: str
-    time: datetime
-    region: str
-    resources: List[str]
-    detail_type: str = Field(None, alias=&#34;detail-type&#34;)
-    detail: Dict[str, Any]
-    replay_name: Optional[str] = Field(None, alias=&#34;replay-name&#34;)</code></pre>
+<pre><code class="python">class SnsModel(BaseModel):
+    Records: List[SnsRecordModel]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+</dd>
+<dt id="aws_lambda_powertools.utilities.parser.models.sns.SnsMsgAttributeModel"><code class="flex name class">
+<span>class <span class="ident">SnsMsgAttributeModel</span></span>
+<span>(</span><span>*, Type, Value)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SnsMsgAttributeModel(BaseModel):
+    Type: str
+    Value: str</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+</dd>
+<dt id="aws_lambda_powertools.utilities.parser.models.sns.SnsNotificationModel"><code class="flex name class">
+<span>class <span class="ident">SnsNotificationModel</span></span>
+<span>(</span><span>*, Subject=None, TopicArn, UnsubscribeUrl, Type, MessageAttributes, Message, MessageId, SigningCertUrl, Signature, Timestamp, SignatureVersion)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SnsNotificationModel(BaseModel):
+    Subject: Optional[str]
+    TopicArn: str
+    UnsubscribeUrl: HttpUrl
+    Type: Literal[&#34;Notification&#34;]
+    MessageAttributes: Dict[str, SnsMsgAttributeModel]
+    Message: str
+    MessageId: str
+    SigningCertUrl: HttpUrl
+    Signature: str
+    Timestamp: datetime
+    SignatureVersion: str</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+</dd>
+<dt id="aws_lambda_powertools.utilities.parser.models.sns.SnsRecordModel"><code class="flex name class">
+<span>class <span class="ident">SnsRecordModel</span></span>
+<span>(</span><span>*, EventSource, EventVersion, EventSubscriptionArn, Sns)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SnsRecordModel(BaseModel):
+    EventSource: Literal[&#34;aws:sns&#34;]
+    EventVersion: str
+    EventSubscriptionArn: str
+    Sns: SnsNotificationModel</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -98,7 +182,16 @@ class EventBridgeModel(BaseModel):
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="aws_lambda_powertools.utilities.parser.models.event_bridge.EventBridgeModel" href="#aws_lambda_powertools.utilities.parser.models.event_bridge.EventBridgeModel">EventBridgeModel</a></code></h4>
+<h4><code><a title="aws_lambda_powertools.utilities.parser.models.sns.SnsModel" href="#aws_lambda_powertools.utilities.parser.models.sns.SnsModel">SnsModel</a></code></h4>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.parser.models.sns.SnsMsgAttributeModel" href="#aws_lambda_powertools.utilities.parser.models.sns.SnsMsgAttributeModel">SnsMsgAttributeModel</a></code></h4>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.parser.models.sns.SnsNotificationModel" href="#aws_lambda_powertools.utilities.parser.models.sns.SnsNotificationModel">SnsNotificationModel</a></code></h4>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.parser.models.sns.SnsRecordModel" href="#aws_lambda_powertools.utilities.parser.models.sns.SnsRecordModel">SnsRecordModel</a></code></h4>
 </li>
 </ul>
 </li>

@@ -293,6 +293,56 @@ class RequestContextV2Http(DictWrapper):
         return self[&#34;requestContext&#34;][&#34;http&#34;][&#34;userAgent&#34;]
 
 
+class RequestContextV2AuthorizerIam(DictWrapper):
+    @property
+    def access_key(self) -&gt; Optional[str]:
+        &#34;&#34;&#34;The IAM user access key associated with the request.&#34;&#34;&#34;
+        return self.get(&#34;accessKey&#34;)
+
+    @property
+    def account_id(self) -&gt; Optional[str]:
+        &#34;&#34;&#34;The AWS account ID associated with the request.&#34;&#34;&#34;
+        return self.get(&#34;accountId&#34;)
+
+    @property
+    def caller_id(self) -&gt; Optional[str]:
+        &#34;&#34;&#34;The principal identifier of the caller making the request.&#34;&#34;&#34;
+        return self.get(&#34;callerId&#34;)
+
+    @property
+    def cognito_amr(self) -&gt; Optional[List[str]]:
+        &#34;&#34;&#34;This represents how the user was authenticated.
+        AMR stands for  Authentication Methods References as per the openid spec&#34;&#34;&#34;
+        return self[&#34;cognitoIdentity&#34;].get(&#34;amr&#34;)
+
+    @property
+    def cognito_identity_id(self) -&gt; Optional[str]:
+        &#34;&#34;&#34;The Amazon Cognito identity ID of the caller making the request.
+        Available only if the request was signed with Amazon Cognito credentials.&#34;&#34;&#34;
+        return self[&#34;cognitoIdentity&#34;].get(&#34;identityId&#34;)
+
+    @property
+    def cognito_identity_pool_id(self) -&gt; Optional[str]:
+        &#34;&#34;&#34;The Amazon Cognito identity pool ID of the caller making the request.
+        Available only if the request was signed with Amazon Cognito credentials.&#34;&#34;&#34;
+        return self[&#34;cognitoIdentity&#34;].get(&#34;identityPoolId&#34;)
+
+    @property
+    def principal_org_id(self) -&gt; Optional[str]:
+        &#34;&#34;&#34;The AWS organization ID.&#34;&#34;&#34;
+        return self.get(&#34;principalOrgId&#34;)
+
+    @property
+    def user_arn(self) -&gt; Optional[str]:
+        &#34;&#34;&#34;The Amazon Resource Name (ARN) of the effective user identified after authentication.&#34;&#34;&#34;
+        return self.get(&#34;userArn&#34;)
+
+    @property
+    def user_id(self) -&gt; Optional[str]:
+        &#34;&#34;&#34;The IAM user ID of the effective user identified after authentication.&#34;&#34;&#34;
+        return self.get(&#34;userId&#34;)
+
+
 class RequestContextV2Authorizer(DictWrapper):
     @property
     def jwt_claim(self) -&gt; Dict[str, Any]:
@@ -301,6 +351,17 @@ class RequestContextV2Authorizer(DictWrapper):
     @property
     def jwt_scopes(self) -&gt; List[str]:
         return self[&#34;jwt&#34;][&#34;scopes&#34;]
+
+    @property
+    def get_lambda(self) -&gt; Optional[Dict[str, Any]]:
+        &#34;&#34;&#34;Lambda authorization context details&#34;&#34;&#34;
+        return self.get(&#34;lambda&#34;)
+
+    @property
+    def iam(self) -&gt; Optional[RequestContextV2AuthorizerIam]:
+        &#34;&#34;&#34;IAM authorization details used for making the request.&#34;&#34;&#34;
+        iam = self.get(&#34;iam&#34;)
+        return None if iam is None else RequestContextV2AuthorizerIam(iam)
 
 
 class RequestContextV2(DictWrapper):
@@ -1757,7 +1818,18 @@ def time_epoch(self) -&gt; int:
 
     @property
     def jwt_scopes(self) -&gt; List[str]:
-        return self[&#34;jwt&#34;][&#34;scopes&#34;]</code></pre>
+        return self[&#34;jwt&#34;][&#34;scopes&#34;]
+
+    @property
+    def get_lambda(self) -&gt; Optional[Dict[str, Any]]:
+        &#34;&#34;&#34;Lambda authorization context details&#34;&#34;&#34;
+        return self.get(&#34;lambda&#34;)
+
+    @property
+    def iam(self) -&gt; Optional[RequestContextV2AuthorizerIam]:
+        &#34;&#34;&#34;IAM authorization details used for making the request.&#34;&#34;&#34;
+        iam = self.get(&#34;iam&#34;)
+        return None if iam is None else RequestContextV2AuthorizerIam(iam)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1765,6 +1837,33 @@ def time_epoch(self) -&gt; int:
 </ul>
 <h3>Instance variables</h3>
 <dl>
+<dt id="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2Authorizer.get_lambda"><code class="name">var <span class="ident">get_lambda</span></code></dt>
+<dd>
+<section class="desc"><p>Lambda authorization context details</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def get_lambda(self) -&gt; Optional[Dict[str, Any]]:
+    &#34;&#34;&#34;Lambda authorization context details&#34;&#34;&#34;
+    return self.get(&#34;lambda&#34;)</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2Authorizer.iam"><code class="name">var <span class="ident">iam</span></code></dt>
+<dd>
+<section class="desc"><p>IAM authorization details used for making the request.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def iam(self) -&gt; Optional[RequestContextV2AuthorizerIam]:
+    &#34;&#34;&#34;IAM authorization details used for making the request.&#34;&#34;&#34;
+    iam = self.get(&#34;iam&#34;)
+    return None if iam is None else RequestContextV2AuthorizerIam(iam)</code></pre>
+</details>
+</dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2Authorizer.jwt_claim"><code class="name">var <span class="ident">jwt_claim</span></code></dt>
 <dd>
 <section class="desc"></section>
@@ -1787,6 +1886,197 @@ def jwt_claim(self) -&gt; Dict[str, Any]:
 <pre><code class="python">@property
 def jwt_scopes(self) -&gt; List[str]:
     return self[&#34;jwt&#34;][&#34;scopes&#34;]</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam"><code class="flex name class">
+<span>class <span class="ident">RequestContextV2AuthorizerIam</span></span>
+<span>(</span><span>data)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RequestContextV2AuthorizerIam(DictWrapper):
+    @property
+    def access_key(self) -&gt; Optional[str]:
+        &#34;&#34;&#34;The IAM user access key associated with the request.&#34;&#34;&#34;
+        return self.get(&#34;accessKey&#34;)
+
+    @property
+    def account_id(self) -&gt; Optional[str]:
+        &#34;&#34;&#34;The AWS account ID associated with the request.&#34;&#34;&#34;
+        return self.get(&#34;accountId&#34;)
+
+    @property
+    def caller_id(self) -&gt; Optional[str]:
+        &#34;&#34;&#34;The principal identifier of the caller making the request.&#34;&#34;&#34;
+        return self.get(&#34;callerId&#34;)
+
+    @property
+    def cognito_amr(self) -&gt; Optional[List[str]]:
+        &#34;&#34;&#34;This represents how the user was authenticated.
+        AMR stands for  Authentication Methods References as per the openid spec&#34;&#34;&#34;
+        return self[&#34;cognitoIdentity&#34;].get(&#34;amr&#34;)
+
+    @property
+    def cognito_identity_id(self) -&gt; Optional[str]:
+        &#34;&#34;&#34;The Amazon Cognito identity ID of the caller making the request.
+        Available only if the request was signed with Amazon Cognito credentials.&#34;&#34;&#34;
+        return self[&#34;cognitoIdentity&#34;].get(&#34;identityId&#34;)
+
+    @property
+    def cognito_identity_pool_id(self) -&gt; Optional[str]:
+        &#34;&#34;&#34;The Amazon Cognito identity pool ID of the caller making the request.
+        Available only if the request was signed with Amazon Cognito credentials.&#34;&#34;&#34;
+        return self[&#34;cognitoIdentity&#34;].get(&#34;identityPoolId&#34;)
+
+    @property
+    def principal_org_id(self) -&gt; Optional[str]:
+        &#34;&#34;&#34;The AWS organization ID.&#34;&#34;&#34;
+        return self.get(&#34;principalOrgId&#34;)
+
+    @property
+    def user_arn(self) -&gt; Optional[str]:
+        &#34;&#34;&#34;The Amazon Resource Name (ARN) of the effective user identified after authentication.&#34;&#34;&#34;
+        return self.get(&#34;userArn&#34;)
+
+    @property
+    def user_id(self) -&gt; Optional[str]:
+        &#34;&#34;&#34;The IAM user ID of the effective user identified after authentication.&#34;&#34;&#34;
+        return self.get(&#34;userId&#34;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.access_key"><code class="name">var <span class="ident">access_key</span></code></dt>
+<dd>
+<section class="desc"><p>The IAM user access key associated with the request.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def access_key(self) -&gt; Optional[str]:
+    &#34;&#34;&#34;The IAM user access key associated with the request.&#34;&#34;&#34;
+    return self.get(&#34;accessKey&#34;)</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.account_id"><code class="name">var <span class="ident">account_id</span></code></dt>
+<dd>
+<section class="desc"><p>The AWS account ID associated with the request.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def account_id(self) -&gt; Optional[str]:
+    &#34;&#34;&#34;The AWS account ID associated with the request.&#34;&#34;&#34;
+    return self.get(&#34;accountId&#34;)</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.caller_id"><code class="name">var <span class="ident">caller_id</span></code></dt>
+<dd>
+<section class="desc"><p>The principal identifier of the caller making the request.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def caller_id(self) -&gt; Optional[str]:
+    &#34;&#34;&#34;The principal identifier of the caller making the request.&#34;&#34;&#34;
+    return self.get(&#34;callerId&#34;)</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.cognito_amr"><code class="name">var <span class="ident">cognito_amr</span></code></dt>
+<dd>
+<section class="desc"><p>This represents how the user was authenticated.
+AMR stands for
+Authentication Methods References as per the openid spec</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def cognito_amr(self) -&gt; Optional[List[str]]:
+    &#34;&#34;&#34;This represents how the user was authenticated.
+    AMR stands for  Authentication Methods References as per the openid spec&#34;&#34;&#34;
+    return self[&#34;cognitoIdentity&#34;].get(&#34;amr&#34;)</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.cognito_identity_id"><code class="name">var <span class="ident">cognito_identity_id</span></code></dt>
+<dd>
+<section class="desc"><p>The Amazon Cognito identity ID of the caller making the request.
+Available only if the request was signed with Amazon Cognito credentials.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def cognito_identity_id(self) -&gt; Optional[str]:
+    &#34;&#34;&#34;The Amazon Cognito identity ID of the caller making the request.
+    Available only if the request was signed with Amazon Cognito credentials.&#34;&#34;&#34;
+    return self[&#34;cognitoIdentity&#34;].get(&#34;identityId&#34;)</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.cognito_identity_pool_id"><code class="name">var <span class="ident">cognito_identity_pool_id</span></code></dt>
+<dd>
+<section class="desc"><p>The Amazon Cognito identity pool ID of the caller making the request.
+Available only if the request was signed with Amazon Cognito credentials.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def cognito_identity_pool_id(self) -&gt; Optional[str]:
+    &#34;&#34;&#34;The Amazon Cognito identity pool ID of the caller making the request.
+    Available only if the request was signed with Amazon Cognito credentials.&#34;&#34;&#34;
+    return self[&#34;cognitoIdentity&#34;].get(&#34;identityPoolId&#34;)</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.principal_org_id"><code class="name">var <span class="ident">principal_org_id</span></code></dt>
+<dd>
+<section class="desc"><p>The AWS organization ID.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def principal_org_id(self) -&gt; Optional[str]:
+    &#34;&#34;&#34;The AWS organization ID.&#34;&#34;&#34;
+    return self.get(&#34;principalOrgId&#34;)</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.user_arn"><code class="name">var <span class="ident">user_arn</span></code></dt>
+<dd>
+<section class="desc"><p>The Amazon Resource Name (ARN) of the effective user identified after authentication.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def user_arn(self) -&gt; Optional[str]:
+    &#34;&#34;&#34;The Amazon Resource Name (ARN) of the effective user identified after authentication.&#34;&#34;&#34;
+    return self.get(&#34;userArn&#34;)</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.user_id"><code class="name">var <span class="ident">user_id</span></code></dt>
+<dd>
+<section class="desc"><p>The IAM user ID of the effective user identified after authentication.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def user_id(self) -&gt; Optional[str]:
+    &#34;&#34;&#34;The IAM user ID of the effective user identified after authentication.&#34;&#34;&#34;
+    return self.get(&#34;userId&#34;)</code></pre>
 </details>
 </dd>
 </dl>
@@ -2011,8 +2301,24 @@ def user_agent(self) -&gt; str:
 <li>
 <h4><code><a title="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2Authorizer" href="#aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2Authorizer">RequestContextV2Authorizer</a></code></h4>
 <ul class="">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2Authorizer.get_lambda" href="#aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2Authorizer.get_lambda">get_lambda</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2Authorizer.iam" href="#aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2Authorizer.iam">iam</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2Authorizer.jwt_claim" href="#aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2Authorizer.jwt_claim">jwt_claim</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2Authorizer.jwt_scopes" href="#aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2Authorizer.jwt_scopes">jwt_scopes</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam" href="#aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam">RequestContextV2AuthorizerIam</a></code></h4>
+<ul class="">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.access_key" href="#aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.access_key">access_key</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.account_id" href="#aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.account_id">account_id</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.caller_id" href="#aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.caller_id">caller_id</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.cognito_amr" href="#aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.cognito_amr">cognito_amr</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.cognito_identity_id" href="#aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.cognito_identity_id">cognito_identity_id</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.cognito_identity_pool_id" href="#aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.cognito_identity_pool_id">cognito_identity_pool_id</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.principal_org_id" href="#aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.principal_org_id">principal_org_id</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.user_arn" href="#aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.user_arn">user_arn</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.user_id" href="#aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam.user_id">user_id</a></code></li>
 </ul>
 </li>
 <li>

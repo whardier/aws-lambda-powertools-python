@@ -24,7 +24,7 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from typing import Any, Dict, List
+<pre><code class="python">from typing import Any, Dict, List, Optional
 
 from aws_lambda_powertools.utilities.data_classes.common import DictWrapper
 
@@ -87,7 +87,12 @@ class EventBridgeEvent(DictWrapper):
     @property
     def detail(self) -&gt; Dict[str, Any]:
         &#34;&#34;&#34;A JSON object, whose content is at the discretion of the service originating the event. &#34;&#34;&#34;
-        return self[&#34;detail&#34;]</code></pre>
+        return self[&#34;detail&#34;]
+
+    @property
+    def replay_name(self) -&gt; Optional[str]:
+        &#34;&#34;&#34;Identifies whether the event is being replayed and what is the name of the replay.&#34;&#34;&#34;
+        return self[&#34;replay-name&#34;]</code></pre>
 </details>
 </section>
 <section>
@@ -171,7 +176,12 @@ class EventBridgeEvent(DictWrapper):
     @property
     def detail(self) -&gt; Dict[str, Any]:
         &#34;&#34;&#34;A JSON object, whose content is at the discretion of the service originating the event. &#34;&#34;&#34;
-        return self[&#34;detail&#34;]</code></pre>
+        return self[&#34;detail&#34;]
+
+    @property
+    def replay_name(self) -&gt; Optional[str]:
+        &#34;&#34;&#34;Identifies whether the event is being replayed and what is the name of the replay.&#34;&#34;&#34;
+        return self[&#34;replay-name&#34;]</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -245,6 +255,19 @@ def get_id(self) -&gt; str:
 def region(self) -&gt; str:
     &#34;&#34;&#34;Identifies the AWS region where the event originated.&#34;&#34;&#34;
     return self[&#34;region&#34;]</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.event_bridge_event.EventBridgeEvent.replay_name"><code class="name">var <span class="ident">replay_name</span></code></dt>
+<dd>
+<section class="desc"><p>Identifies whether the event is being replayed and what is the name of the replay.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def replay_name(self) -&gt; Optional[str]:
+    &#34;&#34;&#34;Identifies whether the event is being replayed and what is the name of the replay.&#34;&#34;&#34;
+    return self[&#34;replay-name&#34;]</code></pre>
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.event_bridge_event.EventBridgeEvent.resources"><code class="name">var <span class="ident">resources</span></code></dt>
@@ -333,6 +356,7 @@ def version(self) -&gt; str:
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.event_bridge_event.EventBridgeEvent.detail_type" href="#aws_lambda_powertools.utilities.data_classes.event_bridge_event.EventBridgeEvent.detail_type">detail_type</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.event_bridge_event.EventBridgeEvent.get_id" href="#aws_lambda_powertools.utilities.data_classes.event_bridge_event.EventBridgeEvent.get_id">get_id</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.event_bridge_event.EventBridgeEvent.region" href="#aws_lambda_powertools.utilities.data_classes.event_bridge_event.EventBridgeEvent.region">region</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.event_bridge_event.EventBridgeEvent.replay_name" href="#aws_lambda_powertools.utilities.data_classes.event_bridge_event.EventBridgeEvent.replay_name">replay_name</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.event_bridge_event.EventBridgeEvent.resources" href="#aws_lambda_powertools.utilities.data_classes.event_bridge_event.EventBridgeEvent.resources">resources</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.event_bridge_event.EventBridgeEvent.source" href="#aws_lambda_powertools.utilities.data_classes.event_bridge_event.EventBridgeEvent.source">source</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.event_bridge_event.EventBridgeEvent.time" href="#aws_lambda_powertools.utilities.data_classes.event_bridge_event.EventBridgeEvent.time">time</a></code></li>
