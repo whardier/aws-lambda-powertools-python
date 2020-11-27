@@ -26,6 +26,7 @@
 </summary>
 <pre><code class="python">from .dynamodb import DynamoDBStreamChangedRecordModel, DynamoDBStreamModel, DynamoDBStreamRecordModel
 from .event_bridge import EventBridgeModel
+from .ses import SesModel, SesRecordModel
 from .sns import SnsModel, SnsNotificationModel, SnsRecordModel
 from .sqs import SqsModel, SqsRecordModel
 
@@ -34,6 +35,8 @@ __all__ = [
     &#34;EventBridgeModel&#34;,
     &#34;DynamoDBStreamChangedRecordModel&#34;,
     &#34;DynamoDBStreamRecordModel&#34;,
+    &#34;SesModel&#34;,
+    &#34;SesRecordModel&#34;,
     &#34;SnsModel&#34;,
     &#34;SnsNotificationModel&#34;,
     &#34;SnsRecordModel&#34;,
@@ -50,6 +53,10 @@ __all__ = [
 <section class="desc"></section>
 </dd>
 <dt><code class="name"><a title="aws_lambda_powertools.utilities.parser.models.event_bridge" href="event_bridge.html">aws_lambda_powertools.utilities.parser.models.event_bridge</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="aws_lambda_powertools.utilities.parser.models.ses" href="ses.html">aws_lambda_powertools.utilities.parser.models.ses</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
@@ -165,6 +172,48 @@ __all__ = [
     detail_type: str = Field(None, alias=&#34;detail-type&#34;)
     detail: Dict[str, Any]
     replay_name: Optional[str] = Field(None, alias=&#34;replay-name&#34;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+</dd>
+<dt id="aws_lambda_powertools.utilities.parser.models.SesModel"><code class="flex name class">
+<span>class <span class="ident">SesModel</span></span>
+<span>(</span><span>*, Records)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SesModel(BaseModel):
+    Records: List[SesRecordModel]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+</dd>
+<dt id="aws_lambda_powertools.utilities.parser.models.SesRecordModel"><code class="flex name class">
+<span>class <span class="ident">SesRecordModel</span></span>
+<span>(</span><span>*, eventSource, eventVersion, ses)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SesRecordModel(BaseModel):
+    eventSource: Literal[&#34;aws:ses&#34;]
+    eventVersion: str
+    ses: SesMessage</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -312,6 +361,7 @@ __all__ = [
 <ul>
 <li><code><a title="aws_lambda_powertools.utilities.parser.models.dynamodb" href="dynamodb.html">aws_lambda_powertools.utilities.parser.models.dynamodb</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.parser.models.event_bridge" href="event_bridge.html">aws_lambda_powertools.utilities.parser.models.event_bridge</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.parser.models.ses" href="ses.html">aws_lambda_powertools.utilities.parser.models.ses</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.parser.models.sns" href="sns.html">aws_lambda_powertools.utilities.parser.models.sns</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.parser.models.sqs" href="sqs.html">aws_lambda_powertools.utilities.parser.models.sqs</a></code></li>
 </ul>
@@ -329,6 +379,12 @@ __all__ = [
 </li>
 <li>
 <h4><code><a title="aws_lambda_powertools.utilities.parser.models.EventBridgeModel" href="#aws_lambda_powertools.utilities.parser.models.EventBridgeModel">EventBridgeModel</a></code></h4>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.parser.models.SesModel" href="#aws_lambda_powertools.utilities.parser.models.SesModel">SesModel</a></code></h4>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.parser.models.SesRecordModel" href="#aws_lambda_powertools.utilities.parser.models.SesRecordModel">SesRecordModel</a></code></h4>
 </li>
 <li>
 <h4><code><a title="aws_lambda_powertools.utilities.parser.models.SnsModel" href="#aws_lambda_powertools.utilities.parser.models.SnsModel">SnsModel</a></code></h4>

@@ -83,7 +83,7 @@ __all__ = [
 <span>def <span class="ident">Field</span></span>(<span>default=PydanticUndefined, *, default_factory=None, alias=None, title=None, description=None, const=None, gt=None, ge=None, lt=None, le=None, multiple_of=None, min_items=None, max_items=None, min_length=None, max_length=None, regex=None, **extra)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Used to provide extra information about a field, either for the model schema or complex valiation. Some arguments
+<section class="desc"><p>Used to provide extra information about a field, either for the model schema or complex validation. Some arguments
 apply only to number fields (<code>int</code>, <code>float</code>, <code>Decimal</code>) and some apply only to <code>str</code>.</p>
 <p>:param default: since this is replacing the field’s default, its first argument is used
 to set the default, use ellipsis (<code>...</code>) to indicate the field is required
@@ -530,6 +530,15 @@ def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model):
 <li><a title="aws_lambda_powertools.utilities.parser.models.dynamodb.DynamoDBStreamRecordModel" href="models/dynamodb.html#aws_lambda_powertools.utilities.parser.models.dynamodb.DynamoDBStreamRecordModel">DynamoDBStreamRecordModel</a></li>
 <li><a title="aws_lambda_powertools.utilities.parser.models.dynamodb.UserIdentity" href="models/dynamodb.html#aws_lambda_powertools.utilities.parser.models.dynamodb.UserIdentity">UserIdentity</a></li>
 <li><a title="aws_lambda_powertools.utilities.parser.models.event_bridge.EventBridgeModel" href="models/event_bridge.html#aws_lambda_powertools.utilities.parser.models.event_bridge.EventBridgeModel">EventBridgeModel</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.ses.SesMail" href="models/ses.html#aws_lambda_powertools.utilities.parser.models.ses.SesMail">SesMail</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.ses.SesMailCommonHeaders" href="models/ses.html#aws_lambda_powertools.utilities.parser.models.ses.SesMailCommonHeaders">SesMailCommonHeaders</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.ses.SesMailHeaders" href="models/ses.html#aws_lambda_powertools.utilities.parser.models.ses.SesMailHeaders">SesMailHeaders</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.ses.SesMessage" href="models/ses.html#aws_lambda_powertools.utilities.parser.models.ses.SesMessage">SesMessage</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.ses.SesModel" href="models/ses.html#aws_lambda_powertools.utilities.parser.models.ses.SesModel">SesModel</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.ses.SesReceipt" href="models/ses.html#aws_lambda_powertools.utilities.parser.models.ses.SesReceipt">SesReceipt</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.ses.SesReceiptAction" href="models/ses.html#aws_lambda_powertools.utilities.parser.models.ses.SesReceiptAction">SesReceiptAction</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.ses.SesReceiptVerdict" href="models/ses.html#aws_lambda_powertools.utilities.parser.models.ses.SesReceiptVerdict">SesReceiptVerdict</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.ses.SesRecordModel" href="models/ses.html#aws_lambda_powertools.utilities.parser.models.ses.SesRecordModel">SesRecordModel</a></li>
 <li><a title="aws_lambda_powertools.utilities.parser.models.sns.SnsModel" href="models/sns.html#aws_lambda_powertools.utilities.parser.models.sns.SnsModel">SnsModel</a></li>
 <li><a title="aws_lambda_powertools.utilities.parser.models.sns.SnsMsgAttributeModel" href="models/sns.html#aws_lambda_powertools.utilities.parser.models.sns.SnsMsgAttributeModel">SnsMsgAttributeModel</a></li>
 <li><a title="aws_lambda_powertools.utilities.parser.models.sns.SnsNotificationModel" href="models/sns.html#aws_lambda_powertools.utilities.parser.models.sns.SnsNotificationModel">SnsNotificationModel</a></li>
@@ -581,13 +590,13 @@ Default values are respected, but no other validation is performed.</p></section
 <section class="desc"></section>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parser.BaseModel.schema"><code class="name flex">
-<span>def <span class="ident">schema</span></span>(<span>by_alias=True)</span>
+<span>def <span class="ident">schema</span></span>(<span>by_alias=True, ref_template='#/definitions/{model}')</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parser.BaseModel.schema_json"><code class="name flex">
-<span>def <span class="ident">schema_json</span></span>(<span>*, by_alias=True, **dumps_kwargs)</span>
+<span>def <span class="ident">schema_json</span></span>(<span>*, by_alias=True, ref_template='#/definitions/{model}', **dumps_kwargs)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
