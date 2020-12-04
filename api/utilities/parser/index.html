@@ -465,8 +465,10 @@ whole object
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
+<li><a title="aws_lambda_powertools.utilities.parser.envelopes.cloudwatch.CloudWatchLogsEnvelope" href="envelopes/cloudwatch.html#aws_lambda_powertools.utilities.parser.envelopes.cloudwatch.CloudWatchLogsEnvelope">CloudWatchLogsEnvelope</a></li>
 <li><a title="aws_lambda_powertools.utilities.parser.envelopes.dynamodb.DynamoDBStreamEnvelope" href="envelopes/dynamodb.html#aws_lambda_powertools.utilities.parser.envelopes.dynamodb.DynamoDBStreamEnvelope">DynamoDBStreamEnvelope</a></li>
 <li><a title="aws_lambda_powertools.utilities.parser.envelopes.event_bridge.EventBridgeEnvelope" href="envelopes/event_bridge.html#aws_lambda_powertools.utilities.parser.envelopes.event_bridge.EventBridgeEnvelope">EventBridgeEnvelope</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.envelopes.kinesis.KinesisDataStreamEnvelope" href="envelopes/kinesis.html#aws_lambda_powertools.utilities.parser.envelopes.kinesis.KinesisDataStreamEnvelope">KinesisDataStreamEnvelope</a></li>
 <li><a title="aws_lambda_powertools.utilities.parser.envelopes.sns.SnsEnvelope" href="envelopes/sns.html#aws_lambda_powertools.utilities.parser.envelopes.sns.SnsEnvelope">SnsEnvelope</a></li>
 <li><a title="aws_lambda_powertools.utilities.parser.envelopes.sqs.SqsEnvelope" href="envelopes/sqs.html#aws_lambda_powertools.utilities.parser.envelopes.sqs.SqsEnvelope">SqsEnvelope</a></li>
 </ul>
@@ -525,11 +527,32 @@ def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model):
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
+<li><a title="aws_lambda_powertools.utilities.parser.models.alb.AlbModel" href="models/alb.html#aws_lambda_powertools.utilities.parser.models.alb.AlbModel">AlbModel</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.alb.AlbRequestContext" href="models/alb.html#aws_lambda_powertools.utilities.parser.models.alb.AlbRequestContext">AlbRequestContext</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.alb.AlbRequestContextData" href="models/alb.html#aws_lambda_powertools.utilities.parser.models.alb.AlbRequestContextData">AlbRequestContextData</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.cloudwatch.CloudWatchLogsData" href="models/cloudwatch.html#aws_lambda_powertools.utilities.parser.models.cloudwatch.CloudWatchLogsData">CloudWatchLogsData</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.cloudwatch.CloudWatchLogsDecode" href="models/cloudwatch.html#aws_lambda_powertools.utilities.parser.models.cloudwatch.CloudWatchLogsDecode">CloudWatchLogsDecode</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.cloudwatch.CloudWatchLogsLogEvent" href="models/cloudwatch.html#aws_lambda_powertools.utilities.parser.models.cloudwatch.CloudWatchLogsLogEvent">CloudWatchLogsLogEvent</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.cloudwatch.CloudWatchLogsModel" href="models/cloudwatch.html#aws_lambda_powertools.utilities.parser.models.cloudwatch.CloudWatchLogsModel">CloudWatchLogsModel</a></li>
 <li><a title="aws_lambda_powertools.utilities.parser.models.dynamodb.DynamoDBStreamChangedRecordModel" href="models/dynamodb.html#aws_lambda_powertools.utilities.parser.models.dynamodb.DynamoDBStreamChangedRecordModel">DynamoDBStreamChangedRecordModel</a></li>
 <li><a title="aws_lambda_powertools.utilities.parser.models.dynamodb.DynamoDBStreamModel" href="models/dynamodb.html#aws_lambda_powertools.utilities.parser.models.dynamodb.DynamoDBStreamModel">DynamoDBStreamModel</a></li>
 <li><a title="aws_lambda_powertools.utilities.parser.models.dynamodb.DynamoDBStreamRecordModel" href="models/dynamodb.html#aws_lambda_powertools.utilities.parser.models.dynamodb.DynamoDBStreamRecordModel">DynamoDBStreamRecordModel</a></li>
 <li><a title="aws_lambda_powertools.utilities.parser.models.dynamodb.UserIdentity" href="models/dynamodb.html#aws_lambda_powertools.utilities.parser.models.dynamodb.UserIdentity">UserIdentity</a></li>
 <li><a title="aws_lambda_powertools.utilities.parser.models.event_bridge.EventBridgeModel" href="models/event_bridge.html#aws_lambda_powertools.utilities.parser.models.event_bridge.EventBridgeModel">EventBridgeModel</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.kinesis.KinesisDataStreamModel" href="models/kinesis.html#aws_lambda_powertools.utilities.parser.models.kinesis.KinesisDataStreamModel">KinesisDataStreamModel</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.kinesis.KinesisDataStreamRecord" href="models/kinesis.html#aws_lambda_powertools.utilities.parser.models.kinesis.KinesisDataStreamRecord">KinesisDataStreamRecord</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.kinesis.KinesisDataStreamRecordPayload" href="models/kinesis.html#aws_lambda_powertools.utilities.parser.models.kinesis.KinesisDataStreamRecordPayload">KinesisDataStreamRecordPayload</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.s3.S3Bucket" href="models/s3.html#aws_lambda_powertools.utilities.parser.models.s3.S3Bucket">S3Bucket</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.s3.S3EventRecordGlacierEventData" href="models/s3.html#aws_lambda_powertools.utilities.parser.models.s3.S3EventRecordGlacierEventData">S3EventRecordGlacierEventData</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.s3.S3EventRecordGlacierRestoreEventData" href="models/s3.html#aws_lambda_powertools.utilities.parser.models.s3.S3EventRecordGlacierRestoreEventData">S3EventRecordGlacierRestoreEventData</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.s3.S3Identity" href="models/s3.html#aws_lambda_powertools.utilities.parser.models.s3.S3Identity">S3Identity</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.s3.S3Message" href="models/s3.html#aws_lambda_powertools.utilities.parser.models.s3.S3Message">S3Message</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.s3.S3Model" href="models/s3.html#aws_lambda_powertools.utilities.parser.models.s3.S3Model">S3Model</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.s3.S3Object" href="models/s3.html#aws_lambda_powertools.utilities.parser.models.s3.S3Object">S3Object</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.s3.S3OwnerIdentify" href="models/s3.html#aws_lambda_powertools.utilities.parser.models.s3.S3OwnerIdentify">S3OwnerIdentify</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.s3.S3RecordModel" href="models/s3.html#aws_lambda_powertools.utilities.parser.models.s3.S3RecordModel">S3RecordModel</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.s3.S3RequestParameters" href="models/s3.html#aws_lambda_powertools.utilities.parser.models.s3.S3RequestParameters">S3RequestParameters</a></li>
+<li><a title="aws_lambda_powertools.utilities.parser.models.s3.S3ResponseElements" href="models/s3.html#aws_lambda_powertools.utilities.parser.models.s3.S3ResponseElements">S3ResponseElements</a></li>
 <li><a title="aws_lambda_powertools.utilities.parser.models.ses.SesMail" href="models/ses.html#aws_lambda_powertools.utilities.parser.models.ses.SesMail">SesMail</a></li>
 <li><a title="aws_lambda_powertools.utilities.parser.models.ses.SesMailCommonHeaders" href="models/ses.html#aws_lambda_powertools.utilities.parser.models.ses.SesMailCommonHeaders">SesMailCommonHeaders</a></li>
 <li><a title="aws_lambda_powertools.utilities.parser.models.ses.SesMailHeaders" href="models/ses.html#aws_lambda_powertools.utilities.parser.models.ses.SesMailHeaders">SesMailHeaders</a></li>

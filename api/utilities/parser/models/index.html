@@ -24,17 +24,33 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from .dynamodb import DynamoDBStreamChangedRecordModel, DynamoDBStreamModel, DynamoDBStreamRecordModel
+<pre><code class="python">from .alb import AlbModel, AlbRequestContext, AlbRequestContextData
+from .cloudwatch import CloudWatchLogsData, CloudWatchLogsDecode, CloudWatchLogsLogEvent, CloudWatchLogsModel
+from .dynamodb import DynamoDBStreamChangedRecordModel, DynamoDBStreamModel, DynamoDBStreamRecordModel
 from .event_bridge import EventBridgeModel
+from .kinesis import KinesisDataStreamModel, KinesisDataStreamRecord, KinesisDataStreamRecordPayload
+from .s3 import S3Model, S3RecordModel
 from .ses import SesModel, SesRecordModel
 from .sns import SnsModel, SnsNotificationModel, SnsRecordModel
 from .sqs import SqsModel, SqsRecordModel
 
 __all__ = [
+    &#34;CloudWatchLogsData&#34;,
+    &#34;CloudWatchLogsDecode&#34;,
+    &#34;CloudWatchLogsLogEvent&#34;,
+    &#34;CloudWatchLogsModel&#34;,
+    &#34;AlbModel&#34;,
+    &#34;AlbRequestContext&#34;,
+    &#34;AlbRequestContextData&#34;,
     &#34;DynamoDBStreamModel&#34;,
     &#34;EventBridgeModel&#34;,
     &#34;DynamoDBStreamChangedRecordModel&#34;,
     &#34;DynamoDBStreamRecordModel&#34;,
+    &#34;KinesisDataStreamModel&#34;,
+    &#34;KinesisDataStreamRecord&#34;,
+    &#34;KinesisDataStreamRecordPayload&#34;,
+    &#34;S3Model&#34;,
+    &#34;S3RecordModel&#34;,
     &#34;SesModel&#34;,
     &#34;SesRecordModel&#34;,
     &#34;SnsModel&#34;,
@@ -48,11 +64,27 @@ __all__ = [
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
+<dt><code class="name"><a title="aws_lambda_powertools.utilities.parser.models.alb" href="alb.html">aws_lambda_powertools.utilities.parser.models.alb</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="aws_lambda_powertools.utilities.parser.models.cloudwatch" href="cloudwatch.html">aws_lambda_powertools.utilities.parser.models.cloudwatch</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
 <dt><code class="name"><a title="aws_lambda_powertools.utilities.parser.models.dynamodb" href="dynamodb.html">aws_lambda_powertools.utilities.parser.models.dynamodb</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
 <dt><code class="name"><a title="aws_lambda_powertools.utilities.parser.models.event_bridge" href="event_bridge.html">aws_lambda_powertools.utilities.parser.models.event_bridge</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="aws_lambda_powertools.utilities.parser.models.kinesis" href="kinesis.html">aws_lambda_powertools.utilities.parser.models.kinesis</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="aws_lambda_powertools.utilities.parser.models.s3" href="s3.html">aws_lambda_powertools.utilities.parser.models.s3</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
@@ -77,6 +109,194 @@ __all__ = [
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="aws_lambda_powertools.utilities.parser.models.AlbModel"><code class="flex name class">
+<span>class <span class="ident">AlbModel</span></span>
+<span>(</span><span>*, httpMethod, path, body, isBase64Encoded, headers, queryStringParameters, requestContext)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AlbModel(BaseModel):
+    httpMethod: str
+    path: str
+    body: str
+    isBase64Encoded: bool
+    headers: Dict[str, str]
+    queryStringParameters: Dict[str, str]
+    requestContext: AlbRequestContext</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+</dd>
+<dt id="aws_lambda_powertools.utilities.parser.models.AlbRequestContext"><code class="flex name class">
+<span>class <span class="ident">AlbRequestContext</span></span>
+<span>(</span><span>*, elb)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AlbRequestContext(BaseModel):
+    elb: AlbRequestContextData</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+</dd>
+<dt id="aws_lambda_powertools.utilities.parser.models.AlbRequestContextData"><code class="flex name class">
+<span>class <span class="ident">AlbRequestContextData</span></span>
+<span>(</span><span>*, targetGroupArn)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AlbRequestContextData(BaseModel):
+    targetGroupArn: str</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+</dd>
+<dt id="aws_lambda_powertools.utilities.parser.models.CloudWatchLogsData"><code class="flex name class">
+<span>class <span class="ident">CloudWatchLogsData</span></span>
+<span>(</span><span>*, data=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CloudWatchLogsData(BaseModel):
+    decoded_data: CloudWatchLogsDecode = Field(None, alias=&#34;data&#34;)
+
+    @validator(&#34;decoded_data&#34;, pre=True)
+    def prepare_data(cls, value):
+        try:
+            logger.debug(&#34;Decoding base64 cloudwatch log data before parsing&#34;)
+            payload = base64.b64decode(value)
+            logger.debug(&#34;Decompressing cloudwatch log data before parsing&#34;)
+            uncompressed = zlib.decompress(payload, zlib.MAX_WBITS | 32)
+            return json.loads(uncompressed.decode(&#34;utf-8&#34;))
+        except Exception:
+            raise ValueError(&#34;unable to decompress data&#34;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="aws_lambda_powertools.utilities.parser.models.CloudWatchLogsData.prepare_data"><code class="name flex">
+<span>def <span class="ident">prepare_data</span></span>(<span>value)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@validator(&#34;decoded_data&#34;, pre=True)
+def prepare_data(cls, value):
+    try:
+        logger.debug(&#34;Decoding base64 cloudwatch log data before parsing&#34;)
+        payload = base64.b64decode(value)
+        logger.debug(&#34;Decompressing cloudwatch log data before parsing&#34;)
+        uncompressed = zlib.decompress(payload, zlib.MAX_WBITS | 32)
+        return json.loads(uncompressed.decode(&#34;utf-8&#34;))
+    except Exception:
+        raise ValueError(&#34;unable to decompress data&#34;)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="aws_lambda_powertools.utilities.parser.models.CloudWatchLogsDecode"><code class="flex name class">
+<span>class <span class="ident">CloudWatchLogsDecode</span></span>
+<span>(</span><span>*, messageType, owner, logGroup, logStream, subscriptionFilters, logEvents)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CloudWatchLogsDecode(BaseModel):
+    messageType: str
+    owner: str
+    logGroup: str
+    logStream: str
+    subscriptionFilters: List[str]
+    logEvents: List[CloudWatchLogsLogEvent]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+</dd>
+<dt id="aws_lambda_powertools.utilities.parser.models.CloudWatchLogsLogEvent"><code class="flex name class">
+<span>class <span class="ident">CloudWatchLogsLogEvent</span></span>
+<span>(</span><span>*, id, timestamp, message)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CloudWatchLogsLogEvent(BaseModel):
+    id: str  # noqa AA03 VNE003
+    timestamp: datetime
+    message: str</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+</dd>
+<dt id="aws_lambda_powertools.utilities.parser.models.CloudWatchLogsModel"><code class="flex name class">
+<span>class <span class="ident">CloudWatchLogsModel</span></span>
+<span>(</span><span>*, awslogs)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CloudWatchLogsModel(BaseModel):
+    awslogs: CloudWatchLogsData</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+</dd>
 <dt id="aws_lambda_powertools.utilities.parser.models.DynamoDBStreamChangedRecordModel"><code class="flex name class">
 <span>class <span class="ident">DynamoDBStreamChangedRecordModel</span></span>
 <span>(</span><span>*, ApproximateCreationDateTime=None, Keys, NewImage=None, OldImage=None, SequenceNumber, SizeBytes, StreamViewType)</span>
@@ -172,6 +392,155 @@ __all__ = [
     detail_type: str = Field(None, alias=&#34;detail-type&#34;)
     detail: Dict[str, Any]
     replay_name: Optional[str] = Field(None, alias=&#34;replay-name&#34;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+</dd>
+<dt id="aws_lambda_powertools.utilities.parser.models.KinesisDataStreamModel"><code class="flex name class">
+<span>class <span class="ident">KinesisDataStreamModel</span></span>
+<span>(</span><span>*, Records)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class KinesisDataStreamModel(BaseModel):
+    Records: List[KinesisDataStreamRecord]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+</dd>
+<dt id="aws_lambda_powertools.utilities.parser.models.KinesisDataStreamRecord"><code class="flex name class">
+<span>class <span class="ident">KinesisDataStreamRecord</span></span>
+<span>(</span><span>*, eventSource, eventVersion, eventID, eventName, invokeIdentityArn, awsRegion, eventSourceARN, kinesis)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class KinesisDataStreamRecord(BaseModel):
+    eventSource: Literal[&#34;aws:kinesis&#34;]
+    eventVersion: str
+    eventID: str
+    eventName: Literal[&#34;aws:kinesis:record&#34;]
+    invokeIdentityArn: str
+    awsRegion: str
+    eventSourceARN: str
+    kinesis: KinesisDataStreamRecordPayload</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+</dd>
+<dt id="aws_lambda_powertools.utilities.parser.models.KinesisDataStreamRecordPayload"><code class="flex name class">
+<span>class <span class="ident">KinesisDataStreamRecordPayload</span></span>
+<span>(</span><span>*, kinesisSchemaVersion, partitionKey, sequenceNumber, data, approximateArrivalTimestamp)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class KinesisDataStreamRecordPayload(BaseModel):
+    kinesisSchemaVersion: str
+    partitionKey: str
+    sequenceNumber: PositiveInt
+    data: bytes  # base64 encoded str is parsed into bytes
+    approximateArrivalTimestamp: float
+
+    @validator(&#34;data&#34;, pre=True)
+    def data_base64_decode(cls, value):
+        try:
+            logger.debug(&#34;Decoding base64 Kinesis data record before parsing&#34;)
+            return base64.b64decode(value)
+        except (BinAsciiError, TypeError):
+            raise ValueError(&#34;base64 decode failed&#34;)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+<h3>Static methods</h3>
+<dl>
+<dt id="aws_lambda_powertools.utilities.parser.models.KinesisDataStreamRecordPayload.data_base64_decode"><code class="name flex">
+<span>def <span class="ident">data_base64_decode</span></span>(<span>value)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@validator(&#34;data&#34;, pre=True)
+def data_base64_decode(cls, value):
+    try:
+        logger.debug(&#34;Decoding base64 Kinesis data record before parsing&#34;)
+        return base64.b64decode(value)
+    except (BinAsciiError, TypeError):
+        raise ValueError(&#34;base64 decode failed&#34;)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="aws_lambda_powertools.utilities.parser.models.S3Model"><code class="flex name class">
+<span>class <span class="ident">S3Model</span></span>
+<span>(</span><span>*, Records)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class S3Model(BaseModel):
+    Records: List[S3RecordModel]</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>pydantic.main.BaseModel</li>
+<li>pydantic.utils.Representation</li>
+</ul>
+</dd>
+<dt id="aws_lambda_powertools.utilities.parser.models.S3RecordModel"><code class="flex name class">
+<span>class <span class="ident">S3RecordModel</span></span>
+<span>(</span><span>*, eventVersion, eventSource, awsRegion, eventTime, eventName, userIdentity, requestParameters, responseElements, s3, glacierEventData=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class S3RecordModel(BaseModel):
+    eventVersion: str
+    eventSource: Literal[&#34;aws:s3&#34;]
+    awsRegion: str
+    eventTime: datetime
+    eventName: str
+    userIdentity: S3Identity
+    requestParameters: S3RequestParameters
+    responseElements: S3ResponseElements
+    s3: S3Message
+    glacierEventData: Optional[S3EventRecordGlacierEventData]</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -359,8 +728,12 @@ __all__ = [
 </li>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
+<li><code><a title="aws_lambda_powertools.utilities.parser.models.alb" href="alb.html">aws_lambda_powertools.utilities.parser.models.alb</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.parser.models.cloudwatch" href="cloudwatch.html">aws_lambda_powertools.utilities.parser.models.cloudwatch</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.parser.models.dynamodb" href="dynamodb.html">aws_lambda_powertools.utilities.parser.models.dynamodb</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.parser.models.event_bridge" href="event_bridge.html">aws_lambda_powertools.utilities.parser.models.event_bridge</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.parser.models.kinesis" href="kinesis.html">aws_lambda_powertools.utilities.parser.models.kinesis</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.parser.models.s3" href="s3.html">aws_lambda_powertools.utilities.parser.models.s3</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.parser.models.ses" href="ses.html">aws_lambda_powertools.utilities.parser.models.ses</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.parser.models.sns" href="sns.html">aws_lambda_powertools.utilities.parser.models.sns</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.parser.models.sqs" href="sqs.html">aws_lambda_powertools.utilities.parser.models.sqs</a></code></li>
@@ -368,6 +741,30 @@ __all__ = [
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.parser.models.AlbModel" href="#aws_lambda_powertools.utilities.parser.models.AlbModel">AlbModel</a></code></h4>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.parser.models.AlbRequestContext" href="#aws_lambda_powertools.utilities.parser.models.AlbRequestContext">AlbRequestContext</a></code></h4>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.parser.models.AlbRequestContextData" href="#aws_lambda_powertools.utilities.parser.models.AlbRequestContextData">AlbRequestContextData</a></code></h4>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.parser.models.CloudWatchLogsData" href="#aws_lambda_powertools.utilities.parser.models.CloudWatchLogsData">CloudWatchLogsData</a></code></h4>
+<ul class="">
+<li><code><a title="aws_lambda_powertools.utilities.parser.models.CloudWatchLogsData.prepare_data" href="#aws_lambda_powertools.utilities.parser.models.CloudWatchLogsData.prepare_data">prepare_data</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.parser.models.CloudWatchLogsDecode" href="#aws_lambda_powertools.utilities.parser.models.CloudWatchLogsDecode">CloudWatchLogsDecode</a></code></h4>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.parser.models.CloudWatchLogsLogEvent" href="#aws_lambda_powertools.utilities.parser.models.CloudWatchLogsLogEvent">CloudWatchLogsLogEvent</a></code></h4>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.parser.models.CloudWatchLogsModel" href="#aws_lambda_powertools.utilities.parser.models.CloudWatchLogsModel">CloudWatchLogsModel</a></code></h4>
+</li>
 <li>
 <h4><code><a title="aws_lambda_powertools.utilities.parser.models.DynamoDBStreamChangedRecordModel" href="#aws_lambda_powertools.utilities.parser.models.DynamoDBStreamChangedRecordModel">DynamoDBStreamChangedRecordModel</a></code></h4>
 </li>
@@ -379,6 +776,24 @@ __all__ = [
 </li>
 <li>
 <h4><code><a title="aws_lambda_powertools.utilities.parser.models.EventBridgeModel" href="#aws_lambda_powertools.utilities.parser.models.EventBridgeModel">EventBridgeModel</a></code></h4>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.parser.models.KinesisDataStreamModel" href="#aws_lambda_powertools.utilities.parser.models.KinesisDataStreamModel">KinesisDataStreamModel</a></code></h4>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.parser.models.KinesisDataStreamRecord" href="#aws_lambda_powertools.utilities.parser.models.KinesisDataStreamRecord">KinesisDataStreamRecord</a></code></h4>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.parser.models.KinesisDataStreamRecordPayload" href="#aws_lambda_powertools.utilities.parser.models.KinesisDataStreamRecordPayload">KinesisDataStreamRecordPayload</a></code></h4>
+<ul class="">
+<li><code><a title="aws_lambda_powertools.utilities.parser.models.KinesisDataStreamRecordPayload.data_base64_decode" href="#aws_lambda_powertools.utilities.parser.models.KinesisDataStreamRecordPayload.data_base64_decode">data_base64_decode</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.parser.models.S3Model" href="#aws_lambda_powertools.utilities.parser.models.S3Model">S3Model</a></code></h4>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.parser.models.S3RecordModel" href="#aws_lambda_powertools.utilities.parser.models.S3RecordModel">S3RecordModel</a></code></h4>
 </li>
 <li>
 <h4><code><a title="aws_lambda_powertools.utilities.parser.models.SesModel" href="#aws_lambda_powertools.utilities.parser.models.SesModel">SesModel</a></code></h4>
