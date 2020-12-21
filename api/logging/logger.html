@@ -174,21 +174,32 @@ class Logger(logging.Logger):  # lgtm [py/missing-call-to-init]
     def _init_logger(self, **kwargs):
         &#34;&#34;&#34;Configures new logger&#34;&#34;&#34;
 
-        # Skip configuration if it&#39;s a child logger to prevent
-        # multiple handlers being attached as well as different sampling mechanisms
-        # and multiple messages from being logged as handlers can be duplicated
-        if not self.child:
-            self._configure_sampling()
-            self._logger.setLevel(self.log_level)
-            self._logger.addHandler(self._handler)
-            self.structure_logs(**kwargs)
+        # Skip configuration if it&#39;s a child logger or a pre-configured logger
+        # to prevent the following:
+        #   a) multiple handlers being attached
+        #   b) different sampling mechanisms
+        #   c) multiple messages from being logged as handlers can be duplicated
+        is_logger_preconfigured = getattr(self._logger, &#34;init&#34;, False)
+        if self.child or is_logger_preconfigured:
+            return
 
-            logger.debug(&#34;Adding filter in root logger to suppress child logger records to bubble up&#34;)
-            for handler in logging.root.handlers:
-                # It&#39;ll add a filter to suppress any child logger from self.service
-                # Where service is Order, it&#39;ll reject parent logger Order,
-                # and child loggers such as Order.checkout, Order.shared
-                handler.addFilter(SuppressFilter(self.service))
+        self._configure_sampling()
+        self._logger.setLevel(self.log_level)
+        self._logger.addHandler(self._handler)
+        self.structure_logs(**kwargs)
+
+        logger.debug(&#34;Adding filter in root logger to suppress child logger records to bubble up&#34;)
+        for handler in logging.root.handlers:
+            # It&#39;ll add a filter to suppress any child logger from self.service
+            # Where service is Order, it&#39;ll reject parent logger Order,
+            # and child loggers such as Order.checkout, Order.shared
+            handler.addFilter(SuppressFilter(self.service))
+
+        # as per bug in #249, we should not be pre-configuring an existing logger
+        # therefore we set a custom attribute in the Logger that will be returned
+        # std logging will return the same Logger with our attribute if name is reused
+        logger.debug(f&#34;Marking logger {self.service} as preconfigured&#34;)
+        self._logger.init = True
 
     def _configure_sampling(self):
         &#34;&#34;&#34;Dynamically set log level based on sampling rate
@@ -618,21 +629,32 @@ $ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
     def _init_logger(self, **kwargs):
         &#34;&#34;&#34;Configures new logger&#34;&#34;&#34;
 
-        # Skip configuration if it&#39;s a child logger to prevent
-        # multiple handlers being attached as well as different sampling mechanisms
-        # and multiple messages from being logged as handlers can be duplicated
-        if not self.child:
-            self._configure_sampling()
-            self._logger.setLevel(self.log_level)
-            self._logger.addHandler(self._handler)
-            self.structure_logs(**kwargs)
+        # Skip configuration if it&#39;s a child logger or a pre-configured logger
+        # to prevent the following:
+        #   a) multiple handlers being attached
+        #   b) different sampling mechanisms
+        #   c) multiple messages from being logged as handlers can be duplicated
+        is_logger_preconfigured = getattr(self._logger, &#34;init&#34;, False)
+        if self.child or is_logger_preconfigured:
+            return
 
-            logger.debug(&#34;Adding filter in root logger to suppress child logger records to bubble up&#34;)
-            for handler in logging.root.handlers:
-                # It&#39;ll add a filter to suppress any child logger from self.service
-                # Where service is Order, it&#39;ll reject parent logger Order,
-                # and child loggers such as Order.checkout, Order.shared
-                handler.addFilter(SuppressFilter(self.service))
+        self._configure_sampling()
+        self._logger.setLevel(self.log_level)
+        self._logger.addHandler(self._handler)
+        self.structure_logs(**kwargs)
+
+        logger.debug(&#34;Adding filter in root logger to suppress child logger records to bubble up&#34;)
+        for handler in logging.root.handlers:
+            # It&#39;ll add a filter to suppress any child logger from self.service
+            # Where service is Order, it&#39;ll reject parent logger Order,
+            # and child loggers such as Order.checkout, Order.shared
+            handler.addFilter(SuppressFilter(self.service))
+
+        # as per bug in #249, we should not be pre-configuring an existing logger
+        # therefore we set a custom attribute in the Logger that will be returned
+        # std logging will return the same Logger with our attribute if name is reused
+        logger.debug(f&#34;Marking logger {self.service} as preconfigured&#34;)
+        self._logger.init = True
 
     def _configure_sampling(self):
         &#34;&#34;&#34;Dynamically set log level based on sampling rate
