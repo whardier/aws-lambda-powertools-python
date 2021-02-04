@@ -26,9 +26,16 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;Generics and other shared types used across parser&#34;&#34;&#34;
+
 from typing import TypeVar
 
 from pydantic import BaseModel
+
+# We only need typing_extensions for python versions &lt;3.8
+try:
+    from typing import Literal  # noqa: F401
+except ImportError:
+    from typing_extensions import Literal  # noqa: F401
 
 Model = TypeVar(&#34;Model&#34;, bound=BaseModel)</code></pre>
 </details>

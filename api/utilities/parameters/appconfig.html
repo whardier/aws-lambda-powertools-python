@@ -59,7 +59,7 @@ class AppConfigProvider(BaseProvider):
     -------
     **Retrieves the latest configuration value from App Config**
 
-        &gt;&gt;&gt; from aws_lambda_powertools.utilities.parameters import AppConfigProvider
+        &gt;&gt;&gt; from aws_lambda_powertools.utilities import parameters
         &gt;&gt;&gt; appconf_provider = parameters.AppConfigProvider(environment=&#34;my_env&#34;, application=&#34;my_app&#34;)
         &gt;&gt;&gt;
         &gt;&gt;&gt; value : bytes = appconf_provider.get(&#34;my_conf&#34;)
@@ -70,7 +70,7 @@ class AppConfigProvider(BaseProvider):
     **Retrieves a configuration value from App Config in another AWS region**
 
         &gt;&gt;&gt; from botocore.config import Config
-        &gt;&gt;&gt; from aws_lambda_powertools.utilities.parameters import AppConfigProvider
+        &gt;&gt;&gt; from aws_lambda_powertools.utilities import parameters
         &gt;&gt;&gt;
         &gt;&gt;&gt; config = Config(region_name=&#34;us-west-1&#34;)
         &gt;&gt;&gt; appconf_provider = parameters.AppConfigProvider(environment=&#34;my_env&#34;, application=&#34;my_app&#34;, config=config)
@@ -318,7 +318,7 @@ My configuration's JSON value
 </dl>
 <h2 id="example">Example</h2>
 <p><strong>Retrieves the latest configuration value from App Config</strong></p>
-<pre><code>&gt;&gt;&gt; from aws_lambda_powertools.utilities.parameters import AppConfigProvider
+<pre><code>&gt;&gt;&gt; from aws_lambda_powertools.utilities import parameters
 &gt;&gt;&gt; appconf_provider = parameters.AppConfigProvider(environment="my_env", application="my_app")
 &gt;&gt;&gt;
 &gt;&gt;&gt; value : bytes = appconf_provider.get("my_conf")
@@ -328,7 +328,7 @@ My configuration value
 </code></pre>
 <p><strong>Retrieves a configuration value from App Config in another AWS region</strong></p>
 <pre><code>&gt;&gt;&gt; from botocore.config import Config
-&gt;&gt;&gt; from aws_lambda_powertools.utilities.parameters import AppConfigProvider
+&gt;&gt;&gt; from aws_lambda_powertools.utilities import parameters
 &gt;&gt;&gt;
 &gt;&gt;&gt; config = Config(region_name="us-west-1")
 &gt;&gt;&gt; appconf_provider = parameters.AppConfigProvider(environment="my_env", application="my_app", config=config)
@@ -360,7 +360,7 @@ My configuration value
     -------
     **Retrieves the latest configuration value from App Config**
 
-        &gt;&gt;&gt; from aws_lambda_powertools.utilities.parameters import AppConfigProvider
+        &gt;&gt;&gt; from aws_lambda_powertools.utilities import parameters
         &gt;&gt;&gt; appconf_provider = parameters.AppConfigProvider(environment=&#34;my_env&#34;, application=&#34;my_app&#34;)
         &gt;&gt;&gt;
         &gt;&gt;&gt; value : bytes = appconf_provider.get(&#34;my_conf&#34;)
@@ -371,7 +371,7 @@ My configuration value
     **Retrieves a configuration value from App Config in another AWS region**
 
         &gt;&gt;&gt; from botocore.config import Config
-        &gt;&gt;&gt; from aws_lambda_powertools.utilities.parameters import AppConfigProvider
+        &gt;&gt;&gt; from aws_lambda_powertools.utilities import parameters
         &gt;&gt;&gt;
         &gt;&gt;&gt; config = Config(region_name=&#34;us-west-1&#34;)
         &gt;&gt;&gt; appconf_provider = parameters.AppConfigProvider(environment=&#34;my_env&#34;, application=&#34;my_app&#34;, config=config)
