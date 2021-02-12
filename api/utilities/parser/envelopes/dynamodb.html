@@ -25,7 +25,7 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">import logging
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Type, Union
 
 from ..models import DynamoDBStreamModel
 from ..types import Model
@@ -41,14 +41,14 @@ class DynamoDBStreamEnvelope(BaseEnvelope):
     length of the list is the record&#39;s amount in the original event.
     &#34;&#34;&#34;
 
-    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model) -&gt; List[Dict[str, Optional[Model]]]:
+    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Type[Model]) -&gt; List[Dict[str, Optional[Model]]]:
         &#34;&#34;&#34;Parses DynamoDB Stream records found in either NewImage and OldImage with model provided
 
         Parameters
         ----------
         data : Dict
             Lambda event to be parsed
-        model : Model
+        model : Type[Model]
             Data model provided to parse after extracting data using envelope
 
         Returns
@@ -95,14 +95,14 @@ length of the list is the record's amount in the original event.</p></section>
     length of the list is the record&#39;s amount in the original event.
     &#34;&#34;&#34;
 
-    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model) -&gt; List[Dict[str, Optional[Model]]]:
+    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Type[Model]) -&gt; List[Dict[str, Optional[Model]]]:
         &#34;&#34;&#34;Parses DynamoDB Stream records found in either NewImage and OldImage with model provided
 
         Parameters
         ----------
         data : Dict
             Lambda event to be parsed
-        model : Model
+        model : Type[Model]
             Data model provided to parse after extracting data using envelope
 
         Returns
@@ -137,7 +137,7 @@ length of the list is the record's amount in the original event.</p></section>
 <dl>
 <dt><strong><code>data</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>Lambda event to be parsed</dd>
-<dt><strong><code>model</code></strong> :&ensp;<code>Model</code></dt>
+<dt><strong><code>model</code></strong> :&ensp;<code>Type</code>[<code>Model</code>]</dt>
 <dd>Data model provided to parse after extracting data using envelope</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -149,14 +149,14 @@ length of the list is the record's amount in the original event.</p></section>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model) -&gt; List[Dict[str, Optional[Model]]]:
+<pre><code class="python">def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Type[Model]) -&gt; List[Dict[str, Optional[Model]]]:
     &#34;&#34;&#34;Parses DynamoDB Stream records found in either NewImage and OldImage with model provided
 
     Parameters
     ----------
     data : Dict
         Lambda event to be parsed
-    model : Model
+    model : Type[Model]
         Data model provided to parse after extracting data using envelope
 
     Returns

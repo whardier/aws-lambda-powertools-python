@@ -97,14 +97,14 @@ __all__ = [
     &#34;&#34;&#34;ABC implementation for creating a supported Envelope&#34;&#34;&#34;
 
     @staticmethod
-    def _parse(data: Optional[Union[Dict[str, Any], Any]], model: Model) -&gt; Union[Model, None]:
+    def _parse(data: Optional[Union[Dict[str, Any], Any]], model: Type[Model]) -&gt; Union[Model, None]:
         &#34;&#34;&#34;Parses envelope data against model provided
 
         Parameters
         ----------
         data : Dict
             Data to be parsed and validated
-        model : Model
+        model : Type[Model]
             Data model to parse and validate data against
 
         Returns
@@ -124,7 +124,7 @@ __all__ = [
         return model.parse_obj(data)
 
     @abstractmethod
-    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model):
+    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Type[Model]):
         &#34;&#34;&#34;Implementation to parse data against envelope model, then against the data model
 
         NOTE: Call `_parse` method to fully parse data with model provided.
@@ -178,7 +178,7 @@ return self._parse(data=parsed_envelope.detail, model=data_model)
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@abstractmethod
-def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model):
+def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Type[Model]):
     &#34;&#34;&#34;Implementation to parse data against envelope model, then against the data model
 
     NOTE: Call `_parse` method to fully parse data with model provided.
@@ -223,14 +223,14 @@ Regardless of its type it'll be parsed into a BaseModel object.</p>
     Note: The record will be parsed the same way so if model is str
     &#34;&#34;&#34;
 
-    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model) -&gt; List[Optional[Model]]:
+    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Type[Model]) -&gt; List[Optional[Model]]:
         &#34;&#34;&#34;Parses records found with model provided
 
         Parameters
         ----------
         data : Dict
             Lambda event to be parsed
-        model : Model
+        model : Type[Model]
             Data model provided to parse after extracting data using envelope
 
         Returns
@@ -261,7 +261,7 @@ Regardless of its type it'll be parsed into a BaseModel object.</p>
 <dl>
 <dt><strong><code>data</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>Lambda event to be parsed</dd>
-<dt><strong><code>model</code></strong> :&ensp;<code>Model</code></dt>
+<dt><strong><code>model</code></strong> :&ensp;<code>Type</code>[<code>Model</code>]</dt>
 <dd>Data model provided to parse after extracting data using envelope</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -273,14 +273,14 @@ Regardless of its type it'll be parsed into a BaseModel object.</p>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model) -&gt; List[Optional[Model]]:
+<pre><code class="python">def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Type[Model]) -&gt; List[Optional[Model]]:
     &#34;&#34;&#34;Parses records found with model provided
 
     Parameters
     ----------
     data : Dict
         Lambda event to be parsed
-    model : Model
+    model : Type[Model]
         Data model provided to parse after extracting data using envelope
 
     Returns
@@ -316,14 +316,14 @@ length of the list is the record's amount in the original event.</p></section>
     length of the list is the record&#39;s amount in the original event.
     &#34;&#34;&#34;
 
-    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model) -&gt; List[Dict[str, Optional[Model]]]:
+    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Type[Model]) -&gt; List[Dict[str, Optional[Model]]]:
         &#34;&#34;&#34;Parses DynamoDB Stream records found in either NewImage and OldImage with model provided
 
         Parameters
         ----------
         data : Dict
             Lambda event to be parsed
-        model : Model
+        model : Type[Model]
             Data model provided to parse after extracting data using envelope
 
         Returns
@@ -358,7 +358,7 @@ length of the list is the record's amount in the original event.</p></section>
 <dl>
 <dt><strong><code>data</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>Lambda event to be parsed</dd>
-<dt><strong><code>model</code></strong> :&ensp;<code>Model</code></dt>
+<dt><strong><code>model</code></strong> :&ensp;<code>Type</code>[<code>Model</code>]</dt>
 <dd>Data model provided to parse after extracting data using envelope</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -370,14 +370,14 @@ length of the list is the record's amount in the original event.</p></section>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model) -&gt; List[Dict[str, Optional[Model]]]:
+<pre><code class="python">def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Type[Model]) -&gt; List[Dict[str, Optional[Model]]]:
     &#34;&#34;&#34;Parses DynamoDB Stream records found in either NewImage and OldImage with model provided
 
     Parameters
     ----------
     data : Dict
         Lambda event to be parsed
-    model : Model
+    model : Type[Model]
         Data model provided to parse after extracting data using envelope
 
     Returns
@@ -411,14 +411,14 @@ length of the list is the record's amount in the original event.</p></section>
 <pre><code class="python">class EventBridgeEnvelope(BaseEnvelope):
     &#34;&#34;&#34;EventBridge envelope to extract data within detail key&#34;&#34;&#34;
 
-    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model) -&gt; Optional[Model]:
+    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Type[Model]) -&gt; Optional[Model]:
         &#34;&#34;&#34;Parses data found with model provided
 
         Parameters
         ----------
         data : Dict
             Lambda event to be parsed
-        model : Model
+        model : Type[Model]
             Data model provided to parse after extracting data using envelope
 
         Returns
@@ -447,7 +447,7 @@ length of the list is the record's amount in the original event.</p></section>
 <dl>
 <dt><strong><code>data</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>Lambda event to be parsed</dd>
-<dt><strong><code>model</code></strong> :&ensp;<code>Model</code></dt>
+<dt><strong><code>model</code></strong> :&ensp;<code>Type</code>[<code>Model</code>]</dt>
 <dd>Data model provided to parse after extracting data using envelope</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -459,14 +459,14 @@ length of the list is the record's amount in the original event.</p></section>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model) -&gt; Optional[Model]:
+<pre><code class="python">def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Type[Model]) -&gt; Optional[Model]:
     &#34;&#34;&#34;Parses data found with model provided
 
     Parameters
     ----------
     data : Dict
         Lambda event to be parsed
-    model : Model
+    model : Type[Model]
         Data model provided to parse after extracting data using envelope
 
     Returns
@@ -507,14 +507,14 @@ all items in the list will be parsed as str and npt as JSON (and vice versa)</p>
     all items in the list will be parsed as str and npt as JSON (and vice versa)
     &#34;&#34;&#34;
 
-    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model) -&gt; List[Optional[Model]]:
+    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Type[Model]) -&gt; List[Optional[Model]]:
         &#34;&#34;&#34;Parses records found with model provided
 
         Parameters
         ----------
         data : Dict
             Lambda event to be parsed
-        model : Model
+        model : Type[Model]
             Data model provided to parse after extracting data using envelope
 
         Returns
@@ -545,7 +545,7 @@ all items in the list will be parsed as str and npt as JSON (and vice versa)</p>
 <dl>
 <dt><strong><code>data</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>Lambda event to be parsed</dd>
-<dt><strong><code>model</code></strong> :&ensp;<code>Model</code></dt>
+<dt><strong><code>model</code></strong> :&ensp;<code>Type</code>[<code>Model</code>]</dt>
 <dd>Data model provided to parse after extracting data using envelope</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -557,14 +557,14 @@ all items in the list will be parsed as str and npt as JSON (and vice versa)</p>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model) -&gt; List[Optional[Model]]:
+<pre><code class="python">def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Type[Model]) -&gt; List[Optional[Model]]:
     &#34;&#34;&#34;Parses records found with model provided
 
     Parameters
     ----------
     data : Dict
         Lambda event to be parsed
-    model : Model
+    model : Type[Model]
         Data model provided to parse after extracting data using envelope
 
     Returns
@@ -603,16 +603,16 @@ all items in the list will be parsed as str and npt as JSON (and vice versa)</p>
 
     Note: Records will be parsed the same way so if model is str,
     all items in the list will be parsed as str and npt as JSON (and vice versa)
-    &#34;&#34;&#34;
+     &#34;&#34;&#34;
 
-    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model) -&gt; List[Optional[Model]]:
+    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Type[Model]) -&gt; List[Optional[Model]]:
         &#34;&#34;&#34;Parses records found with model provided
 
         Parameters
         ----------
         data : Dict
             Lambda event to be parsed
-        model : Model
+        model : Type[Model]
             Data model provided to parse after extracting data using envelope
 
         Returns
@@ -641,7 +641,7 @@ all items in the list will be parsed as str and npt as JSON (and vice versa)</p>
 <dl>
 <dt><strong><code>data</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>Lambda event to be parsed</dd>
-<dt><strong><code>model</code></strong> :&ensp;<code>Model</code></dt>
+<dt><strong><code>model</code></strong> :&ensp;<code>Type</code>[<code>Model</code>]</dt>
 <dd>Data model provided to parse after extracting data using envelope</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -653,14 +653,14 @@ all items in the list will be parsed as str and npt as JSON (and vice versa)</p>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model) -&gt; List[Optional[Model]]:
+<pre><code class="python">def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Type[Model]) -&gt; List[Optional[Model]]:
     &#34;&#34;&#34;Parses records found with model provided
 
     Parameters
     ----------
     data : Dict
         Lambda event to be parsed
-    model : Model
+    model : Type[Model]
         Data model provided to parse after extracting data using envelope
 
     Returns
@@ -703,14 +703,14 @@ Since SNS payload is marshalled into <code>Record</code> key in SQS, we have to:
     3. Finally, parse provided model against payload extracted
     &#34;&#34;&#34;
 
-    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model) -&gt; List[Optional[Model]]:
+    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Type[Model]) -&gt; List[Optional[Model]]:
         &#34;&#34;&#34;Parses records found with model provided
 
         Parameters
         ----------
         data : Dict
             Lambda event to be parsed
-        model : Model
+        model : Type[Model]
             Data model provided to parse after extracting data using envelope
 
         Returns
@@ -742,7 +742,7 @@ Since SNS payload is marshalled into <code>Record</code> key in SQS, we have to:
 <dl>
 <dt><strong><code>data</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>Lambda event to be parsed</dd>
-<dt><strong><code>model</code></strong> :&ensp;<code>Model</code></dt>
+<dt><strong><code>model</code></strong> :&ensp;<code>Type</code>[<code>Model</code>]</dt>
 <dd>Data model provided to parse after extracting data using envelope</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -754,14 +754,14 @@ Since SNS payload is marshalled into <code>Record</code> key in SQS, we have to:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model) -&gt; List[Optional[Model]]:
+<pre><code class="python">def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Type[Model]) -&gt; List[Optional[Model]]:
     &#34;&#34;&#34;Parses records found with model provided
 
     Parameters
     ----------
     data : Dict
         Lambda event to be parsed
-    model : Model
+    model : Type[Model]
         Data model provided to parse after extracting data using envelope
 
     Returns
@@ -803,14 +803,14 @@ all items in the list will be parsed as str and npt as JSON (and vice versa)</p>
     all items in the list will be parsed as str and npt as JSON (and vice versa)
     &#34;&#34;&#34;
 
-    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model) -&gt; List[Optional[Model]]:
+    def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Type[Model]) -&gt; List[Optional[Model]]:
         &#34;&#34;&#34;Parses records found with model provided
 
         Parameters
         ----------
         data : Dict
             Lambda event to be parsed
-        model : Model
+        model : Type[Model]
             Data model provided to parse after extracting data using envelope
 
         Returns
@@ -839,7 +839,7 @@ all items in the list will be parsed as str and npt as JSON (and vice versa)</p>
 <dl>
 <dt><strong><code>data</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>Lambda event to be parsed</dd>
-<dt><strong><code>model</code></strong> :&ensp;<code>Model</code></dt>
+<dt><strong><code>model</code></strong> :&ensp;<code>Type</code>[<code>Model</code>]</dt>
 <dd>Data model provided to parse after extracting data using envelope</dd>
 </dl>
 <h2 id="returns">Returns</h2>
@@ -851,14 +851,14 @@ all items in the list will be parsed as str and npt as JSON (and vice versa)</p>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Model) -&gt; List[Optional[Model]]:
+<pre><code class="python">def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Type[Model]) -&gt; List[Optional[Model]]:
     &#34;&#34;&#34;Parses records found with model provided
 
     Parameters
     ----------
     data : Dict
         Lambda event to be parsed
-    model : Model
+    model : Type[Model]
         Data model provided to parse after extracting data using envelope
 
     Returns
