@@ -10,13 +10,15 @@
       
       
       
+        <meta name="author" content="Amazon Web Services">
+      
       
       <link rel="shortcut icon" href="../../media/aws-logo-light.svg">
       <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.7">
     
     
       
-        <title>Metrics - AWS Lambda Powertools Python</title>
+        <title>Metrics - Lambda Powertools Python</title>
       
     
     
@@ -79,7 +81,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header-nav md-grid" aria-label="Header">
-    <a href="../.." title="AWS Lambda Powertools Python" class="md-header-nav__button md-logo" aria-label="AWS Lambda Powertools Python">
+    <a href="../.." title="Lambda Powertools Python" class="md-header-nav__button md-logo" aria-label="Lambda Powertools Python">
       
   <img src="../../media/aws-logo-light.svg" alt="logo">
 
@@ -91,7 +93,7 @@
       <div class="md-header-nav__ellipsis">
         <div class="md-header-nav__topic">
           <span class="md-ellipsis">
-            AWS Lambda Powertools Python
+            Lambda Powertools Python
           </span>
         </div>
         <div class="md-header-nav__topic">
@@ -171,12 +173,12 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="AWS Lambda Powertools Python" class="md-nav__button md-logo" aria-label="AWS Lambda Powertools Python">
+    <a href="../.." title="Lambda Powertools Python" class="md-nav__button md-logo" aria-label="Lambda Powertools Python">
       
   <img src="../../media/aws-logo-light.svg" alt="logo">
 
     </a>
-    AWS Lambda Powertools Python
+    Lambda Powertools Python
   </label>
   
     <div class="md-nav__source">
@@ -232,7 +234,7 @@
   
   
     <li class="md-nav__item">
-      <a href="https://awslabs.github.io/aws-lambda-powertools-python/api/" class="md-nav__link">
+      <a href="https://awslabs.github.io/aws-lambda-powertools-python/api/" target="_blank" class="md-nav__link">
         API reference
       </a>
     </li>
@@ -356,6 +358,26 @@
   <a href="#flushing-metrics" class="md-nav__link">
     Flushing metrics
   </a>
+  
+    <nav class="md-nav" aria-label="Flushing metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#raising-schemavalidationerror-on-empty-metrics" class="md-nav__link">
+    Raising SchemaValidationError on empty metrics
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nesting-multiple-middlewares" class="md-nav__link">
+    Nesting multiple middlewares
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -618,6 +640,26 @@
   <a href="#flushing-metrics" class="md-nav__link">
     Flushing metrics
   </a>
+  
+    <nav class="md-nav" aria-label="Flushing metrics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#raising-schemavalidationerror-on-empty-metrics" class="md-nav__link">
+    Raising SchemaValidationError on empty metrics
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nesting-multiple-middlewares" class="md-nav__link">
+    Nesting multiple middlewares
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -926,7 +968,7 @@
 <li>Metric units must be <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_MetricDatum.html">supported by CloudWatch</a></li>
 </ul>
 </div>
-<h4>Raising SchemaValidationError on empty metrics</h4>
+<h4 id="raising-schemavalidationerror-on-empty-metrics">Raising SchemaValidationError on empty metrics<a class="headerlink" href="#raising-schemavalidationerror-on-empty-metrics" title="Permanent link">&para;</a></h4>
 <p>If you want to ensure that at least one metric is emitted, you can pass <code>raise_on_empty_metrics</code> to the <strong>log_metrics</strong> decorator:</p>
 <div class="tabbed-set" data-tabs="4:1"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><label for="__tabbed_4_1">app.py</label><div class="tabbed-content">
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
@@ -946,7 +988,7 @@
 <p class="admonition-title">Suppressing warning messages on empty metrics</p>
 <p>If you expect your function to execute without publishing metrics every time, you can suppress the warning with <strong><code>warnings.filterwarnings("ignore", "No metrics to publish*")</code></strong>.</p>
 </div>
-<h4>Nesting multiple middlewares</h4>
+<h4 id="nesting-multiple-middlewares">Nesting multiple middlewares<a class="headerlink" href="#nesting-multiple-middlewares" title="Permanent link">&para;</a></h4>
 <p>When using multiple middlewares, use <code>log_metrics</code> as your <strong>last decorator</strong> wrapping all subsequent ones to prevent early Metric validations when code hasn't been run yet.</p>
 <div class="tabbed-set" data-tabs="5:1"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><label for="__tabbed_5_1">nested_middlewares.py</label><div class="tabbed-content">
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1

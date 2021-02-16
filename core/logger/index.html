@@ -10,13 +10,15 @@
       
       
       
+        <meta name="author" content="Amazon Web Services">
+      
       
       <link rel="shortcut icon" href="../../media/aws-logo-light.svg">
       <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.7">
     
     
       
-        <title>Logger - AWS Lambda Powertools Python</title>
+        <title>Logger - Lambda Powertools Python</title>
       
     
     
@@ -79,7 +81,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header-nav md-grid" aria-label="Header">
-    <a href="../.." title="AWS Lambda Powertools Python" class="md-header-nav__button md-logo" aria-label="AWS Lambda Powertools Python">
+    <a href="../.." title="Lambda Powertools Python" class="md-header-nav__button md-logo" aria-label="Lambda Powertools Python">
       
   <img src="../../media/aws-logo-light.svg" alt="logo">
 
@@ -91,7 +93,7 @@
       <div class="md-header-nav__ellipsis">
         <div class="md-header-nav__topic">
           <span class="md-ellipsis">
-            AWS Lambda Powertools Python
+            Lambda Powertools Python
           </span>
         </div>
         <div class="md-header-nav__topic">
@@ -171,12 +173,12 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="AWS Lambda Powertools Python" class="md-nav__button md-logo" aria-label="AWS Lambda Powertools Python">
+    <a href="../.." title="Lambda Powertools Python" class="md-nav__button md-logo" aria-label="Lambda Powertools Python">
       
   <img src="../../media/aws-logo-light.svg" alt="logo">
 
     </a>
-    AWS Lambda Powertools Python
+    Lambda Powertools Python
   </label>
   
     <div class="md-nav__source">
@@ -232,7 +234,7 @@
   
   
     <li class="md-nav__item">
-      <a href="https://awslabs.github.io/aws-lambda-powertools-python/api/" class="md-nav__link">
+      <a href="https://awslabs.github.io/aws-lambda-powertools-python/api/" target="_blank" class="md-nav__link">
         API reference
       </a>
     </li>
@@ -338,12 +340,45 @@
     Capturing Lambda context info
   </a>
   
+    <nav class="md-nav" aria-label="Capturing Lambda context info">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#logging-incoming-event" class="md-nav__link">
+    Logging incoming event
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
   <a href="#appending-additional-keys" class="md-nav__link">
     Appending additional keys
   </a>
+  
+    <nav class="md-nav" aria-label="Appending additional keys">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#structure_logs-method" class="md-nav__link">
+    structure_logs method
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extra-parameter" class="md-nav__link">
+    extra parameter
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -378,6 +413,40 @@
   <a href="#migrating-from-other-loggers" class="md-nav__link">
     Migrating from other Loggers
   </a>
+  
+    <nav class="md-nav" aria-label="Migrating from other Loggers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-service-parameter" class="md-nav__link">
+    The service parameter
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inheriting-loggers" class="md-nav__link">
+    Inheriting Loggers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#overriding-log-records" class="md-nav__link">
+    Overriding Log records
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logging-exceptions" class="md-nav__link">
+    Logging exceptions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -605,12 +674,45 @@
     Capturing Lambda context info
   </a>
   
+    <nav class="md-nav" aria-label="Capturing Lambda context info">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#logging-incoming-event" class="md-nav__link">
+    Logging incoming event
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
   <a href="#appending-additional-keys" class="md-nav__link">
     Appending additional keys
   </a>
+  
+    <nav class="md-nav" aria-label="Appending additional keys">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#structure_logs-method" class="md-nav__link">
+    structure_logs method
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extra-parameter" class="md-nav__link">
+    extra parameter
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -645,6 +747,40 @@
   <a href="#migrating-from-other-loggers" class="md-nav__link">
     Migrating from other Loggers
   </a>
+  
+    <nav class="md-nav" aria-label="Migrating from other Loggers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-service-parameter" class="md-nav__link">
+    The service parameter
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inheriting-loggers" class="md-nav__link">
+    Inheriting Loggers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#overriding-log-records" class="md-nav__link">
+    Overriding Log records
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logging-exceptions" class="md-nav__link">
+    Logging exceptions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -955,7 +1091,7 @@
 </tr>
 </tbody>
 </table>
-<h4>Logging incoming event</h4>
+<h4 id="logging-incoming-event">Logging incoming event<a class="headerlink" href="#logging-incoming-event" title="Permanent link">&para;</a></h4>
 <p>When debugging in non-production environments, you can instruct Logger to log the incoming event with <code>log_event</code> param or via <code>POWERTOOLS_LOGGER_LOG_EVENT</code> env var.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -985,7 +1121,7 @@
 <li>Persist new keys across all future log messages via <code>structure_logs</code> method</li>
 <li>Add additional keys on a per log message basis via <code>extra</code> parameter</li>
 </ul>
-<h4>structure_logs method</h4>
+<h4 id="structure_logs-method">structure_logs method<a class="headerlink" href="#structure_logs-method" title="Permanent link">&para;</a></h4>
 <p>You can append your own keys to your existing Logger via <code>structure_logs(append=True, **kwargs)</code> method.</p>
 <blockquote>
 <p>Omitting <code>append=True</code> will reset the existing structured logs to standard keys + keys provided as arguments</p>
@@ -1038,7 +1174,7 @@
 <p>If you conditionally add keys depending on the payload, you can use the highlighted line above as an example.</p>
 <p>This example will add <code>order_id</code> if its value is not empty, and in subsequent invocations where <code>order_id</code> might not be present it'll remove it from the logger.</p>
 </div>
-<h4>extra parameter</h4>
+<h4 id="extra-parameter">extra parameter<a class="headerlink" href="#extra-parameter" title="Permanent link">&para;</a></h4>
 <p>Extra parameter is available for all log levels' methods, as implemented in the standard logging library - e.g. <code>logger.info, logger.warning</code>.</p>
 <p>It accepts any dictionary, and all keyword arguments will be added as part of the root structure of the logs for that log statement.</p>
 <div class="admonition info">
@@ -1218,7 +1354,7 @@
 </div>
 <h3 id="migrating-from-other-loggers">Migrating from other Loggers<a class="headerlink" href="#migrating-from-other-loggers" title="Permanent link">&para;</a></h3>
 <p>If you're migrating from other Loggers, there are few key points to be aware of: <a href="#the-service-parameter">Service parameter</a>, <a href="#inheriting-loggers">Inheriting Loggers</a>, <a href="#overriding-log-records">Overriding Log records</a>, and <a href="#logging-exceptions">Logging exceptions</a>.</p>
-<h4>The service parameter</h4>
+<h4 id="the-service-parameter">The service parameter<a class="headerlink" href="#the-service-parameter" title="Permanent link">&para;</a></h4>
 <p>Service is what defines the Logger name, including what the Lambda function is responsible for, or part of (e.g payment service).</p>
 <p>For Logger, the <code>service</code> is the logging key customers can use to search log operations for one or more functions - For example, <strong>search for all errors, or messages like X, where service is payment</strong>.</p>
 <details class="tip"><summary>Logging output example</summary><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span> 1
@@ -1249,7 +1385,7 @@
 </code></pre></div>
 </td></tr></table>
 </details>
-<h4>Inheriting Loggers</h4>
+<h4 id="inheriting-loggers">Inheriting Loggers<a class="headerlink" href="#inheriting-loggers" title="Permanent link">&para;</a></h4>
 <blockquote>
 <p>Python Logging hierarchy happens via the dot notation: <code>service</code>, <code>service.child</code>, <code>service.child_2</code></p>
 </blockquote>
@@ -1308,7 +1444,7 @@
 <p class="admonition-title">Tip</p>
 <p>This can be fixed by either ensuring both has the <code>service</code> value as <code>payment</code>, or simply use the environment variable <code>POWERTOOLS_SERVICE_NAME</code> to ensure service value will be the same across all Loggers when not explicitly set.</p>
 </div>
-<h4>Overriding Log records</h4>
+<h4 id="overriding-log-records">Overriding Log records<a class="headerlink" href="#overriding-log-records" title="Permanent link">&para;</a></h4>
 <p>You might want to continue to use the same date formatting style, or override <code>location</code> to display the <code>package.function_name:line_number</code> as you previously had.</p>
 <p>Logger allows you to either change the format or suppress the following keys altogether at the initialization: <code>location</code>, <code>timestamp</code>, <code>level</code>, <code>xray_trace_id</code>, and <code>datefmt</code>. However, <code>sampling_rate</code> key is part of the specification and cannot be suppressed.</p>
 <div class="admonition note">
@@ -1394,7 +1530,7 @@
 </td></tr></table>
 </div>
 </div>
-<h4>Logging exceptions</h4>
+<h4 id="logging-exceptions">Logging exceptions<a class="headerlink" href="#logging-exceptions" title="Permanent link">&para;</a></h4>
 <p>When logging exceptions, Logger will add a new key named <code>exception</code>, and will serialize the full traceback as a string.</p>
 <div class="tabbed-set" data-tabs="11:2"><input checked="checked" id="__tabbed_11_1" name="__tabbed_11" type="radio" /><label for="__tabbed_11_1">logging_an_exception.py</label><div class="tabbed-content">
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span>1
