@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.5" />
-<title>aws_lambda_powertools.utilities.validation.jmespath_functions API documentation</title>
+<title>aws_lambda_powertools.shared.cache_dict API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,35 +17,44 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>aws_lambda_powertools.utilities.validation.jmespath_functions</code></h1>
+<h1 class="title">Module <code>aws_lambda_powertools.shared.cache_dict</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">import base64
-import gzip
-import json
-
-import jmespath
+<pre><code class="python">from collections import OrderedDict
 
 
-class PowertoolsFunctions(jmespath.functions.Functions):
-    @jmespath.functions.signature({&#34;types&#34;: [&#34;string&#34;]})
-    def _func_powertools_json(self, value):
-        return json.loads(value)
+class LRUDict(OrderedDict):
+    &#34;&#34;&#34;
+    Cache implementation based on ordered dict with a maximum number of items. Last accessed item will be evicted
+    first. Currently used by idempotency utility.
+    &#34;&#34;&#34;
 
-    @jmespath.functions.signature({&#34;types&#34;: [&#34;string&#34;]})
-    def _func_powertools_base64(self, value):
-        return base64.b64decode(value).decode()
+    def __init__(self, max_items=1024, *args, **kwargs):
+        self.max_items = max_items
+        super().__init__(*args, **kwargs)
 
-    @jmespath.functions.signature({&#34;types&#34;: [&#34;string&#34;]})
-    def _func_powertools_base64_gzip(self, value):
-        encoded = base64.b64decode(value)
-        uncompressed = gzip.decompress(encoded)
+    def __getitem__(self, key):
+        value = super().__getitem__(key)
+        self.move_to_end(key)
+        return value
 
-        return uncompressed.decode()</code></pre>
+    def __setitem__(self, key, value):
+        if key in self:
+            self.move_to_end(key)
+        super().__setitem__(key, value)
+        if len(self) &gt; self.max_items:
+            oldest = next(iter(self))
+            del self[oldest]
+
+    def get(self, key, *args, **kwargs):
+        item = super(LRUDict, self).get(key, *args, **kwargs)
+        if item:
+            self.move_to_end(key=key)
+        return item</code></pre>
 </details>
 </section>
 <section>
@@ -57,40 +66,68 @@ class PowertoolsFunctions(jmespath.functions.Functions):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="aws_lambda_powertools.utilities.validation.jmespath_functions.PowertoolsFunctions"><code class="flex name class">
-<span>class <span class="ident">PowertoolsFunctions</span></span>
+<dt id="aws_lambda_powertools.shared.cache_dict.LRUDict"><code class="flex name class">
+<span>class <span class="ident">LRUDict</span></span>
+<span>(</span><span>max_items=1024, *args, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Cache implementation based on ordered dict with a maximum number of items. Last accessed item will be evicted
+first. Currently used by idempotency utility.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class PowertoolsFunctions(jmespath.functions.Functions):
-    @jmespath.functions.signature({&#34;types&#34;: [&#34;string&#34;]})
-    def _func_powertools_json(self, value):
-        return json.loads(value)
+<pre><code class="python">class LRUDict(OrderedDict):
+    &#34;&#34;&#34;
+    Cache implementation based on ordered dict with a maximum number of items. Last accessed item will be evicted
+    first. Currently used by idempotency utility.
+    &#34;&#34;&#34;
 
-    @jmespath.functions.signature({&#34;types&#34;: [&#34;string&#34;]})
-    def _func_powertools_base64(self, value):
-        return base64.b64decode(value).decode()
+    def __init__(self, max_items=1024, *args, **kwargs):
+        self.max_items = max_items
+        super().__init__(*args, **kwargs)
 
-    @jmespath.functions.signature({&#34;types&#34;: [&#34;string&#34;]})
-    def _func_powertools_base64_gzip(self, value):
-        encoded = base64.b64decode(value)
-        uncompressed = gzip.decompress(encoded)
+    def __getitem__(self, key):
+        value = super().__getitem__(key)
+        self.move_to_end(key)
+        return value
 
-        return uncompressed.decode()</code></pre>
+    def __setitem__(self, key, value):
+        if key in self:
+            self.move_to_end(key)
+        super().__setitem__(key, value)
+        if len(self) &gt; self.max_items:
+            oldest = next(iter(self))
+            del self[oldest]
+
+    def get(self, key, *args, **kwargs):
+        item = super(LRUDict, self).get(key, *args, **kwargs)
+        if item:
+            self.move_to_end(key=key)
+        return item</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li>jmespath.functions.Functions</li>
+<li>collections.OrderedDict</li>
+<li>builtins.dict</li>
 </ul>
-<h3>Class variables</h3>
+<h3>Methods</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.validation.jmespath_functions.PowertoolsFunctions.FUNCTION_TABLE"><code class="name">var <span class="ident">FUNCTION_TABLE</span></code></dt>
+<dt id="aws_lambda_powertools.shared.cache_dict.LRUDict.get"><code class="name flex">
+<span>def <span class="ident">get</span></span>(<span>self, key, *args, **kwargs)</span>
+</code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Return the value for key if key is in the dictionary, else default.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get(self, key, *args, **kwargs):
+    item = super(LRUDict, self).get(key, *args, **kwargs)
+    if item:
+        self.move_to_end(key=key)
+    return item</code></pre>
+</details>
 </dd>
 </dl>
 </dd>
@@ -105,15 +142,15 @@ class PowertoolsFunctions(jmespath.functions.Functions):
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="aws_lambda_powertools.utilities.validation" href="index.html">aws_lambda_powertools.utilities.validation</a></code></li>
+<li><code><a title="aws_lambda_powertools.shared" href="index.html">aws_lambda_powertools.shared</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="aws_lambda_powertools.utilities.validation.jmespath_functions.PowertoolsFunctions" href="#aws_lambda_powertools.utilities.validation.jmespath_functions.PowertoolsFunctions">PowertoolsFunctions</a></code></h4>
+<h4><code><a title="aws_lambda_powertools.shared.cache_dict.LRUDict" href="#aws_lambda_powertools.shared.cache_dict.LRUDict">LRUDict</a></code></h4>
 <ul class="">
-<li><code><a title="aws_lambda_powertools.utilities.validation.jmespath_functions.PowertoolsFunctions.FUNCTION_TABLE" href="#aws_lambda_powertools.utilities.validation.jmespath_functions.PowertoolsFunctions.FUNCTION_TABLE">FUNCTION_TABLE</a></code></li>
+<li><code><a title="aws_lambda_powertools.shared.cache_dict.LRUDict.get" href="#aws_lambda_powertools.shared.cache_dict.LRUDict.get">get</a></code></li>
 </ul>
 </li>
 </ul>

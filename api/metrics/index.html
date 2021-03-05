@@ -108,8 +108,12 @@ with single_metric(name="ColdStart", unit=MetricUnit.Count, value=1) as metric:
 </dl>
 <h2 id="raises">Raises</h2>
 <dl>
-<dt><code>e</code></dt>
-<dd>Propagate error received</dd>
+<dt><a title="aws_lambda_powertools.metrics.MetricUnitError" href="#aws_lambda_powertools.metrics.MetricUnitError"><code>MetricUnitError</code></a></dt>
+<dd>When metric metric isn't supported by CloudWatch</dd>
+<dt><a title="aws_lambda_powertools.metrics.MetricValueError" href="#aws_lambda_powertools.metrics.MetricValueError"><code>MetricValueError</code></a></dt>
+<dd>When metric value isn't a number</dd>
+<dt><a title="aws_lambda_powertools.metrics.SchemaValidationError" href="#aws_lambda_powertools.metrics.SchemaValidationError"><code>SchemaValidationError</code></a></dt>
+<dd>When metric object fails EMF schema validation</dd>
 </dl></section>
 <details class="source">
 <summary>
@@ -157,8 +161,12 @@ def single_metric(name: str, unit: MetricUnit, value: float, namespace: str = No
 
     Raises
     ------
-    e
-        Propagate error received
+    MetricUnitError
+        When metric metric isn&#39;t supported by CloudWatch
+    MetricValueError
+        When metric value isn&#39;t a number
+    SchemaValidationError
+        When metric object fails EMF schema validation
     &#34;&#34;&#34;
     metric_set = None
     try:
@@ -167,7 +175,7 @@ def single_metric(name: str, unit: MetricUnit, value: float, namespace: str = No
         yield metric
         metric_set: Dict = metric.serialize_metric_set()
     finally:
-        print(json.dumps(metric_set))</code></pre>
+        print(json.dumps(metric_set, separators=(&#34;,&#34;, &#34;:&#34;)))</code></pre>
 </details>
 </dd>
 </dl>
@@ -410,13 +418,19 @@ def do_something():
 </dl>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><code>MetricManager</code></strong> :&ensp;<code>MetricManager</code></dt>
-<dd>Inherits from <a title="aws_lambda_powertools.metrics.base.MetricManager" href="base.html#aws_lambda_powertools.metrics.base.MetricManager"><code>MetricManager</code></a></dd>
+<dt><strong><code>service</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>service name to be used as metric dimension, by default "service_undefined"</dd>
+<dt><strong><code>namespace</code></strong> :&ensp;<code>str</code></dt>
+<dd>Namespace for metrics</dd>
 </dl>
 <h2 id="raises">Raises</h2>
 <dl>
-<dt><code>e</code></dt>
-<dd>Propagate error received</dd>
+<dt><a title="aws_lambda_powertools.metrics.MetricUnitError" href="#aws_lambda_powertools.metrics.MetricUnitError"><code>MetricUnitError</code></a></dt>
+<dd>When metric metric isn't supported by CloudWatch</dd>
+<dt><a title="aws_lambda_powertools.metrics.MetricValueError" href="#aws_lambda_powertools.metrics.MetricValueError"><code>MetricValueError</code></a></dt>
+<dd>When metric value isn't a number</dd>
+<dt><a title="aws_lambda_powertools.metrics.SchemaValidationError" href="#aws_lambda_powertools.metrics.SchemaValidationError"><code>SchemaValidationError</code></a></dt>
+<dd>When metric object fails EMF schema validation</dd>
 </dl></section>
 <details class="source">
 <summary>
@@ -467,13 +481,19 @@ def do_something():
 
     Parameters
     ----------
-    MetricManager : MetricManager
-        Inherits from `aws_lambda_powertools.metrics.base.MetricManager`
+    service : str, optional
+        service name to be used as metric dimension, by default &#34;service_undefined&#34;
+    namespace : str
+        Namespace for metrics
 
     Raises
     ------
-    e
-        Propagate error received
+    MetricUnitError
+        When metric metric isn&#39;t supported by CloudWatch
+    MetricValueError
+        When metric value isn&#39;t a number
+    SchemaValidationError
+        When metric object fails EMF schema validation
     &#34;&#34;&#34;
 
     _metrics = {}
@@ -560,7 +580,7 @@ def do_something():
                 else:
                     metrics = self.serialize_metric_set()
                     self.clear_metrics()
-                    print(json.dumps(metrics))
+                    print(json.dumps(metrics, separators=(&#34;,&#34;, &#34;:&#34;)))
 
             return response
 
@@ -697,7 +717,7 @@ tracer = Tracer(service="payment")
             else:
                 metrics = self.serialize_metric_set()
                 self.clear_metrics()
-                print(json.dumps(metrics))
+                print(json.dumps(metrics, separators=(&#34;,&#34;, &#34;:&#34;)))
 
         return response
 

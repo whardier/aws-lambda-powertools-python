@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.5" />
-<title>aws_lambda_powertools.shared.constants API documentation</title>
+<title>aws_lambda_powertools.utilities.idempotency.persistence API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,36 +17,22 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>aws_lambda_powertools.shared.constants</code></h1>
+<h1 class="title">Module <code>aws_lambda_powertools.utilities.idempotency.persistence</code></h1>
 </header>
 <section id="section-intro">
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">TRACER_CAPTURE_RESPONSE_ENV: str = &#34;POWERTOOLS_TRACER_CAPTURE_RESPONSE&#34;
-TRACER_CAPTURE_ERROR_ENV: str = &#34;POWERTOOLS_TRACER_CAPTURE_ERROR&#34;
-TRACER_DISABLED_ENV: str = &#34;POWERTOOLS_TRACE_DISABLED&#34;
-
-LOGGER_LOG_SAMPLING_RATE: str = &#34;POWERTOOLS_LOGGER_SAMPLE_RATE&#34;
-LOGGER_LOG_EVENT_ENV: str = &#34;POWERTOOLS_LOGGER_LOG_EVENT&#34;
-LOGGER_LOG_DEDUPLICATION_ENV: str = &#34;POWERTOOLS_LOG_DEDUPLICATION_DISABLED&#34;
-
-MIDDLEWARE_FACTORY_TRACE_ENV: str = &#34;POWERTOOLS_TRACE_MIDDLEWARES&#34;
-
-METRICS_NAMESPACE_ENV: str = &#34;POWERTOOLS_METRICS_NAMESPACE&#34;
-
-SAM_LOCAL_ENV: str = &#34;AWS_SAM_LOCAL&#34;
-CHALICE_LOCAL_ENV: str = &#34;AWS_CHALICE_CLI_MODE&#34;
-SERVICE_NAME_ENV: str = &#34;POWERTOOLS_SERVICE_NAME&#34;
-XRAY_TRACE_ID_ENV: str = &#34;_X_AMZN_TRACE_ID&#34;
-
-
-XRAY_SDK_MODULE = &#34;aws_xray_sdk&#34;
-XRAY_SDK_CORE_MODULE = &#34;aws_xray_sdk.core&#34;</code></pre>
-</details>
 </section>
 <section>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+<dl>
+<dt><code class="name"><a title="aws_lambda_powertools.utilities.idempotency.persistence.base" href="base.html">aws_lambda_powertools.utilities.idempotency.persistence.base</a></code></dt>
+<dd>
+<section class="desc"><p>Persistence layers supporting idempotency</p></section>
+</dd>
+<dt><code class="name"><a title="aws_lambda_powertools.utilities.idempotency.persistence.dynamodb" href="dynamodb.html">aws_lambda_powertools.utilities.idempotency.persistence.dynamodb</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 </section>
 <section>
 </section>
@@ -63,7 +49,13 @@ XRAY_SDK_CORE_MODULE = &#34;aws_xray_sdk.core&#34;</code></pre>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="aws_lambda_powertools.shared" href="index.html">aws_lambda_powertools.shared</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.idempotency" href="../index.html">aws_lambda_powertools.utilities.idempotency</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<ul>
+<li><code><a title="aws_lambda_powertools.utilities.idempotency.persistence.base" href="base.html">aws_lambda_powertools.utilities.idempotency.persistence.base</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.idempotency.persistence.dynamodb" href="dynamodb.html">aws_lambda_powertools.utilities.idempotency.persistence.dynamodb</a></code></li>
 </ul>
 </li>
 </ul>

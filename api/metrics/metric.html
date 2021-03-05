@@ -128,8 +128,12 @@ def single_metric(name: str, unit: MetricUnit, value: float, namespace: str = No
 
     Raises
     ------
-    e
-        Propagate error received
+    MetricUnitError
+        When metric metric isn&#39;t supported by CloudWatch
+    MetricValueError
+        When metric value isn&#39;t a number
+    SchemaValidationError
+        When metric object fails EMF schema validation
     &#34;&#34;&#34;
     metric_set = None
     try:
@@ -138,7 +142,7 @@ def single_metric(name: str, unit: MetricUnit, value: float, namespace: str = No
         yield metric
         metric_set: Dict = metric.serialize_metric_set()
     finally:
-        print(json.dumps(metric_set))</code></pre>
+        print(json.dumps(metric_set, separators=(&#34;,&#34;, &#34;:&#34;)))</code></pre>
 </details>
 </section>
 <section>
@@ -188,8 +192,12 @@ with single_metric(name="ColdStart", unit=MetricUnit.Count, value=1) as metric:
 </dl>
 <h2 id="raises">Raises</h2>
 <dl>
-<dt><code>e</code></dt>
-<dd>Propagate error received</dd>
+<dt><code>MetricUnitError</code></dt>
+<dd>When metric metric isn't supported by CloudWatch</dd>
+<dt><code>MetricValueError</code></dt>
+<dd>When metric value isn't a number</dd>
+<dt><code>SchemaValidationError</code></dt>
+<dd>When metric object fails EMF schema validation</dd>
 </dl></section>
 <details class="source">
 <summary>
@@ -237,8 +245,12 @@ def single_metric(name: str, unit: MetricUnit, value: float, namespace: str = No
 
     Raises
     ------
-    e
-        Propagate error received
+    MetricUnitError
+        When metric metric isn&#39;t supported by CloudWatch
+    MetricValueError
+        When metric value isn&#39;t a number
+    SchemaValidationError
+        When metric object fails EMF schema validation
     &#34;&#34;&#34;
     metric_set = None
     try:
@@ -247,7 +259,7 @@ def single_metric(name: str, unit: MetricUnit, value: float, namespace: str = No
         yield metric
         metric_set: Dict = metric.serialize_metric_set()
     finally:
-        print(json.dumps(metric_set))</code></pre>
+        print(json.dumps(metric_set, separators=(&#34;,&#34;, &#34;:&#34;)))</code></pre>
 </details>
 </dd>
 </dl>

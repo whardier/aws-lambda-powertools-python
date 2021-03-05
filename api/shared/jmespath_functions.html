@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.5" />
-<title>aws_lambda_powertools.shared.constants API documentation</title>
+<title>aws_lambda_powertools.shared.jmespath_functions API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,33 +17,35 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>aws_lambda_powertools.shared.constants</code></h1>
+<h1 class="title">Module <code>aws_lambda_powertools.shared.jmespath_functions</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">TRACER_CAPTURE_RESPONSE_ENV: str = &#34;POWERTOOLS_TRACER_CAPTURE_RESPONSE&#34;
-TRACER_CAPTURE_ERROR_ENV: str = &#34;POWERTOOLS_TRACER_CAPTURE_ERROR&#34;
-TRACER_DISABLED_ENV: str = &#34;POWERTOOLS_TRACE_DISABLED&#34;
+<pre><code class="python">import base64
+import gzip
+import json
 
-LOGGER_LOG_SAMPLING_RATE: str = &#34;POWERTOOLS_LOGGER_SAMPLE_RATE&#34;
-LOGGER_LOG_EVENT_ENV: str = &#34;POWERTOOLS_LOGGER_LOG_EVENT&#34;
-LOGGER_LOG_DEDUPLICATION_ENV: str = &#34;POWERTOOLS_LOG_DEDUPLICATION_DISABLED&#34;
-
-MIDDLEWARE_FACTORY_TRACE_ENV: str = &#34;POWERTOOLS_TRACE_MIDDLEWARES&#34;
-
-METRICS_NAMESPACE_ENV: str = &#34;POWERTOOLS_METRICS_NAMESPACE&#34;
-
-SAM_LOCAL_ENV: str = &#34;AWS_SAM_LOCAL&#34;
-CHALICE_LOCAL_ENV: str = &#34;AWS_CHALICE_CLI_MODE&#34;
-SERVICE_NAME_ENV: str = &#34;POWERTOOLS_SERVICE_NAME&#34;
-XRAY_TRACE_ID_ENV: str = &#34;_X_AMZN_TRACE_ID&#34;
+import jmespath
 
 
-XRAY_SDK_MODULE = &#34;aws_xray_sdk&#34;
-XRAY_SDK_CORE_MODULE = &#34;aws_xray_sdk.core&#34;</code></pre>
+class PowertoolsFunctions(jmespath.functions.Functions):
+    @jmespath.functions.signature({&#34;types&#34;: [&#34;string&#34;]})
+    def _func_powertools_json(self, value):
+        return json.loads(value)
+
+    @jmespath.functions.signature({&#34;types&#34;: [&#34;string&#34;]})
+    def _func_powertools_base64(self, value):
+        return base64.b64decode(value).decode()
+
+    @jmespath.functions.signature({&#34;types&#34;: [&#34;string&#34;]})
+    def _func_powertools_base64_gzip(self, value):
+        encoded = base64.b64decode(value)
+        uncompressed = gzip.decompress(encoded)
+
+        return uncompressed.decode()</code></pre>
 </details>
 </section>
 <section>
@@ -53,6 +55,46 @@ XRAY_SDK_CORE_MODULE = &#34;aws_xray_sdk.core&#34;</code></pre>
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="aws_lambda_powertools.shared.jmespath_functions.PowertoolsFunctions"><code class="flex name class">
+<span>class <span class="ident">PowertoolsFunctions</span></span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class PowertoolsFunctions(jmespath.functions.Functions):
+    @jmespath.functions.signature({&#34;types&#34;: [&#34;string&#34;]})
+    def _func_powertools_json(self, value):
+        return json.loads(value)
+
+    @jmespath.functions.signature({&#34;types&#34;: [&#34;string&#34;]})
+    def _func_powertools_base64(self, value):
+        return base64.b64decode(value).decode()
+
+    @jmespath.functions.signature({&#34;types&#34;: [&#34;string&#34;]})
+    def _func_powertools_base64_gzip(self, value):
+        encoded = base64.b64decode(value)
+        uncompressed = gzip.decompress(encoded)
+
+        return uncompressed.decode()</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>jmespath.functions.Functions</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="aws_lambda_powertools.shared.jmespath_functions.PowertoolsFunctions.FUNCTION_TABLE"><code class="name">var <span class="ident">FUNCTION_TABLE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -64,6 +106,16 @@ XRAY_SDK_CORE_MODULE = &#34;aws_xray_sdk.core&#34;</code></pre>
 <li><h3>Super-module</h3>
 <ul>
 <li><code><a title="aws_lambda_powertools.shared" href="index.html">aws_lambda_powertools.shared</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="aws_lambda_powertools.shared.jmespath_functions.PowertoolsFunctions" href="#aws_lambda_powertools.shared.jmespath_functions.PowertoolsFunctions">PowertoolsFunctions</a></code></h4>
+<ul class="">
+<li><code><a title="aws_lambda_powertools.shared.jmespath_functions.PowertoolsFunctions.FUNCTION_TABLE" href="#aws_lambda_powertools.shared.jmespath_functions.PowertoolsFunctions.FUNCTION_TABLE">FUNCTION_TABLE</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

@@ -29,12 +29,9 @@ import json
 import logging
 import numbers
 import os
-import pathlib
 from collections import defaultdict
 from enum import Enum
 from typing import Any, Dict, List, Union
-
-import fastjsonschema
 
 from ..shared import constants
 from ..shared.functions import resolve_env_var_choice
@@ -42,11 +39,8 @@ from .exceptions import MetricUnitError, MetricValueError, SchemaValidationError
 
 logger = logging.getLogger(__name__)
 
-_schema_path = pathlib.Path(__file__).parent / &#34;./schema.json&#34;
-with _schema_path.open() as f:
-    CLOUDWATCH_EMF_SCHEMA = json.load(f)
-
 MAX_METRICS = 100
+MAX_DIMENSIONS = 9
 
 
 class MetricUnit(Enum):
@@ -210,6 +204,12 @@ class MetricManager:
         if self.service and not self.dimension_set.get(&#34;service&#34;):
             self.dimension_set[&#34;service&#34;] = self.service
 
+        if len(metrics) == 0:
+            raise SchemaValidationError(&#34;Must contain at least one metric.&#34;)
+
+        if self.namespace is None:
+            raise SchemaValidationError(&#34;Must contain a metric namespace.&#34;)
+
         logger.debug({&#34;details&#34;: &#34;Serializing metrics&#34;, &#34;metrics&#34;: metrics, &#34;dimensions&#34;: dimensions})
 
         metric_names_and_units: List[Dict[str, str]] = []  # [ { &#34;Name&#34;: &#34;metric_name&#34;, &#34;Unit&#34;: &#34;Count&#34; } ]
@@ -239,12 +239,6 @@ class MetricManager:
             **metric_names_and_values,  # &#34;single_metric&#34;: 1.0
         }
 
-        try:
-            logger.debug(&#34;Validating serialized metrics against CloudWatch EMF schema&#34;)
-            fastjsonschema.validate(definition=CLOUDWATCH_EMF_SCHEMA, data=embedded_metrics_object)
-        except fastjsonschema.JsonSchemaException as e:
-            message = f&#34;Invalid format. Error: {e.message}, Invalid item: {e.name}&#34;  # noqa: B306, E501
-            raise SchemaValidationError(message)
         return embedded_metrics_object
 
     def add_dimension(self, name: str, value: str):
@@ -264,7 +258,10 @@ class MetricManager:
             Dimension value
         &#34;&#34;&#34;
         logger.debug(f&#34;Adding dimension: {name}:{value}&#34;)
-
+        if len(self.dimension_set) == 9:
+            raise SchemaValidationError(
+                f&#34;Maximum number of dimensions exceeded ({MAX_DIMENSIONS}): Unable to add dimension {name}.&#34;
+            )
         # Cast value to str according to EMF spec
         # Majority of values are expected to be string already, so
         # checking before casting improves performance in most cases
@@ -325,7 +322,7 @@ class MetricManager:
             if unit in self._metric_unit_options:
                 unit = MetricUnit[unit].value
 
-            if unit not in self._metric_units:  # str correta
+            if unit not in self._metric_units:
                 raise MetricUnitError(
                     f&#34;Invalid metric unit &#39;{unit}&#39;, expected either option: {self._metric_unit_options}&#34;
                 )
@@ -509,6 +506,12 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
         if self.service and not self.dimension_set.get(&#34;service&#34;):
             self.dimension_set[&#34;service&#34;] = self.service
 
+        if len(metrics) == 0:
+            raise SchemaValidationError(&#34;Must contain at least one metric.&#34;)
+
+        if self.namespace is None:
+            raise SchemaValidationError(&#34;Must contain a metric namespace.&#34;)
+
         logger.debug({&#34;details&#34;: &#34;Serializing metrics&#34;, &#34;metrics&#34;: metrics, &#34;dimensions&#34;: dimensions})
 
         metric_names_and_units: List[Dict[str, str]] = []  # [ { &#34;Name&#34;: &#34;metric_name&#34;, &#34;Unit&#34;: &#34;Count&#34; } ]
@@ -538,12 +541,6 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
             **metric_names_and_values,  # &#34;single_metric&#34;: 1.0
         }
 
-        try:
-            logger.debug(&#34;Validating serialized metrics against CloudWatch EMF schema&#34;)
-            fastjsonschema.validate(definition=CLOUDWATCH_EMF_SCHEMA, data=embedded_metrics_object)
-        except fastjsonschema.JsonSchemaException as e:
-            message = f&#34;Invalid format. Error: {e.message}, Invalid item: {e.name}&#34;  # noqa: B306, E501
-            raise SchemaValidationError(message)
         return embedded_metrics_object
 
     def add_dimension(self, name: str, value: str):
@@ -563,7 +560,10 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
             Dimension value
         &#34;&#34;&#34;
         logger.debug(f&#34;Adding dimension: {name}:{value}&#34;)
-
+        if len(self.dimension_set) == 9:
+            raise SchemaValidationError(
+                f&#34;Maximum number of dimensions exceeded ({MAX_DIMENSIONS}): Unable to add dimension {name}.&#34;
+            )
         # Cast value to str according to EMF spec
         # Majority of values are expected to be string already, so
         # checking before casting improves performance in most cases
@@ -624,7 +624,7 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
             if unit in self._metric_unit_options:
                 unit = MetricUnit[unit].value
 
-            if unit not in self._metric_units:  # str correta
+            if unit not in self._metric_units:
                 raise MetricUnitError(
                     f&#34;Invalid metric unit &#39;{unit}&#39;, expected either option: {self._metric_unit_options}&#34;
                 )
@@ -678,7 +678,10 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
         Dimension value
     &#34;&#34;&#34;
     logger.debug(f&#34;Adding dimension: {name}:{value}&#34;)
-
+    if len(self.dimension_set) == 9:
+        raise SchemaValidationError(
+            f&#34;Maximum number of dimensions exceeded ({MAX_DIMENSIONS}): Unable to add dimension {name}.&#34;
+        )
     # Cast value to str according to EMF spec
     # Majority of values are expected to be string already, so
     # checking before casting improves performance in most cases
@@ -895,6 +898,12 @@ ret = metrics.serialize_metric_set()
     if self.service and not self.dimension_set.get(&#34;service&#34;):
         self.dimension_set[&#34;service&#34;] = self.service
 
+    if len(metrics) == 0:
+        raise SchemaValidationError(&#34;Must contain at least one metric.&#34;)
+
+    if self.namespace is None:
+        raise SchemaValidationError(&#34;Must contain a metric namespace.&#34;)
+
     logger.debug({&#34;details&#34;: &#34;Serializing metrics&#34;, &#34;metrics&#34;: metrics, &#34;dimensions&#34;: dimensions})
 
     metric_names_and_units: List[Dict[str, str]] = []  # [ { &#34;Name&#34;: &#34;metric_name&#34;, &#34;Unit&#34;: &#34;Count&#34; } ]
@@ -924,12 +933,6 @@ ret = metrics.serialize_metric_set()
         **metric_names_and_values,  # &#34;single_metric&#34;: 1.0
     }
 
-    try:
-        logger.debug(&#34;Validating serialized metrics against CloudWatch EMF schema&#34;)
-        fastjsonschema.validate(definition=CLOUDWATCH_EMF_SCHEMA, data=embedded_metrics_object)
-    except fastjsonschema.JsonSchemaException as e:
-        message = f&#34;Invalid format. Error: {e.message}, Invalid item: {e.name}&#34;  # noqa: B306, E501
-        raise SchemaValidationError(message)
     return embedded_metrics_object</code></pre>
 </details>
 </dd>

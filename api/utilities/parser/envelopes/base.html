@@ -85,7 +85,7 @@ class BaseEnvelope(ABC):
 
 
 # Generic to support type annotations throughout parser
-# Note: Can&#39;t be defined under types.py due to circular dependency
+# Note: Can&#39;t be defined under base.py due to circular dependency
 Envelope = TypeVar(&#34;Envelope&#34;, bound=BaseEnvelope)</code></pre>
 </details>
 </section>

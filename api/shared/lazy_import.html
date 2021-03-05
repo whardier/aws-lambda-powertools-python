@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.5" />
-<title>aws_lambda_powertools.shared.constants API documentation</title>
-<meta name="description" content="" />
+<title>aws_lambda_powertools.shared.lazy_import API documentation</title>
+<meta name="description" content="A LazyLoader class." />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -17,33 +17,69 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>aws_lambda_powertools.shared.constants</code></h1>
+<h1 class="title">Module <code>aws_lambda_powertools.shared.lazy_import</code></h1>
 </header>
 <section id="section-intro">
+<p>A LazyLoader class.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">TRACER_CAPTURE_RESPONSE_ENV: str = &#34;POWERTOOLS_TRACER_CAPTURE_RESPONSE&#34;
-TRACER_CAPTURE_ERROR_ENV: str = &#34;POWERTOOLS_TRACER_CAPTURE_ERROR&#34;
-TRACER_DISABLED_ENV: str = &#34;POWERTOOLS_TRACE_DISABLED&#34;
+<pre><code class="python"># Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the &#34;License&#34;);
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an &#34;AS IS&#34; BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ==============================================================================
 
-LOGGER_LOG_SAMPLING_RATE: str = &#34;POWERTOOLS_LOGGER_SAMPLE_RATE&#34;
-LOGGER_LOG_EVENT_ENV: str = &#34;POWERTOOLS_LOGGER_LOG_EVENT&#34;
-LOGGER_LOG_DEDUPLICATION_ENV: str = &#34;POWERTOOLS_LOG_DEDUPLICATION_DISABLED&#34;
+&#34;&#34;&#34;A LazyLoader class.&#34;&#34;&#34;
 
-MIDDLEWARE_FACTORY_TRACE_ENV: str = &#34;POWERTOOLS_TRACE_MIDDLEWARES&#34;
-
-METRICS_NAMESPACE_ENV: str = &#34;POWERTOOLS_METRICS_NAMESPACE&#34;
-
-SAM_LOCAL_ENV: str = &#34;AWS_SAM_LOCAL&#34;
-CHALICE_LOCAL_ENV: str = &#34;AWS_CHALICE_CLI_MODE&#34;
-SERVICE_NAME_ENV: str = &#34;POWERTOOLS_SERVICE_NAME&#34;
-XRAY_TRACE_ID_ENV: str = &#34;_X_AMZN_TRACE_ID&#34;
+import importlib
+import types
 
 
-XRAY_SDK_MODULE = &#34;aws_xray_sdk&#34;
-XRAY_SDK_CORE_MODULE = &#34;aws_xray_sdk.core&#34;</code></pre>
+class LazyLoader(types.ModuleType):
+    &#34;&#34;&#34;Lazily import a module, mainly to avoid pulling in large dependencies.
+
+    `contrib`, and `ffmpeg` are examples of modules that are large and not always
+    needed, and this allows them to only be loaded when they are used.
+
+    Note: Subclassing types.ModuleType allow us to correctly adhere with sys.modules, import system
+    &#34;&#34;&#34;
+
+    def __init__(self, local_name, parent_module_globals, name):  # pylint: disable=super-on-old-class
+        self._local_name = local_name
+        self._parent_module_globals = parent_module_globals
+
+        super(LazyLoader, self).__init__(name)
+
+    def _load(self):
+        # Import the target module and insert it into the parent&#39;s namespace
+        module = importlib.import_module(self.__name__)
+        self._parent_module_globals[self._local_name] = module
+
+        # Update this object&#39;s dict so that if someone keeps a reference to the
+        #   LazyLoader, lookups are efficient (__getattr__ is only called on lookups
+        #   that fail).
+        self.__dict__.update(module.__dict__)
+
+        return module
+
+    def __getattr__(self, item):
+        module = self._load()
+        return getattr(module, item)
+
+    def __dir__(self):
+        module = self._load()
+        return dir(module)</code></pre>
 </details>
 </section>
 <section>
@@ -53,6 +89,62 @@ XRAY_SDK_CORE_MODULE = &#34;aws_xray_sdk.core&#34;</code></pre>
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="aws_lambda_powertools.shared.lazy_import.LazyLoader"><code class="flex name class">
+<span>class <span class="ident">LazyLoader</span></span>
+<span>(</span><span>local_name, parent_module_globals, name)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Lazily import a module, mainly to avoid pulling in large dependencies.</p>
+<p><code>contrib</code>, and <code>ffmpeg</code> are examples of modules that are large and not always
+needed, and this allows them to only be loaded when they are used.</p>
+<p>Note: Subclassing types.ModuleType allow us to correctly adhere with sys.modules, import system</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class LazyLoader(types.ModuleType):
+    &#34;&#34;&#34;Lazily import a module, mainly to avoid pulling in large dependencies.
+
+    `contrib`, and `ffmpeg` are examples of modules that are large and not always
+    needed, and this allows them to only be loaded when they are used.
+
+    Note: Subclassing types.ModuleType allow us to correctly adhere with sys.modules, import system
+    &#34;&#34;&#34;
+
+    def __init__(self, local_name, parent_module_globals, name):  # pylint: disable=super-on-old-class
+        self._local_name = local_name
+        self._parent_module_globals = parent_module_globals
+
+        super(LazyLoader, self).__init__(name)
+
+    def _load(self):
+        # Import the target module and insert it into the parent&#39;s namespace
+        module = importlib.import_module(self.__name__)
+        self._parent_module_globals[self._local_name] = module
+
+        # Update this object&#39;s dict so that if someone keeps a reference to the
+        #   LazyLoader, lookups are efficient (__getattr__ is only called on lookups
+        #   that fail).
+        self.__dict__.update(module.__dict__)
+
+        return module
+
+    def __getattr__(self, item):
+        module = self._load()
+        return getattr(module, item)
+
+    def __dir__(self):
+        module = self._load()
+        return dir(module)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.module</li>
+</ul>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -64,6 +156,13 @@ XRAY_SDK_CORE_MODULE = &#34;aws_xray_sdk.core&#34;</code></pre>
 <li><h3>Super-module</h3>
 <ul>
 <li><code><a title="aws_lambda_powertools.shared" href="index.html">aws_lambda_powertools.shared</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="aws_lambda_powertools.shared.lazy_import.LazyLoader" href="#aws_lambda_powertools.shared.lazy_import.LazyLoader">LazyLoader</a></code></h4>
+</li>
 </ul>
 </li>
 </ul>
