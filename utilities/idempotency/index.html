@@ -537,6 +537,19 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced" class="md-nav__link">
+    Advanced
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced">
+      <ul class="md-nav__list">
+        
           <li class="md-nav__item">
   <a href="#customizing-the-default-behavior" class="md-nav__link">
     Customizing the default behavior
@@ -743,6 +756,19 @@
     </nav>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced" class="md-nav__link">
+    Advanced
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#customizing-the-default-behavior" class="md-nav__link">
@@ -964,9 +990,9 @@ estimate the cost.</p>
 <span class="normal">16</span>
 <span class="normal">17</span>
 <span class="normal">18</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="hll"><span class="kn">from</span> <span class="nn">aws_lambda_powertools.utilities.idempotency</span> <span class="kn">import</span> <span class="p">(</span>
-</span>    <span class="n">DynamoDBPersistenceLayer</span><span class="p">,</span> <span class="n">idempotent</span>
-<span class="p">)</span>
-
+</span><span class="hll">    <span class="n">DynamoDBPersistenceLayer</span><span class="p">,</span> <span class="n">idempotent</span>
+</span><span class="hll"><span class="p">)</span>
+</span>
 <span class="hll"><span class="n">persistence_layer</span> <span class="o">=</span> <span class="n">DynamoDBPersistenceLayer</span><span class="p">(</span><span class="n">table_name</span><span class="o">=</span><span class="s2">&quot;IdempotencyTable&quot;</span><span class="p">)</span>
 </span>
 <span class="hll"><span class="nd">@idempotent</span><span class="p">(</span><span class="n">persistence_store</span><span class="o">=</span><span class="n">persistence_layer</span><span class="p">)</span>
@@ -1115,7 +1141,7 @@ estimate the cost.</p>
     <span class="nt">&quot;time&quot;</span><span class="p">:</span><span class="s2">&quot;10/Feb/2021:13:40:43 +0000&quot;</span><span class="p">,</span>
     <span class="nt">&quot;timeEpoch&quot;</span><span class="p">:</span><span class="mi">1612964443723</span>
   <span class="p">},</span>
-<span class="hll">  <span class="nt">&quot;body&quot;</span><span class="p">:</span><span class="s2">&quot;{\&quot;username\&quot;:\&quot;xyz\&quot;,\&quot;product_id\&quot;:\&quot;123456789\&quot;}&quot;</span><span class="p">,</span>
+<span class="hll">  <span class="nt">&quot;body&quot;</span><span class="p">:</span><span class="s2">&quot;{\&quot;user\&quot;:\&quot;xyz\&quot;,\&quot;product_id\&quot;:\&quot;123456789\&quot;}&quot;</span><span class="p">,</span>
 </span>  <span class="nt">&quot;isBase64Encoded&quot;</span><span class="p">:</span><span class="kc">false</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -1154,14 +1180,14 @@ estimate the cost.</p>
 <span class="normal"> 9</span>
 <span class="normal">10</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">aws_lambda_powertools.utilities.idempotency</span> <span class="kn">import</span> <span class="n">DynamoDBPersistenceLayer</span>
 
-<span class="hll"><span class="n">persistence_layer</span> <span class="o">=</span> <span class="n">DynamoDBPersistenceLayer</span><span class="p">(</span>
-</span><span class="hll">    <span class="n">table_name</span><span class="o">=</span><span class="s2">&quot;IdempotencyTable&quot;</span><span class="p">,</span>
-</span><span class="hll">    <span class="n">key_attr</span><span class="o">=</span><span class="s2">&quot;idempotency_key&quot;</span><span class="p">,</span>
+<span class="n">persistence_layer</span> <span class="o">=</span> <span class="n">DynamoDBPersistenceLayer</span><span class="p">(</span>
+    <span class="n">table_name</span><span class="o">=</span><span class="s2">&quot;IdempotencyTable&quot;</span><span class="p">,</span>
+<span class="hll">    <span class="n">key_attr</span><span class="o">=</span><span class="s2">&quot;idempotency_key&quot;</span><span class="p">,</span>
 </span><span class="hll">    <span class="n">expiry_attr</span><span class="o">=</span><span class="s2">&quot;expires_at&quot;</span><span class="p">,</span>
 </span><span class="hll">    <span class="n">status_attr</span><span class="o">=</span><span class="s2">&quot;current_status&quot;</span><span class="p">,</span>
-</span>    <span class="n">data_attr</span><span class="o">=</span><span class="s2">&quot;result_data&quot;</span><span class="p">,</span>
-    <span class="n">validation_key_attr</span><span class="o">=</span><span class="s2">&quot;validation_key&quot;</span>
-<span class="p">)</span>
+</span><span class="hll">    <span class="n">data_attr</span><span class="o">=</span><span class="s2">&quot;result_data&quot;</span><span class="p">,</span>
+</span><span class="hll">    <span class="n">validation_key_attr</span><span class="o">=</span><span class="s2">&quot;validation_key&quot;</span><span class="p">,</span>
+</span><span class="p">)</span>
 </code></pre></div>
 </td></tr></table>
 </div>
@@ -1213,14 +1239,9 @@ estimate the cost.</p>
 <td><code>validation</code></td>
 <td>Hashed representation of the parts of the event used for validation</td>
 </tr>
-<tr>
-<td>## Advanced</td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
 </tbody>
 </table>
+<h2 id="advanced">Advanced<a class="headerlink" href="#advanced" title="Permanent link">&para;</a></h2>
 <h3 id="customizing-the-default-behavior">Customizing the default behavior<a class="headerlink" href="#customizing-the-default-behavior" title="Permanent link">&para;</a></h3>
 <p>Idempotent decorator can be further configured with <strong><code>IdempotencyConfig</code></strong> as seen in the previous example. These are the available options for further configuration</p>
 <table>
@@ -1259,7 +1280,7 @@ estimate the cost.</p>
 </tr>
 <tr>
 <td><strong>local_cache_max_items</strong></td>
-<td>1024</td>
+<td>256</td>
 <td>Max number of items to store in local cache</td>
 </tr>
 <tr>
@@ -1295,20 +1316,18 @@ estimate the cost.</p>
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">aws_lambda_powertools.utilities.idempotency</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">aws_lambda_powertools.utilities.idempotency</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">IdempotencyConfig</span><span class="p">,</span> <span class="n">DynamoDBPersistenceLayer</span><span class="p">,</span> <span class="n">idempotent</span>
 <span class="p">)</span>
 
 <span class="n">persistence_layer</span> <span class="o">=</span> <span class="n">DynamoDBPersistenceLayer</span><span class="p">(</span><span class="n">table_name</span><span class="o">=</span><span class="s2">&quot;IdempotencyTable&quot;</span><span class="p">)</span>
-<span class="hll"><span class="n">config</span> <span class="o">=</span>  <span class="n">IdempotencyConfig</span><span class="p">(</span>
-</span>    <span class="n">event_key_jmespath</span><span class="o">=</span><span class="s2">&quot;body&quot;</span><span class="p">,</span>
-<span class="hll">    <span class="n">expires_after_seconds</span><span class="o">=</span><span class="mi">5</span><span class="o">*</span><span class="mi">60</span><span class="p">,</span>  <span class="c1"># 5 minutes</span>
-</span>    <span class="n">use_local_cache</span><span class="o">=</span><span class="kc">True</span>
-<span class="p">)</span>
-<span class="hll">
-</span><span class="nd">@idempotent</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">persistence_store</span><span class="o">=</span><span class="n">persistence_layer</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+<span class="n">config</span> <span class="o">=</span>  <span class="n">IdempotencyConfig</span><span class="p">(</span>
+    <span class="n">event_key_jmespath</span><span class="o">=</span><span class="s2">&quot;body&quot;</span><span class="p">,</span>
+<span class="hll">    <span class="n">use_local_cache</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span class="p">)</span>
+
+<span class="hll"><span class="nd">@idempotent</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">persistence_store</span><span class="o">=</span><span class="n">persistence_layer</span><span class="p">)</span>
+</span><span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
     <span class="o">...</span>
 </code></pre></div>
 </td></tr></table>
@@ -1340,8 +1359,8 @@ estimate the cost.</p>
 <span class="p">)</span>
 
 <span class="n">persistence_layer</span> <span class="o">=</span> <span class="n">DynamoDBPersistenceLayer</span><span class="p">(</span><span class="n">table_name</span><span class="o">=</span><span class="s2">&quot;IdempotencyTable&quot;</span><span class="p">)</span>
-<span class="hll"><span class="n">config</span> <span class="o">=</span>  <span class="n">IdempotencyConfig</span><span class="p">(</span>
-</span>    <span class="n">event_key_jmespath</span><span class="o">=</span><span class="s2">&quot;body&quot;</span><span class="p">,</span>
+<span class="n">config</span> <span class="o">=</span>  <span class="n">IdempotencyConfig</span><span class="p">(</span>
+    <span class="n">event_key_jmespath</span><span class="o">=</span><span class="s2">&quot;body&quot;</span><span class="p">,</span>
 <span class="hll">    <span class="n">expires_after_seconds</span><span class="o">=</span><span class="mi">5</span><span class="o">*</span><span class="mi">60</span><span class="p">,</span>  <span class="c1"># 5 minutes</span>
 </span><span class="p">)</span>
 
