@@ -65,14 +65,13 @@ class Metrics(MetricManager):
         metrics.add_dimension(name=&#34;function_version&#34;, value=&#34;$LATEST&#34;)
         ...
 
-        @tracer.capture_lambda_handler
         @metrics.log_metrics()
         def lambda_handler():
-                do_something()
-                return True
+               do_something()
+               return True
 
         def do_something():
-                metrics.add_metric(name=&#34;Something&#34;, unit=&#34;Count&#34;, value=1)
+               metrics.add_metric(name=&#34;Something&#34;, unit=&#34;Count&#34;, value=1)
 
     Environment variables
     ---------------------
@@ -137,12 +136,14 @@ class Metrics(MetricManager):
         -------
         **Lambda function using tracer and metrics decorators**
 
+            from aws_lambda_powertools import Metrics, Tracer
+
             metrics = Metrics(service=&#34;payment&#34;)
             tracer = Tracer(service=&#34;payment&#34;)
 
             @tracer.capture_lambda_handler
             @metrics.log_metrics
-                def handler(event, context):
+            def handler(event, context):
                     ...
 
         Parameters
@@ -239,14 +240,13 @@ metrics.add_metric(name="BookingConfirmation", unit="Count", value=1)
 metrics.add_dimension(name="function_version", value="$LATEST")
 ...
 
-@tracer.capture_lambda_handler
 @metrics.log_metrics()
 def lambda_handler():
-        do_something()
-        return True
+       do_something()
+       return True
 
 def do_something():
-        metrics.add_metric(name="Something", unit="Count", value=1)
+       metrics.add_metric(name="Something", unit="Count", value=1)
 </code></pre>
 <h2 id="environment-variables">Environment variables</h2>
 <dl>
@@ -302,14 +302,13 @@ def do_something():
         metrics.add_dimension(name=&#34;function_version&#34;, value=&#34;$LATEST&#34;)
         ...
 
-        @tracer.capture_lambda_handler
         @metrics.log_metrics()
         def lambda_handler():
-                do_something()
-                return True
+               do_something()
+               return True
 
         def do_something():
-                metrics.add_metric(name=&#34;Something&#34;, unit=&#34;Count&#34;, value=1)
+               metrics.add_metric(name=&#34;Something&#34;, unit=&#34;Count&#34;, value=1)
 
     Environment variables
     ---------------------
@@ -374,12 +373,14 @@ def do_something():
         -------
         **Lambda function using tracer and metrics decorators**
 
+            from aws_lambda_powertools import Metrics, Tracer
+
             metrics = Metrics(service=&#34;payment&#34;)
             tracer = Tracer(service=&#34;payment&#34;)
 
             @tracer.capture_lambda_handler
             @metrics.log_metrics
-                def handler(event, context):
+            def handler(event, context):
                     ...
 
         Parameters
@@ -471,12 +472,14 @@ def do_something():
 <p>Be aware that the log_metrics *<em>does call</em> the decorated function (e.g. lambda_handler).</p>
 <h2 id="example">Example</h2>
 <p><strong>Lambda function using tracer and metrics decorators</strong></p>
-<pre><code>metrics = Metrics(service="payment")
+<pre><code>from aws_lambda_powertools import Metrics, Tracer
+
+metrics = Metrics(service="payment")
 tracer = Tracer(service="payment")
 
 @tracer.capture_lambda_handler
 @metrics.log_metrics
-    def handler(event, context):
+def handler(event, context):
         ...
 </code></pre>
 <h2 id="parameters">Parameters</h2>
@@ -511,12 +514,14 @@ tracer = Tracer(service="payment")
     -------
     **Lambda function using tracer and metrics decorators**
 
+        from aws_lambda_powertools import Metrics, Tracer
+
         metrics = Metrics(service=&#34;payment&#34;)
         tracer = Tracer(service=&#34;payment&#34;)
 
         @tracer.capture_lambda_handler
         @metrics.log_metrics
-            def handler(event, context):
+        def handler(event, context):
                 ...
 
     Parameters

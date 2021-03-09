@@ -223,7 +223,7 @@ class MetricManager:
             metric_names_and_units.append({&#34;Name&#34;: metric_name, &#34;Unit&#34;: metric_unit})
             metric_names_and_values.update({metric_name: metric_value})
 
-        embedded_metrics_object = {
+        return {
             &#34;_aws&#34;: {
                 &#34;Timestamp&#34;: int(datetime.datetime.now().timestamp() * 1000),  # epoch
                 &#34;CloudWatchMetrics&#34;: [
@@ -238,8 +238,6 @@ class MetricManager:
             **metadata,  # &#34;username&#34;: &#34;test&#34;
             **metric_names_and_values,  # &#34;single_metric&#34;: 1.0
         }
-
-        return embedded_metrics_object
 
     def add_dimension(self, name: str, value: str):
         &#34;&#34;&#34;Adds given dimension to all metrics
@@ -525,7 +523,7 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
             metric_names_and_units.append({&#34;Name&#34;: metric_name, &#34;Unit&#34;: metric_unit})
             metric_names_and_values.update({metric_name: metric_value})
 
-        embedded_metrics_object = {
+        return {
             &#34;_aws&#34;: {
                 &#34;Timestamp&#34;: int(datetime.datetime.now().timestamp() * 1000),  # epoch
                 &#34;CloudWatchMetrics&#34;: [
@@ -540,8 +538,6 @@ will adhere to the schema, will be serialized and validated against EMF Schema.<
             **metadata,  # &#34;username&#34;: &#34;test&#34;
             **metric_names_and_values,  # &#34;single_metric&#34;: 1.0
         }
-
-        return embedded_metrics_object
 
     def add_dimension(self, name: str, value: str):
         &#34;&#34;&#34;Adds given dimension to all metrics
@@ -917,7 +913,7 @@ ret = metrics.serialize_metric_set()
         metric_names_and_units.append({&#34;Name&#34;: metric_name, &#34;Unit&#34;: metric_unit})
         metric_names_and_values.update({metric_name: metric_value})
 
-    embedded_metrics_object = {
+    return {
         &#34;_aws&#34;: {
             &#34;Timestamp&#34;: int(datetime.datetime.now().timestamp() * 1000),  # epoch
             &#34;CloudWatchMetrics&#34;: [
@@ -931,9 +927,7 @@ ret = metrics.serialize_metric_set()
         **dimensions,  # &#34;service&#34;: &#34;test_service&#34;
         **metadata,  # &#34;username&#34;: &#34;test&#34;
         **metric_names_and_values,  # &#34;single_metric&#34;: 1.0
-    }
-
-    return embedded_metrics_object</code></pre>
+    }</code></pre>
 </details>
 </dd>
 </dl>

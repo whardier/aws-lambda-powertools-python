@@ -78,17 +78,16 @@ __all__ = (&#34;BasePartialProcessor&#34;, &#34;PartialSQSProcessor&#34;, &#34;b
 <dd>Batch Processor to handle partial failure cases</dd>
 </dl>
 <h2 id="examples">Examples</h2>
-<p><strong>Processes Lambda's event with PartialSQSProcessor</strong>
-&gt;&gt;&gt; from aws_lambda_powertools.utilities.batch import batch_processor, PartialSQSProcessor
+<p><strong>Processes Lambda's event with PartialSQSProcessor</strong></p>
+<pre><code>&gt;&gt;&gt; from aws_lambda_powertools.utilities.batch import batch_processor, PartialSQSProcessor
 &gt;&gt;&gt;
 &gt;&gt;&gt; def record_handler(record):
-&gt;&gt;&gt;
-return record["body"]
+&gt;&gt;&gt;     return record["body"]
 &gt;&gt;&gt;
 &gt;&gt;&gt; @batch_processor(record_handler=record_handler, processor=PartialSQSProcessor())
 &gt;&gt;&gt; def handler(event, context):
-&gt;&gt;&gt;
-return {"StatusCode": 200}</p>
+&gt;&gt;&gt;     return {"StatusCode": 200}
+</code></pre>
 <h2 id="limitations">Limitations</h2>
 <ul>
 <li>Async batch processors</li>
@@ -120,6 +119,7 @@ def batch_processor(
     Examples
     --------
     **Processes Lambda&#39;s event with PartialSQSProcessor**
+
         &gt;&gt;&gt; from aws_lambda_powertools.utilities.batch import batch_processor, PartialSQSProcessor
         &gt;&gt;&gt;
         &gt;&gt;&gt; def record_handler(record):
@@ -163,17 +163,16 @@ def batch_processor(
 <dd>Supress exception raised if any messages fail processing, by default False</dd>
 </dl>
 <h2 id="examples">Examples</h2>
-<p><strong>Processes Lambda's event with PartialSQSProcessor</strong>
-&gt;&gt;&gt; from aws_lambda_powertools.utilities.batch import sqs_batch_processor
+<p><strong>Processes Lambda's event with PartialSQSProcessor</strong></p>
+<pre><code>&gt;&gt;&gt; from aws_lambda_powertools.utilities.batch import sqs_batch_processor
 &gt;&gt;&gt;
 &gt;&gt;&gt; def record_handler(record):
-&gt;&gt;&gt;
-return record["body"]
+&gt;&gt;&gt;      return record["body"]
 &gt;&gt;&gt;
 &gt;&gt;&gt; @sqs_batch_processor(record_handler=record_handler)
 &gt;&gt;&gt; def handler(event, context):
-&gt;&gt;&gt;
-return {"StatusCode": 200}</p>
+&gt;&gt;&gt;     return {"StatusCode": 200}
+</code></pre>
 <h2 id="limitations">Limitations</h2>
 <ul>
 <li>Async batch processors</li>
@@ -212,10 +211,11 @@ def sqs_batch_processor(
     Examples
     --------
     **Processes Lambda&#39;s event with PartialSQSProcessor**
+
         &gt;&gt;&gt; from aws_lambda_powertools.utilities.batch import sqs_batch_processor
         &gt;&gt;&gt;
         &gt;&gt;&gt; def record_handler(record):
-        &gt;&gt;&gt;     return record[&#34;body&#34;]
+        &gt;&gt;&gt;      return record[&#34;body&#34;]
         &gt;&gt;&gt;
         &gt;&gt;&gt; @sqs_batch_processor(record_handler=record_handler)
         &gt;&gt;&gt; def handler(event, context):
@@ -502,6 +502,7 @@ be returned to the SQS queue. This behaviour can be disabled by passing suppress
         &gt;&gt;&gt;     # have been deleted from the queue after context&#39;s exit.
         &gt;&gt;&gt;
         &gt;&gt;&gt;     return result
+
     &#34;&#34;&#34;
 
     def __init__(self, config: Optional[Config] = None, suppress_exception: bool = False):

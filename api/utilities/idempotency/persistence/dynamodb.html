@@ -79,11 +79,14 @@ class DynamoDBPersistenceLayer(BasePersistenceLayer):
         Examples
         --------
         **Create a DynamoDB persistence layer with custom settings**
-            &gt;&gt;&gt; from aws_lambda_powertools.utilities.idempotency import idempotent, DynamoDBPersistenceLayer
+
+            &gt;&gt;&gt; from aws_lambda_powertools.utilities.idempotency import (
+            &gt;&gt;&gt;    idempotent, DynamoDBPersistenceLayer
+            &gt;&gt;&gt; )
             &gt;&gt;&gt;
             &gt;&gt;&gt; persistence_store = DynamoDBPersistenceLayer(table_name=&#34;idempotency_store&#34;)
             &gt;&gt;&gt;
-            &gt;&gt;&gt; @idempotent(persistence_store=persistence_store, event_key=&#34;body&#34;)
+            &gt;&gt;&gt; @idempotent(persistence_store=persistence_store)
             &gt;&gt;&gt; def handler(event, context):
             &gt;&gt;&gt;     return {&#34;StatusCode&#34;: 200}
         &#34;&#34;&#34;
@@ -225,15 +228,17 @@ class DynamoDBPersistenceLayer(BasePersistenceLayer):
 <dd>&nbsp;</dd>
 </dl>
 <h2 id="examples">Examples</h2>
-<p><strong>Create a DynamoDB persistence layer with custom settings</strong>
-&gt;&gt;&gt; from aws_lambda_powertools.utilities.idempotency import idempotent, DynamoDBPersistenceLayer
+<p><strong>Create a DynamoDB persistence layer with custom settings</strong></p>
+<pre><code>&gt;&gt;&gt; from aws_lambda_powertools.utilities.idempotency import (
+&gt;&gt;&gt;    idempotent, DynamoDBPersistenceLayer
+&gt;&gt;&gt; )
 &gt;&gt;&gt;
 &gt;&gt;&gt; persistence_store = DynamoDBPersistenceLayer(table_name="idempotency_store")
 &gt;&gt;&gt;
-&gt;&gt;&gt; @idempotent(persistence_store=persistence_store, event_key="body")
+&gt;&gt;&gt; @idempotent(persistence_store=persistence_store)
 &gt;&gt;&gt; def handler(event, context):
-&gt;&gt;&gt;
-return {"StatusCode": 200}</p></section>
+&gt;&gt;&gt;     return {"StatusCode": 200}
+</code></pre></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -276,11 +281,14 @@ return {"StatusCode": 200}</p></section>
         Examples
         --------
         **Create a DynamoDB persistence layer with custom settings**
-            &gt;&gt;&gt; from aws_lambda_powertools.utilities.idempotency import idempotent, DynamoDBPersistenceLayer
+
+            &gt;&gt;&gt; from aws_lambda_powertools.utilities.idempotency import (
+            &gt;&gt;&gt;    idempotent, DynamoDBPersistenceLayer
+            &gt;&gt;&gt; )
             &gt;&gt;&gt;
             &gt;&gt;&gt; persistence_store = DynamoDBPersistenceLayer(table_name=&#34;idempotency_store&#34;)
             &gt;&gt;&gt;
-            &gt;&gt;&gt; @idempotent(persistence_store=persistence_store, event_key=&#34;body&#34;)
+            &gt;&gt;&gt; @idempotent(persistence_store=persistence_store)
             &gt;&gt;&gt; def handler(event, context):
             &gt;&gt;&gt;     return {&#34;StatusCode&#34;: 200}
         &#34;&#34;&#34;

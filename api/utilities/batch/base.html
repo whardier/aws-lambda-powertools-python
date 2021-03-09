@@ -152,6 +152,7 @@ def batch_processor(
     Examples
     --------
     **Processes Lambda&#39;s event with PartialSQSProcessor**
+
         &gt;&gt;&gt; from aws_lambda_powertools.utilities.batch import batch_processor, PartialSQSProcessor
         &gt;&gt;&gt;
         &gt;&gt;&gt; def record_handler(record):
@@ -200,17 +201,16 @@ def batch_processor(
 <dd>Batch Processor to handle partial failure cases</dd>
 </dl>
 <h2 id="examples">Examples</h2>
-<p><strong>Processes Lambda's event with PartialSQSProcessor</strong>
-&gt;&gt;&gt; from aws_lambda_powertools.utilities.batch import batch_processor, PartialSQSProcessor
+<p><strong>Processes Lambda's event with PartialSQSProcessor</strong></p>
+<pre><code>&gt;&gt;&gt; from aws_lambda_powertools.utilities.batch import batch_processor, PartialSQSProcessor
 &gt;&gt;&gt;
 &gt;&gt;&gt; def record_handler(record):
-&gt;&gt;&gt;
-return record["body"]
+&gt;&gt;&gt;     return record["body"]
 &gt;&gt;&gt;
 &gt;&gt;&gt; @batch_processor(record_handler=record_handler, processor=PartialSQSProcessor())
 &gt;&gt;&gt; def handler(event, context):
-&gt;&gt;&gt;
-return {"StatusCode": 200}</p>
+&gt;&gt;&gt;     return {"StatusCode": 200}
+</code></pre>
 <h2 id="limitations">Limitations</h2>
 <ul>
 <li>Async batch processors</li>
@@ -242,6 +242,7 @@ def batch_processor(
     Examples
     --------
     **Processes Lambda&#39;s event with PartialSQSProcessor**
+
         &gt;&gt;&gt; from aws_lambda_powertools.utilities.batch import batch_processor, PartialSQSProcessor
         &gt;&gt;&gt;
         &gt;&gt;&gt; def record_handler(record):

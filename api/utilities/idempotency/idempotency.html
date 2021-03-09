@@ -78,6 +78,7 @@ def idempotent(
     Examples
     --------
     **Processes Lambda&#39;s event in an idempotent manner**
+
         &gt;&gt;&gt; from aws_lambda_powertools.utilities.idempotency import (
         &gt;&gt;&gt;    idempotent, DynamoDBPersistenceLayer, IdempotencyConfig
         &gt;&gt;&gt; )
@@ -162,6 +163,8 @@ class IdempotencyHandler:
             # Now we know the item already exists, we can retrieve it
             record = self._get_idempotency_record()
             return self._handle_for_status(record)
+        except Exception as exc:
+            raise IdempotencyPersistenceLayerError(&#34;Failed to save in progress record to idempotency store&#34;) from exc
 
         return self._call_lambda_handler()
 
@@ -287,10 +290,9 @@ class IdempotencyHandler:
 <dd>Configuration</dd>
 </dl>
 <h2 id="examples">Examples</h2>
-<p><strong>Processes Lambda's event in an idempotent manner</strong>
-&gt;&gt;&gt; from aws_lambda_powertools.utilities.idempotency import (
-&gt;&gt;&gt;
-idempotent, DynamoDBPersistenceLayer, IdempotencyConfig
+<p><strong>Processes Lambda's event in an idempotent manner</strong></p>
+<pre><code>&gt;&gt;&gt; from aws_lambda_powertools.utilities.idempotency import (
+&gt;&gt;&gt;    idempotent, DynamoDBPersistenceLayer, IdempotencyConfig
 &gt;&gt;&gt; )
 &gt;&gt;&gt;
 &gt;&gt;&gt; idem_config=IdempotencyConfig(event_key_jmespath="body")
@@ -298,8 +300,8 @@ idempotent, DynamoDBPersistenceLayer, IdempotencyConfig
 &gt;&gt;&gt;
 &gt;&gt;&gt; @idempotent(config=idem_config, persistence_store=persistence_layer)
 &gt;&gt;&gt; def handler(event, context):
-&gt;&gt;&gt;
-return {"StatusCode": 200}</p></section>
+&gt;&gt;&gt;     return {"StatusCode": 200}
+</code></pre></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -331,6 +333,7 @@ def idempotent(
     Examples
     --------
     **Processes Lambda&#39;s event in an idempotent manner**
+
         &gt;&gt;&gt; from aws_lambda_powertools.utilities.idempotency import (
         &gt;&gt;&gt;    idempotent, DynamoDBPersistenceLayer, IdempotencyConfig
         &gt;&gt;&gt; )
@@ -442,6 +445,8 @@ def idempotent(
             # Now we know the item already exists, we can retrieve it
             record = self._get_idempotency_record()
             return self._handle_for_status(record)
+        except Exception as exc:
+            raise IdempotencyPersistenceLayerError(&#34;Failed to save in progress record to idempotency store&#34;) from exc
 
         return self._call_lambda_handler()
 
@@ -574,6 +579,8 @@ def idempotent(
         # Now we know the item already exists, we can retrieve it
         record = self._get_idempotency_record()
         return self._handle_for_status(record)
+    except Exception as exc:
+        raise IdempotencyPersistenceLayerError(&#34;Failed to save in progress record to idempotency store&#34;) from exc
 
     return self._call_lambda_handler()</code></pre>
 </details>

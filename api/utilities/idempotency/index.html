@@ -82,10 +82,9 @@ __all__ = (&#34;DynamoDBPersistenceLayer&#34;, &#34;BasePersistenceLayer&#34;, &
 <dd>Configuration</dd>
 </dl>
 <h2 id="examples">Examples</h2>
-<p><strong>Processes Lambda's event in an idempotent manner</strong>
-&gt;&gt;&gt; from aws_lambda_powertools.utilities.idempotency import (
-&gt;&gt;&gt;
-idempotent, DynamoDBPersistenceLayer, IdempotencyConfig
+<p><strong>Processes Lambda's event in an idempotent manner</strong></p>
+<pre><code>&gt;&gt;&gt; from aws_lambda_powertools.utilities.idempotency import (
+&gt;&gt;&gt;    idempotent, DynamoDBPersistenceLayer, IdempotencyConfig
 &gt;&gt;&gt; )
 &gt;&gt;&gt;
 &gt;&gt;&gt; idem_config=IdempotencyConfig(event_key_jmespath="body")
@@ -93,8 +92,8 @@ idempotent, DynamoDBPersistenceLayer, IdempotencyConfig
 &gt;&gt;&gt;
 &gt;&gt;&gt; @idempotent(config=idem_config, persistence_store=persistence_layer)
 &gt;&gt;&gt; def handler(event, context):
-&gt;&gt;&gt;
-return {"StatusCode": 200}</p></section>
+&gt;&gt;&gt;     return {"StatusCode": 200}
+</code></pre></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -126,6 +125,7 @@ def idempotent(
     Examples
     --------
     **Processes Lambda&#39;s event in an idempotent manner**
+
         &gt;&gt;&gt; from aws_lambda_powertools.utilities.idempotency import (
         &gt;&gt;&gt;    idempotent, DynamoDBPersistenceLayer, IdempotencyConfig
         &gt;&gt;&gt; )
@@ -253,7 +253,9 @@ def idempotent(
 
     @staticmethod
     def is_missing_idempotency_key(data) -&gt; bool:
-        return data is None or not data or all(x is None for x in data)
+        if type(data).__name__ in (&#34;tuple&#34;, &#34;list&#34;, &#34;dict&#34;):
+            return all(x is None for x in data)
+        return not data
 
     def _get_hashed_payload(self, lambda_event: Dict[str, Any]) -&gt; str:
         &#34;&#34;&#34;
@@ -556,7 +558,9 @@ def idempotent(
 </summary>
 <pre><code class="python">@staticmethod
 def is_missing_idempotency_key(data) -&gt; bool:
-    return data is None or not data or all(x is None for x in data)</code></pre>
+    if type(data).__name__ in (&#34;tuple&#34;, &#34;list&#34;, &#34;dict&#34;):
+        return all(x is None for x in data)
+    return not data</code></pre>
 </details>
 </dd>
 </dl>
@@ -824,15 +828,17 @@ and return it as a DataRecord instance.and return it as a DataRecord instance.</
 <dd>&nbsp;</dd>
 </dl>
 <h2 id="examples">Examples</h2>
-<p><strong>Create a DynamoDB persistence layer with custom settings</strong>
-&gt;&gt;&gt; from aws_lambda_powertools.utilities.idempotency import idempotent, DynamoDBPersistenceLayer
+<p><strong>Create a DynamoDB persistence layer with custom settings</strong></p>
+<pre><code>&gt;&gt;&gt; from aws_lambda_powertools.utilities.idempotency import (
+&gt;&gt;&gt;    idempotent, DynamoDBPersistenceLayer
+&gt;&gt;&gt; )
 &gt;&gt;&gt;
 &gt;&gt;&gt; persistence_store = DynamoDBPersistenceLayer(table_name="idempotency_store")
 &gt;&gt;&gt;
-&gt;&gt;&gt; @idempotent(persistence_store=persistence_store, event_key="body")
+&gt;&gt;&gt; @idempotent(persistence_store=persistence_store)
 &gt;&gt;&gt; def handler(event, context):
-&gt;&gt;&gt;
-return {"StatusCode": 200}</p></section>
+&gt;&gt;&gt;     return {"StatusCode": 200}
+</code></pre></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -875,11 +881,14 @@ return {"StatusCode": 200}</p></section>
         Examples
         --------
         **Create a DynamoDB persistence layer with custom settings**
-            &gt;&gt;&gt; from aws_lambda_powertools.utilities.idempotency import idempotent, DynamoDBPersistenceLayer
+
+            &gt;&gt;&gt; from aws_lambda_powertools.utilities.idempotency import (
+            &gt;&gt;&gt;    idempotent, DynamoDBPersistenceLayer
+            &gt;&gt;&gt; )
             &gt;&gt;&gt;
             &gt;&gt;&gt; persistence_store = DynamoDBPersistenceLayer(table_name=&#34;idempotency_store&#34;)
             &gt;&gt;&gt;
-            &gt;&gt;&gt; @idempotent(persistence_store=persistence_store, event_key=&#34;body&#34;)
+            &gt;&gt;&gt; @idempotent(persistence_store=persistence_store)
             &gt;&gt;&gt; def handler(event, context):
             &gt;&gt;&gt;     return {&#34;StatusCode&#34;: 200}
         &#34;&#34;&#34;

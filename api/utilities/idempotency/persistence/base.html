@@ -210,7 +210,9 @@ class BasePersistenceLayer(ABC):
 
     @staticmethod
     def is_missing_idempotency_key(data) -&gt; bool:
-        return data is None or not data or all(x is None for x in data)
+        if type(data).__name__ in (&#34;tuple&#34;, &#34;list&#34;, &#34;dict&#34;):
+            return all(x is None for x in data)
+        return not data
 
     def _get_hashed_payload(self, lambda_event: Dict[str, Any]) -&gt; str:
         &#34;&#34;&#34;
@@ -592,7 +594,9 @@ class BasePersistenceLayer(ABC):
 
     @staticmethod
     def is_missing_idempotency_key(data) -&gt; bool:
-        return data is None or not data or all(x is None for x in data)
+        if type(data).__name__ in (&#34;tuple&#34;, &#34;list&#34;, &#34;dict&#34;):
+            return all(x is None for x in data)
+        return not data
 
     def _get_hashed_payload(self, lambda_event: Dict[str, Any]) -&gt; str:
         &#34;&#34;&#34;
@@ -895,7 +899,9 @@ class BasePersistenceLayer(ABC):
 </summary>
 <pre><code class="python">@staticmethod
 def is_missing_idempotency_key(data) -&gt; bool:
-    return data is None or not data or all(x is None for x in data)</code></pre>
+    if type(data).__name__ in (&#34;tuple&#34;, &#34;list&#34;, &#34;dict&#34;):
+        return all(x is None for x in data)
+    return not data</code></pre>
 </details>
 </dd>
 </dl>
