@@ -34,7 +34,7 @@ import os
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 from ..shared import constants
-from ..shared.functions import resolve_truthy_env_var_choice
+from ..shared.functions import resolve_env_var_choice, resolve_truthy_env_var_choice
 from ..shared.lazy_import import LazyLoader
 from .base import BaseProvider, BaseSegment
 
@@ -81,6 +81,13 @@ class Tracer:
         `Env POWERTOOLS_TRACE_DISABLED=&#34;true&#34;`
     patch_modules: Tuple[str]
         Tuple of modules supported by tracing provider to patch, by default all modules are patched
+    provider: BaseProvider
+        Tracing provider, by default it is aws_xray_sdk.core.xray_recorder
+
+    Returns
+    -------
+    Tracer
+        Tracer instance with imported modules patched
 
     Example
     -------
@@ -149,17 +156,12 @@ class Tracer:
         tracer = Tracer()
         ...
 
-    Returns
-    -------
-    Tracer
-        Tracer instance with imported modules patched
-
     Limitations
     -----------
     * Async handler not supported
     &#34;&#34;&#34;
 
-    _default_config = {
+    _default_config: Dict[str, Any] = {
         &#34;service&#34;: &#34;service_undefined&#34;,
         &#34;disabled&#34;: False,
         &#34;auto_patch&#34;: True,
@@ -179,7 +181,7 @@ class Tracer:
         self.__build_config(
             service=service, disabled=disabled, auto_patch=auto_patch, patch_modules=patch_modules, provider=provider
         )
-        self.provider = self._config[&#34;provider&#34;]
+        self.provider: BaseProvider = self._config[&#34;provider&#34;]
         self.disabled = self._config[&#34;disabled&#34;]
         self.service = self._config[&#34;service&#34;]
         self.auto_patch = self._config[&#34;auto_patch&#34;]
@@ -746,7 +748,7 @@ class Tracer:
     ):
         &#34;&#34;&#34; Populates Tracer config for new and existing initializations &#34;&#34;&#34;
         is_disabled = disabled if disabled is not None else self._is_tracer_disabled()
-        is_service = service if service is not None else os.getenv(constants.SERVICE_NAME_ENV)
+        is_service = resolve_env_var_choice(choice=service, env=os.getenv(constants.SERVICE_NAME_ENV))
 
         self._config[&#34;provider&#34;] = provider or self._config[&#34;provider&#34;] or aws_xray_sdk.core.xray_recorder
         self._config[&#34;auto_patch&#34;] = auto_patch if auto_patch is not None else self._config[&#34;auto_patch&#34;]
@@ -804,6 +806,13 @@ Make sure to set <code>auto_patch=False</code> in subsequent Tracer instances to
 <code>Env POWERTOOLS_TRACE_DISABLED="true"</code></dd>
 <dt><strong><code>patch_modules</code></strong> :&ensp;<code>Tuple</code>[<code>str</code>]</dt>
 <dd>Tuple of modules supported by tracing provider to patch, by default all modules are patched</dd>
+<dt><strong><code>provider</code></strong> :&ensp;<code>BaseProvider</code></dt>
+<dd>Tracing provider, by default it is aws_xray_sdk.core.xray_recorder</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><a title="aws_lambda_powertools.tracing.tracer.Tracer" href="#aws_lambda_powertools.tracing.tracer.Tracer"><code>Tracer</code></a></dt>
+<dd>Tracer instance with imported modules patched</dd>
 </dl>
 <h2 id="example">Example</h2>
 <p><strong>A Lambda function using Tracer</strong></p>
@@ -867,11 +876,6 @@ from aws_lambda_powertools import Tracer
 tracer = Tracer()
 ...
 </code></pre>
-<h2 id="returns">Returns</h2>
-<dl>
-<dt><a title="aws_lambda_powertools.tracing.tracer.Tracer" href="#aws_lambda_powertools.tracing.tracer.Tracer"><code>Tracer</code></a></dt>
-<dd>Tracer instance with imported modules patched</dd>
-</dl>
 <h2 id="limitations">Limitations</h2>
 <ul>
 <li>Async handler not supported</li>
@@ -916,6 +920,13 @@ tracer = Tracer()
         `Env POWERTOOLS_TRACE_DISABLED=&#34;true&#34;`
     patch_modules: Tuple[str]
         Tuple of modules supported by tracing provider to patch, by default all modules are patched
+    provider: BaseProvider
+        Tracing provider, by default it is aws_xray_sdk.core.xray_recorder
+
+    Returns
+    -------
+    Tracer
+        Tracer instance with imported modules patched
 
     Example
     -------
@@ -984,17 +995,12 @@ tracer = Tracer()
         tracer = Tracer()
         ...
 
-    Returns
-    -------
-    Tracer
-        Tracer instance with imported modules patched
-
     Limitations
     -----------
     * Async handler not supported
     &#34;&#34;&#34;
 
-    _default_config = {
+    _default_config: Dict[str, Any] = {
         &#34;service&#34;: &#34;service_undefined&#34;,
         &#34;disabled&#34;: False,
         &#34;auto_patch&#34;: True,
@@ -1014,7 +1020,7 @@ tracer = Tracer()
         self.__build_config(
             service=service, disabled=disabled, auto_patch=auto_patch, patch_modules=patch_modules, provider=provider
         )
-        self.provider = self._config[&#34;provider&#34;]
+        self.provider: BaseProvider = self._config[&#34;provider&#34;]
         self.disabled = self._config[&#34;disabled&#34;]
         self.service = self._config[&#34;service&#34;]
         self.auto_patch = self._config[&#34;auto_patch&#34;]
@@ -1581,7 +1587,7 @@ tracer = Tracer()
     ):
         &#34;&#34;&#34; Populates Tracer config for new and existing initializations &#34;&#34;&#34;
         is_disabled = disabled if disabled is not None else self._is_tracer_disabled()
-        is_service = service if service is not None else os.getenv(constants.SERVICE_NAME_ENV)
+        is_service = resolve_env_var_choice(choice=service, env=os.getenv(constants.SERVICE_NAME_ENV))
 
         self._config[&#34;provider&#34;] = provider or self._config[&#34;provider&#34;] or aws_xray_sdk.core.xray_recorder
         self._config[&#34;auto_patch&#34;] = auto_patch if auto_patch is not None else self._config[&#34;auto_patch&#34;]

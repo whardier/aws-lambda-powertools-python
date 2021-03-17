@@ -65,7 +65,12 @@ class BaseProvider(ABC):
         return key in self.store and self.store[key].ttl &gt;= datetime.now()
 
     def get(
-        self, name: str, max_age: int = DEFAULT_MAX_AGE_SECS, transform: Optional[str] = None, **sdk_options
+        self,
+        name: str,
+        max_age: int = DEFAULT_MAX_AGE_SECS,
+        transform: Optional[str] = None,
+        force_fetch: bool = False,
+        **sdk_options,
     ) -&gt; Union[str, list, dict, bytes]:
         &#34;&#34;&#34;
         Retrieve a parameter value or return the cached value
@@ -80,6 +85,8 @@ class BaseProvider(ABC):
             Optional transformation of the parameter value. Supported values
             are &#34;json&#34; for JSON strings and &#34;binary&#34; for base 64 encoded
             values.
+        force_fetch: bool, optional
+            Force update even before a cached item has expired, defaults to False
         sdk_options: dict, optional
             Arguments that will be passed directly to the underlying API call
 
@@ -103,7 +110,7 @@ class BaseProvider(ABC):
         # an acceptable tradeoff.
         key = (name, transform)
 
-        if self._has_not_expired(key):
+        if not force_fetch and self._has_not_expired(key):
             return self.store[key].value
 
         try:
@@ -132,6 +139,7 @@ class BaseProvider(ABC):
         max_age: int = DEFAULT_MAX_AGE_SECS,
         transform: Optional[str] = None,
         raise_on_transform_error: bool = False,
+        force_fetch: bool = False,
         **sdk_options,
     ) -&gt; Union[Dict[str, str], Dict[str, dict], Dict[str, bytes]]:
         &#34;&#34;&#34;
@@ -150,6 +158,8 @@ class BaseProvider(ABC):
         raise_on_transform_error: bool, optional
             Raises an exception if any transform fails, otherwise this will
             return a None value for each transform that failed
+        force_fetch: bool, optional
+            Force update even before a cached item has expired, defaults to False
         sdk_options: dict, optional
             Arguments that will be passed directly to the underlying API call
 
@@ -164,7 +174,7 @@ class BaseProvider(ABC):
 
         key = (path, transform)
 
-        if self._has_not_expired(key):
+        if not force_fetch and self._has_not_expired(key):
             return self.store[key].value
 
         try:
@@ -435,7 +445,12 @@ return a None value for each transform that failed</dd>
         return key in self.store and self.store[key].ttl &gt;= datetime.now()
 
     def get(
-        self, name: str, max_age: int = DEFAULT_MAX_AGE_SECS, transform: Optional[str] = None, **sdk_options
+        self,
+        name: str,
+        max_age: int = DEFAULT_MAX_AGE_SECS,
+        transform: Optional[str] = None,
+        force_fetch: bool = False,
+        **sdk_options,
     ) -&gt; Union[str, list, dict, bytes]:
         &#34;&#34;&#34;
         Retrieve a parameter value or return the cached value
@@ -450,6 +465,8 @@ return a None value for each transform that failed</dd>
             Optional transformation of the parameter value. Supported values
             are &#34;json&#34; for JSON strings and &#34;binary&#34; for base 64 encoded
             values.
+        force_fetch: bool, optional
+            Force update even before a cached item has expired, defaults to False
         sdk_options: dict, optional
             Arguments that will be passed directly to the underlying API call
 
@@ -473,7 +490,7 @@ return a None value for each transform that failed</dd>
         # an acceptable tradeoff.
         key = (name, transform)
 
-        if self._has_not_expired(key):
+        if not force_fetch and self._has_not_expired(key):
             return self.store[key].value
 
         try:
@@ -502,6 +519,7 @@ return a None value for each transform that failed</dd>
         max_age: int = DEFAULT_MAX_AGE_SECS,
         transform: Optional[str] = None,
         raise_on_transform_error: bool = False,
+        force_fetch: bool = False,
         **sdk_options,
     ) -&gt; Union[Dict[str, str], Dict[str, dict], Dict[str, bytes]]:
         &#34;&#34;&#34;
@@ -520,6 +538,8 @@ return a None value for each transform that failed</dd>
         raise_on_transform_error: bool, optional
             Raises an exception if any transform fails, otherwise this will
             return a None value for each transform that failed
+        force_fetch: bool, optional
+            Force update even before a cached item has expired, defaults to False
         sdk_options: dict, optional
             Arguments that will be passed directly to the underlying API call
 
@@ -534,7 +554,7 @@ return a None value for each transform that failed</dd>
 
         key = (path, transform)
 
-        if self._has_not_expired(key):
+        if not force_fetch and self._has_not_expired(key):
             return self.store[key].value
 
         try:
@@ -583,7 +603,7 @@ return a None value for each transform that failed</dd>
 <h3>Methods</h3>
 <dl>
 <dt id="aws_lambda_powertools.utilities.parameters.base.BaseProvider.get"><code class="name flex">
-<span>def <span class="ident">get</span></span>(<span>self, name, max_age=5, transform=None, **sdk_options)</span>
+<span>def <span class="ident">get</span></span>(<span>self, name, max_age=5, transform=None, force_fetch=False, **sdk_options)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Retrieve a parameter value or return the cached value</p>
@@ -597,6 +617,8 @@ return a None value for each transform that failed</dd>
 <dd>Optional transformation of the parameter value. Supported values
 are "json" for JSON strings and "binary" for base 64 encoded
 values.</dd>
+<dt><strong><code>force_fetch</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Force update even before a cached item has expired, defaults to False</dd>
 <dt><strong><code>sdk_options</code></strong> :&ensp;<code>dict</code>, optional</dt>
 <dd>Arguments that will be passed directly to the underlying API call</dd>
 </dl>
@@ -613,7 +635,12 @@ a given name.</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get(
-    self, name: str, max_age: int = DEFAULT_MAX_AGE_SECS, transform: Optional[str] = None, **sdk_options
+    self,
+    name: str,
+    max_age: int = DEFAULT_MAX_AGE_SECS,
+    transform: Optional[str] = None,
+    force_fetch: bool = False,
+    **sdk_options,
 ) -&gt; Union[str, list, dict, bytes]:
     &#34;&#34;&#34;
     Retrieve a parameter value or return the cached value
@@ -628,6 +655,8 @@ a given name.</dd>
         Optional transformation of the parameter value. Supported values
         are &#34;json&#34; for JSON strings and &#34;binary&#34; for base 64 encoded
         values.
+    force_fetch: bool, optional
+        Force update even before a cached item has expired, defaults to False
     sdk_options: dict, optional
         Arguments that will be passed directly to the underlying API call
 
@@ -651,7 +680,7 @@ a given name.</dd>
     # an acceptable tradeoff.
     key = (name, transform)
 
-    if self._has_not_expired(key):
+    if not force_fetch and self._has_not_expired(key):
         return self.store[key].value
 
     try:
@@ -669,7 +698,7 @@ a given name.</dd>
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parameters.base.BaseProvider.get_multiple"><code class="name flex">
-<span>def <span class="ident">get_multiple</span></span>(<span>self, path, max_age=5, transform=None, raise_on_transform_error=False, **sdk_options)</span>
+<span>def <span class="ident">get_multiple</span></span>(<span>self, path, max_age=5, transform=None, raise_on_transform_error=False, force_fetch=False, **sdk_options)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Retrieve multiple parameters based on a path prefix</p>
@@ -686,6 +715,8 @@ values or "auto" which looks at the attribute key to determine the type.</dd>
 <dt><strong><code>raise_on_transform_error</code></strong> :&ensp;<code>bool</code>, optional</dt>
 <dd>Raises an exception if any transform fails, otherwise this will
 return a None value for each transform that failed</dd>
+<dt><strong><code>force_fetch</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Force update even before a cached item has expired, defaults to False</dd>
 <dt><strong><code>sdk_options</code></strong> :&ensp;<code>dict</code>, optional</dt>
 <dd>Arguments that will be passed directly to the underlying API call</dd>
 </dl>
@@ -707,6 +738,7 @@ a given path.</dd>
     max_age: int = DEFAULT_MAX_AGE_SECS,
     transform: Optional[str] = None,
     raise_on_transform_error: bool = False,
+    force_fetch: bool = False,
     **sdk_options,
 ) -&gt; Union[Dict[str, str], Dict[str, dict], Dict[str, bytes]]:
     &#34;&#34;&#34;
@@ -725,6 +757,8 @@ a given path.</dd>
     raise_on_transform_error: bool, optional
         Raises an exception if any transform fails, otherwise this will
         return a None value for each transform that failed
+    force_fetch: bool, optional
+        Force update even before a cached item has expired, defaults to False
     sdk_options: dict, optional
         Arguments that will be passed directly to the underlying API call
 
@@ -739,7 +773,7 @@ a given path.</dd>
 
     key = (path, transform)
 
-    if self._has_not_expired(key):
+    if not force_fetch and self._has_not_expired(key):
         return self.store[key].value
 
     try:

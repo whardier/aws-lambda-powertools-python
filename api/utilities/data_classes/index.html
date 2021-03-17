@@ -24,7 +24,9 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from .alb_event import ALBEvent
+<pre><code class="python">from aws_lambda_powertools.utilities.data_classes.appsync_resolver_event import AppSyncResolverEvent
+
+from .alb_event import ALBEvent
 from .api_gateway_proxy_event import APIGatewayProxyEvent, APIGatewayProxyEventV2
 from .cloud_watch_logs_event import CloudWatchLogsEvent
 from .connect_contact_flow_event import ConnectContactFlowEvent
@@ -39,6 +41,7 @@ from .sqs_event import SQSEvent
 __all__ = [
     &#34;APIGatewayProxyEvent&#34;,
     &#34;APIGatewayProxyEventV2&#34;,
+    &#34;AppSyncResolverEvent&#34;,
     &#34;ALBEvent&#34;,
     &#34;CloudWatchLogsEvent&#34;,
     &#34;ConnectContactFlowEvent&#34;,
@@ -60,6 +63,14 @@ __all__ = [
 <section class="desc"></section>
 </dd>
 <dt><code class="name"><a title="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event" href="api_gateway_proxy_event.html">aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="aws_lambda_powertools.utilities.data_classes.appsync" href="appsync/index.html">aws_lambda_powertools.utilities.data_classes.appsync</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="aws_lambda_powertools.utilities.data_classes.appsync_resolver_event" href="appsync_resolver_event.html">aws_lambda_powertools.utilities.data_classes.appsync_resolver_event</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
@@ -232,6 +243,7 @@ def request_context(self) -&gt; ALBEventRequestContext:
 <ul class="hlist">
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.common.BaseProxyEvent.get_header_value" href="common.html#aws_lambda_powertools.utilities.data_classes.common.BaseProxyEvent.get_header_value">get_header_value</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.common.BaseProxyEvent.get_query_string_value" href="common.html#aws_lambda_powertools.utilities.data_classes.common.BaseProxyEvent.get_query_string_value">get_query_string_value</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.common.BaseProxyEvent.raw_event" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event">raw_event</a></code></li>
 </ul>
 </li>
 </ul>
@@ -418,6 +430,7 @@ def version(self) -&gt; str:
 <ul class="hlist">
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.common.BaseProxyEvent.get_header_value" href="common.html#aws_lambda_powertools.utilities.data_classes.common.BaseProxyEvent.get_header_value">get_header_value</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.common.BaseProxyEvent.get_query_string_value" href="common.html#aws_lambda_powertools.utilities.data_classes.common.BaseProxyEvent.get_query_string_value">get_query_string_value</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.common.BaseProxyEvent.raw_event" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event">raw_event</a></code></li>
 </ul>
 </li>
 </ul>
@@ -601,6 +614,325 @@ def version(self) -&gt; str:
 <ul class="hlist">
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.common.BaseProxyEvent.get_header_value" href="common.html#aws_lambda_powertools.utilities.data_classes.common.BaseProxyEvent.get_header_value">get_header_value</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.common.BaseProxyEvent.get_query_string_value" href="common.html#aws_lambda_powertools.utilities.data_classes.common.BaseProxyEvent.get_query_string_value">get_query_string_value</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.common.BaseProxyEvent.raw_event" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event">raw_event</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent"><code class="flex name class">
+<span>class <span class="ident">AppSyncResolverEvent</span></span>
+<span>(</span><span>data)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>AppSync resolver event</p>
+<p><strong>NOTE:</strong> AppSync Resolver Events can come in various shapes this data class
+supports both Amplify GraphQL directive @function and Direct Lambda Resolver</p>
+<h2 id="documentation">Documentation:</h2>
+<ul>
+<li><a href="https://docs.aws.amazon.com/appsync/latest/devguide/resolver-context-reference.html">https://docs.aws.amazon.com/appsync/latest/devguide/resolver-context-reference.html</a></li>
+<li><a href="https://docs.amplify.aws/cli/graphql-transformer/function#structure-of-the-function-event">https://docs.amplify.aws/cli/graphql-transformer/function#structure-of-the-function-event</a></li>
+</ul></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AppSyncResolverEvent(DictWrapper):
+    &#34;&#34;&#34;AppSync resolver event
+
+    **NOTE:** AppSync Resolver Events can come in various shapes this data class
+    supports both Amplify GraphQL directive @function and Direct Lambda Resolver
+
+    Documentation:
+    -------------
+    - https://docs.aws.amazon.com/appsync/latest/devguide/resolver-context-reference.html
+    - https://docs.amplify.aws/cli/graphql-transformer/function#structure-of-the-function-event
+    &#34;&#34;&#34;
+
+    def __init__(self, data: dict):
+        super().__init__(data)
+
+        info: dict = data.get(&#34;info&#34;)
+        if not info:
+            info = {&#34;fieldName&#34;: self.get(&#34;fieldName&#34;), &#34;parentTypeName&#34;: self.get(&#34;typeName&#34;)}
+
+        self._info = AppSyncResolverEventInfo(info)
+
+    @property
+    def type_name(self) -&gt; str:
+        &#34;&#34;&#34;The name of the parent type for the field that is currently being resolved.&#34;&#34;&#34;
+        return self.info.parent_type_name
+
+    @property
+    def field_name(self) -&gt; str:
+        &#34;&#34;&#34;The name of the field that is currently being resolved.&#34;&#34;&#34;
+        return self.info.field_name
+
+    @property
+    def arguments(self) -&gt; Dict[str, any]:
+        &#34;&#34;&#34;A map that contains all GraphQL arguments for this field.&#34;&#34;&#34;
+        return self[&#34;arguments&#34;]
+
+    @property
+    def identity(self) -&gt; Union[None, AppSyncIdentityIAM, AppSyncIdentityCognito]:
+        &#34;&#34;&#34;An object that contains information about the caller.
+
+        Depending of the type of identify found:
+
+        - API_KEY authorization - returns None
+        - AWS_IAM authorization - returns AppSyncIdentityIAM
+        - AMAZON_COGNITO_USER_POOLS authorization - returns AppSyncIdentityCognito
+        &#34;&#34;&#34;
+        return get_identity_object(self.get(&#34;identity&#34;))
+
+    @property
+    def source(self) -&gt; Dict[str, any]:
+        &#34;&#34;&#34;A map that contains the resolution of the parent field.&#34;&#34;&#34;
+        return self.get(&#34;source&#34;)
+
+    @property
+    def request_headers(self) -&gt; Dict[str, str]:
+        &#34;&#34;&#34;Request headers&#34;&#34;&#34;
+        return self[&#34;request&#34;][&#34;headers&#34;]
+
+    @property
+    def prev_result(self) -&gt; Optional[Dict[str, any]]:
+        &#34;&#34;&#34;It represents the result of whatever previous operation was executed in a pipeline resolver.&#34;&#34;&#34;
+        prev = self.get(&#34;prev&#34;)
+        if not prev:
+            return None
+        return prev.get(&#34;result&#34;)
+
+    @property
+    def info(self) -&gt; AppSyncResolverEventInfo:
+        &#34;&#34;&#34;The info section contains information about the GraphQL request.&#34;&#34;&#34;
+        return self._info
+
+    @property
+    def stash(self) -&gt; Optional[dict]:
+        &#34;&#34;&#34;The stash is a map that is made available inside each resolver and function mapping template.
+        The same stash instance lives through a single resolver execution. This means that you can use the
+        stash to pass arbitrary data across request and response mapping templates, and across functions in
+        a pipeline resolver.&#34;&#34;&#34;
+        return self.get(&#34;stash&#34;)
+
+    def get_header_value(
+        self, name: str, default_value: Optional[str] = None, case_sensitive: Optional[bool] = False
+    ) -&gt; Optional[str]:
+        &#34;&#34;&#34;Get header value by name
+
+        Parameters
+        ----------
+        name: str
+            Header name
+        default_value: str, optional
+            Default value if no value was found by name
+        case_sensitive: bool
+            Whether to use a case sensitive look up
+        Returns
+        -------
+        str, optional
+            Header value
+        &#34;&#34;&#34;
+        return get_header_value(self.request_headers, name, default_value, case_sensitive)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></li>
+</ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.arguments"><code class="name">var <span class="ident">arguments</span></code></dt>
+<dd>
+<section class="desc"><p>A map that contains all GraphQL arguments for this field.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def arguments(self) -&gt; Dict[str, any]:
+    &#34;&#34;&#34;A map that contains all GraphQL arguments for this field.&#34;&#34;&#34;
+    return self[&#34;arguments&#34;]</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.field_name"><code class="name">var <span class="ident">field_name</span></code></dt>
+<dd>
+<section class="desc"><p>The name of the field that is currently being resolved.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def field_name(self) -&gt; str:
+    &#34;&#34;&#34;The name of the field that is currently being resolved.&#34;&#34;&#34;
+    return self.info.field_name</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.identity"><code class="name">var <span class="ident">identity</span></code></dt>
+<dd>
+<section class="desc"><p>An object that contains information about the caller.</p>
+<p>Depending of the type of identify found:</p>
+<ul>
+<li>API_KEY authorization - returns None</li>
+<li>AWS_IAM authorization - returns AppSyncIdentityIAM</li>
+<li>AMAZON_COGNITO_USER_POOLS authorization - returns AppSyncIdentityCognito</li>
+</ul></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def identity(self) -&gt; Union[None, AppSyncIdentityIAM, AppSyncIdentityCognito]:
+    &#34;&#34;&#34;An object that contains information about the caller.
+
+    Depending of the type of identify found:
+
+    - API_KEY authorization - returns None
+    - AWS_IAM authorization - returns AppSyncIdentityIAM
+    - AMAZON_COGNITO_USER_POOLS authorization - returns AppSyncIdentityCognito
+    &#34;&#34;&#34;
+    return get_identity_object(self.get(&#34;identity&#34;))</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.info"><code class="name">var <span class="ident">info</span></code></dt>
+<dd>
+<section class="desc"><p>The info section contains information about the GraphQL request.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def info(self) -&gt; AppSyncResolverEventInfo:
+    &#34;&#34;&#34;The info section contains information about the GraphQL request.&#34;&#34;&#34;
+    return self._info</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.prev_result"><code class="name">var <span class="ident">prev_result</span></code></dt>
+<dd>
+<section class="desc"><p>It represents the result of whatever previous operation was executed in a pipeline resolver.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def prev_result(self) -&gt; Optional[Dict[str, any]]:
+    &#34;&#34;&#34;It represents the result of whatever previous operation was executed in a pipeline resolver.&#34;&#34;&#34;
+    prev = self.get(&#34;prev&#34;)
+    if not prev:
+        return None
+    return prev.get(&#34;result&#34;)</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.request_headers"><code class="name">var <span class="ident">request_headers</span></code></dt>
+<dd>
+<section class="desc"><p>Request headers</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def request_headers(self) -&gt; Dict[str, str]:
+    &#34;&#34;&#34;Request headers&#34;&#34;&#34;
+    return self[&#34;request&#34;][&#34;headers&#34;]</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.source"><code class="name">var <span class="ident">source</span></code></dt>
+<dd>
+<section class="desc"><p>A map that contains the resolution of the parent field.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def source(self) -&gt; Dict[str, any]:
+    &#34;&#34;&#34;A map that contains the resolution of the parent field.&#34;&#34;&#34;
+    return self.get(&#34;source&#34;)</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.stash"><code class="name">var <span class="ident">stash</span></code></dt>
+<dd>
+<section class="desc"><p>The stash is a map that is made available inside each resolver and function mapping template.
+The same stash instance lives through a single resolver execution. This means that you can use the
+stash to pass arbitrary data across request and response mapping templates, and across functions in
+a pipeline resolver.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def stash(self) -&gt; Optional[dict]:
+    &#34;&#34;&#34;The stash is a map that is made available inside each resolver and function mapping template.
+    The same stash instance lives through a single resolver execution. This means that you can use the
+    stash to pass arbitrary data across request and response mapping templates, and across functions in
+    a pipeline resolver.&#34;&#34;&#34;
+    return self.get(&#34;stash&#34;)</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.type_name"><code class="name">var <span class="ident">type_name</span></code></dt>
+<dd>
+<section class="desc"><p>The name of the parent type for the field that is currently being resolved.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def type_name(self) -&gt; str:
+    &#34;&#34;&#34;The name of the parent type for the field that is currently being resolved.&#34;&#34;&#34;
+    return self.info.parent_type_name</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.get_header_value"><code class="name flex">
+<span>def <span class="ident">get_header_value</span></span>(<span>self, name, default_value=None, case_sensitive=False)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get header value by name</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
+<dd>Header name</dd>
+<dt><strong><code>default_value</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>Default value if no value was found by name</dd>
+<dt><strong><code>case_sensitive</code></strong> :&ensp;<code>bool</code></dt>
+<dd>Whether to use a case sensitive look up</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>str</code>, optional</dt>
+<dd>Header value</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_header_value(
+    self, name: str, default_value: Optional[str] = None, case_sensitive: Optional[bool] = False
+) -&gt; Optional[str]:
+    &#34;&#34;&#34;Get header value by name
+
+    Parameters
+    ----------
+    name: str
+        Header name
+    default_value: str, optional
+        Default value if no value was found by name
+    case_sensitive: bool
+        Whether to use a case sensitive look up
+    Returns
+    -------
+    str, optional
+        Header value
+    &#34;&#34;&#34;
+    return get_header_value(self.request_headers, name, default_value, case_sensitive)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></b></code>:
+<ul class="hlist">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event">raw_event</a></code></li>
 </ul>
 </li>
 </ul>
@@ -707,6 +1039,14 @@ def raw_logs_data(self) -&gt; str:
 </details>
 </dd>
 </dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></b></code>:
+<ul class="hlist">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event">raw_event</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.ConnectContactFlowEvent"><code class="flex name class">
 <span>class <span class="ident">ConnectContactFlowEvent</span></span>
@@ -773,6 +1113,14 @@ def parameters(self) -&gt; Dict[str, str]:
 </details>
 </dd>
 </dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></b></code>:
+<ul class="hlist">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event">raw_event</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.DynamoDBStreamEvent"><code class="flex name class">
 <span>class <span class="ident">DynamoDBStreamEvent</span></span>
@@ -821,6 +1169,14 @@ def records(self) -&gt; Iterator[DynamoDBRecord]:
 </details>
 </dd>
 </dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></b></code>:
+<ul class="hlist">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event">raw_event</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.EventBridgeEvent"><code class="flex name class">
 <span>class <span class="ident">EventBridgeEvent</span></span>
@@ -1049,6 +1405,14 @@ def version(self) -&gt; str:
 </details>
 </dd>
 </dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></b></code>:
+<ul class="hlist">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event">raw_event</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.KinesisStreamEvent"><code class="flex name class">
 <span>class <span class="ident">KinesisStreamEvent</span></span>
@@ -1097,6 +1461,14 @@ def records(self) -&gt; Iterator[KinesisStreamRecord]:
 </details>
 </dd>
 </dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></b></code>:
+<ul class="hlist">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event">raw_event</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.S3Event"><code class="flex name class">
 <span>class <span class="ident">S3Event</span></span>
@@ -1203,6 +1575,14 @@ def records(self) -&gt; Iterator[S3EventRecord]:
 </details>
 </dd>
 </dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></b></code>:
+<ul class="hlist">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event">raw_event</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.SESEvent"><code class="flex name class">
 <span>class <span class="ident">SESEvent</span></span>
@@ -1304,6 +1684,14 @@ def records(self) -&gt; Iterator[SESEventRecord]:
 </details>
 </dd>
 </dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></b></code>:
+<ul class="hlist">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event">raw_event</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.SNSEvent"><code class="flex name class">
 <span>class <span class="ident">SNSEvent</span></span>
@@ -1388,6 +1776,14 @@ def sns_message(self) -&gt; str:
 </details>
 </dd>
 </dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></b></code>:
+<ul class="hlist">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event">raw_event</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.SQSEvent"><code class="flex name class">
 <span>class <span class="ident">SQSEvent</span></span>
@@ -1436,6 +1832,14 @@ def records(self) -&gt; Iterator[SQSRecord]:
 </details>
 </dd>
 </dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></b></code>:
+<ul class="hlist">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event" href="common.html#aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event">raw_event</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 </dl>
 </section>
@@ -1455,6 +1859,8 @@ def records(self) -&gt; Iterator[SQSRecord]:
 <ul>
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.alb_event" href="alb_event.html">aws_lambda_powertools.utilities.data_classes.alb_event</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event" href="api_gateway_proxy_event.html">aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.appsync" href="appsync/index.html">aws_lambda_powertools.utilities.data_classes.appsync</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.appsync_resolver_event" href="appsync_resolver_event.html">aws_lambda_powertools.utilities.data_classes.appsync_resolver_event</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.cloud_watch_logs_event" href="cloud_watch_logs_event.html">aws_lambda_powertools.utilities.data_classes.cloud_watch_logs_event</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event" href="cognito_user_pool_event.html">aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.common" href="common.html">aws_lambda_powertools.utilities.data_classes.common</a></code></li>
@@ -1505,6 +1911,21 @@ def records(self) -&gt; Iterator[SQSRecord]:
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.APIGatewayProxyEventV2.route_key" href="#aws_lambda_powertools.utilities.data_classes.APIGatewayProxyEventV2.route_key">route_key</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.APIGatewayProxyEventV2.stage_variables" href="#aws_lambda_powertools.utilities.data_classes.APIGatewayProxyEventV2.stage_variables">stage_variables</a></code></li>
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.APIGatewayProxyEventV2.version" href="#aws_lambda_powertools.utilities.data_classes.APIGatewayProxyEventV2.version">version</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent" href="#aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent">AppSyncResolverEvent</a></code></h4>
+<ul class="two-column">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.arguments" href="#aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.arguments">arguments</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.field_name" href="#aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.field_name">field_name</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.get_header_value" href="#aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.get_header_value">get_header_value</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.identity" href="#aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.identity">identity</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.info" href="#aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.info">info</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.prev_result" href="#aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.prev_result">prev_result</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.request_headers" href="#aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.request_headers">request_headers</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.source" href="#aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.source">source</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.stash" href="#aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.stash">stash</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.type_name" href="#aws_lambda_powertools.utilities.data_classes.AppSyncResolverEvent.type_name">type_name</a></code></li>
 </ul>
 </li>
 <li>

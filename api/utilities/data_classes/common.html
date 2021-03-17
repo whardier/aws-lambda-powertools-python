@@ -45,6 +45,26 @@ class DictWrapper:
     def get(self, key: str) -&gt; Optional[Any]:
         return self._data.get(key)
 
+    @property
+    def raw_event(self) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;The original raw event dict&#34;&#34;&#34;
+        return self._data
+
+
+def get_header_value(headers: Dict[str, str], name: str, default_value: str, case_sensitive: bool) -&gt; Optional[str]:
+    &#34;&#34;&#34;Get header value by name&#34;&#34;&#34;
+    if case_sensitive:
+        return headers.get(name, default_value)
+
+    name_lower = name.lower()
+
+    return next(
+        # Iterate over the dict and do a case insensitive key comparison
+        (value for key, value in headers.items() if key.lower() == name_lower),
+        # Default value is returned if no matches was found
+        default_value,
+    )
+
 
 class BaseProxyEvent(DictWrapper):
     @property
@@ -98,10 +118,7 @@ class BaseProxyEvent(DictWrapper):
         str, optional
             Header value
         &#34;&#34;&#34;
-        if case_sensitive:
-            return self.headers.get(name, default_value)
-
-        return next((value for key, value in self.headers.items() if name.lower() == key.lower()), default_value)</code></pre>
+        return get_header_value(self.headers, name, default_value, case_sensitive)</code></pre>
 </details>
 </section>
 <section>
@@ -109,6 +126,33 @@ class BaseProxyEvent(DictWrapper):
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="aws_lambda_powertools.utilities.data_classes.common.get_header_value"><code class="name flex">
+<span>def <span class="ident">get_header_value</span></span>(<span>headers, name, default_value, case_sensitive)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get header value by name</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_header_value(headers: Dict[str, str], name: str, default_value: str, case_sensitive: bool) -&gt; Optional[str]:
+    &#34;&#34;&#34;Get header value by name&#34;&#34;&#34;
+    if case_sensitive:
+        return headers.get(name, default_value)
+
+    name_lower = name.lower()
+
+    return next(
+        # Iterate over the dict and do a case insensitive key comparison
+        (value for key, value in headers.items() if key.lower() == name_lower),
+        # Default value is returned if no matches was found
+        default_value,
+    )</code></pre>
+</details>
+</dd>
+</dl>
 </section>
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
@@ -175,10 +219,7 @@ class BaseProxyEvent(DictWrapper):
         str, optional
             Header value
         &#34;&#34;&#34;
-        if case_sensitive:
-            return self.headers.get(name, default_value)
-
-        return next((value for key, value in self.headers.items() if name.lower() == key.lower()), default_value)</code></pre>
+        return get_header_value(self.headers, name, default_value, case_sensitive)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -284,10 +325,7 @@ def query_string_parameters(self) -&gt; Optional[Dict[str, str]]:
     str, optional
         Header value
     &#34;&#34;&#34;
-    if case_sensitive:
-        return self.headers.get(name, default_value)
-
-    return next((value for key, value in self.headers.items() if name.lower() == key.lower()), default_value)</code></pre>
+    return get_header_value(self.headers, name, default_value, case_sensitive)</code></pre>
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.common.BaseProxyEvent.get_query_string_value"><code class="name flex">
@@ -330,6 +368,14 @@ def query_string_parameters(self) -&gt; Optional[Dict[str, str]]:
 </details>
 </dd>
 </dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></b></code>:
+<ul class="hlist">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event" href="#aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event">raw_event</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.common.DictWrapper"><code class="flex name class">
 <span>class <span class="ident">DictWrapper</span></span>
@@ -357,7 +403,12 @@ def query_string_parameters(self) -&gt; Optional[Dict[str, str]]:
         return self._data == other._data
 
     def get(self, key: str) -&gt; Optional[Any]:
-        return self._data.get(key)</code></pre>
+        return self._data.get(key)
+
+    @property
+    def raw_event(self) -&gt; Dict[str, Any]:
+        &#34;&#34;&#34;The original raw event dict&#34;&#34;&#34;
+        return self._data</code></pre>
 </details>
 <h3>Subclasses</h3>
 <ul class="hlist">
@@ -369,6 +420,10 @@ def query_string_parameters(self) -&gt; Optional[Dict[str, str]]:
 <li><a title="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2Authorizer" href="api_gateway_proxy_event.html#aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2Authorizer">RequestContextV2Authorizer</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam" href="api_gateway_proxy_event.html#aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2AuthorizerIam">RequestContextV2AuthorizerIam</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2Http" href="api_gateway_proxy_event.html#aws_lambda_powertools.utilities.data_classes.api_gateway_proxy_event.RequestContextV2Http">RequestContextV2Http</a></li>
+<li><a title="aws_lambda_powertools.utilities.data_classes.appsync_resolver_event.AppSyncIdentityCognito" href="appsync_resolver_event.html#aws_lambda_powertools.utilities.data_classes.appsync_resolver_event.AppSyncIdentityCognito">AppSyncIdentityCognito</a></li>
+<li><a title="aws_lambda_powertools.utilities.data_classes.appsync_resolver_event.AppSyncIdentityIAM" href="appsync_resolver_event.html#aws_lambda_powertools.utilities.data_classes.appsync_resolver_event.AppSyncIdentityIAM">AppSyncIdentityIAM</a></li>
+<li><a title="aws_lambda_powertools.utilities.data_classes.appsync_resolver_event.AppSyncResolverEvent" href="appsync_resolver_event.html#aws_lambda_powertools.utilities.data_classes.appsync_resolver_event.AppSyncResolverEvent">AppSyncResolverEvent</a></li>
+<li><a title="aws_lambda_powertools.utilities.data_classes.appsync_resolver_event.AppSyncResolverEventInfo" href="appsync_resolver_event.html#aws_lambda_powertools.utilities.data_classes.appsync_resolver_event.AppSyncResolverEventInfo">AppSyncResolverEventInfo</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.cloud_watch_logs_event.CloudWatchLogsDecodedData" href="cloud_watch_logs_event.html#aws_lambda_powertools.utilities.data_classes.cloud_watch_logs_event.CloudWatchLogsDecodedData">CloudWatchLogsDecodedData</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.cloud_watch_logs_event.CloudWatchLogsEvent" href="cloud_watch_logs_event.html#aws_lambda_powertools.utilities.data_classes.cloud_watch_logs_event.CloudWatchLogsEvent">CloudWatchLogsEvent</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.cloud_watch_logs_event.CloudWatchLogsLogEvent" href="cloud_watch_logs_event.html#aws_lambda_powertools.utilities.data_classes.cloud_watch_logs_event.CloudWatchLogsLogEvent">CloudWatchLogsLogEvent</a></li>
@@ -437,6 +492,22 @@ def query_string_parameters(self) -&gt; Optional[Dict[str, str]]:
 <li><a title="aws_lambda_powertools.utilities.data_classes.sqs_event.SQSRecord" href="sqs_event.html#aws_lambda_powertools.utilities.data_classes.sqs_event.SQSRecord">SQSRecord</a></li>
 <li><a title="aws_lambda_powertools.utilities.data_classes.sqs_event.SQSRecordAttributes" href="sqs_event.html#aws_lambda_powertools.utilities.data_classes.sqs_event.SQSRecordAttributes">SQSRecordAttributes</a></li>
 </ul>
+<h3>Instance variables</h3>
+<dl>
+<dt id="aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event"><code class="name">var <span class="ident">raw_event</span></code></dt>
+<dd>
+<section class="desc"><p>The original raw event dict</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def raw_event(self) -&gt; Dict[str, Any]:
+    &#34;&#34;&#34;The original raw event dict&#34;&#34;&#34;
+    return self._data</code></pre>
+</details>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="aws_lambda_powertools.utilities.data_classes.common.DictWrapper.get"><code class="name flex">
@@ -468,6 +539,11 @@ def query_string_parameters(self) -&gt; Optional[Dict[str, str]]:
 <li><code><a title="aws_lambda_powertools.utilities.data_classes" href="index.html">aws_lambda_powertools.utilities.data_classes</a></code></li>
 </ul>
 </li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.common.get_header_value" href="#aws_lambda_powertools.utilities.data_classes.common.get_header_value">get_header_value</a></code></li>
+</ul>
+</li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
@@ -485,6 +561,7 @@ def query_string_parameters(self) -&gt; Optional[Dict[str, str]]:
 <h4><code><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper" href="#aws_lambda_powertools.utilities.data_classes.common.DictWrapper">DictWrapper</a></code></h4>
 <ul class="">
 <li><code><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper.get" href="#aws_lambda_powertools.utilities.data_classes.common.DictWrapper.get">get</a></code></li>
+<li><code><a title="aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event" href="#aws_lambda_powertools.utilities.data_classes.common.DictWrapper.raw_event">raw_event</a></code></li>
 </ul>
 </li>
 </ul>

@@ -32,6 +32,8 @@ import random
 import sys
 from typing import Any, Callable, Dict, Union
 
+import jmespath
+
 from ..shared import constants
 from ..shared.functions import resolve_env_var_choice, resolve_truthy_env_var_choice
 from .exceptions import InvalidLoggerSamplingRateError
@@ -230,7 +232,9 @@ class Logger(logging.Logger):  # lgtm [py/missing-call-to-init]
                 f&#34;Please review POWERTOOLS_LOGGER_SAMPLE_RATE environment variable.&#34;
             )
 
-    def inject_lambda_context(self, lambda_handler: Callable[[Dict, Any], Any] = None, log_event: bool = None):
+    def inject_lambda_context(
+        self, lambda_handler: Callable[[Dict, Any], Any] = None, log_event: bool = None, correlation_id_path: str = None
+    ):
         &#34;&#34;&#34;Decorator to capture Lambda contextual info and inject into logger
 
         Parameters
@@ -239,6 +243,8 @@ class Logger(logging.Logger):  # lgtm [py/missing-call-to-init]
             Method to inject the lambda context
         log_event : bool, optional
             Instructs logger to log Lambda Event, by default False
+        correlation_id_path: str, optional
+            Optional JMESPath for the correlation_id
 
         Environment variables
         ---------------------
@@ -277,7 +283,9 @@ class Logger(logging.Logger):  # lgtm [py/missing-call-to-init]
         # Return a partial function with args filled
         if lambda_handler is None:
             logger.debug(&#34;Decorator called with parameters&#34;)
-            return functools.partial(self.inject_lambda_context, log_event=log_event)
+            return functools.partial(
+                self.inject_lambda_context, log_event=log_event, correlation_id_path=correlation_id_path
+            )
 
         log_event = resolve_truthy_env_var_choice(
             choice=log_event, env=os.getenv(constants.LOGGER_LOG_EVENT_ENV, &#34;false&#34;)
@@ -288,6 +296,9 @@ class Logger(logging.Logger):  # lgtm [py/missing-call-to-init]
             lambda_context = build_lambda_context_model(context)
             cold_start = _is_cold_start()
             self.structure_logs(append=True, cold_start=cold_start, **lambda_context.__dict__)
+
+            if correlation_id_path:
+                self.set_correlation_id(jmespath.search(correlation_id_path, event))
 
             if log_event:
                 logger.debug(&#34;Event received&#34;)
@@ -321,6 +332,16 @@ class Logger(logging.Logger):  # lgtm [py/missing-call-to-init]
             else:
                 # Set a new formatter for a logger handler
                 handler.setFormatter(JsonFormatter(**self._default_log_keys, **kwargs))
+
+    def set_correlation_id(self, value: str):
+        &#34;&#34;&#34;Sets the correlation_id in the logging json
+
+        Parameters
+        ----------
+        value : str
+            Value for the correlation id
+        &#34;&#34;&#34;
+        self.structure_logs(append=True, correlation_id=value)
 
     @staticmethod
     def _get_log_level(level: Union[str, int]) -&gt; Union[str, int]:
@@ -695,7 +716,9 @@ $ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
                 f&#34;Please review POWERTOOLS_LOGGER_SAMPLE_RATE environment variable.&#34;
             )
 
-    def inject_lambda_context(self, lambda_handler: Callable[[Dict, Any], Any] = None, log_event: bool = None):
+    def inject_lambda_context(
+        self, lambda_handler: Callable[[Dict, Any], Any] = None, log_event: bool = None, correlation_id_path: str = None
+    ):
         &#34;&#34;&#34;Decorator to capture Lambda contextual info and inject into logger
 
         Parameters
@@ -704,6 +727,8 @@ $ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
             Method to inject the lambda context
         log_event : bool, optional
             Instructs logger to log Lambda Event, by default False
+        correlation_id_path: str, optional
+            Optional JMESPath for the correlation_id
 
         Environment variables
         ---------------------
@@ -742,7 +767,9 @@ $ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
         # Return a partial function with args filled
         if lambda_handler is None:
             logger.debug(&#34;Decorator called with parameters&#34;)
-            return functools.partial(self.inject_lambda_context, log_event=log_event)
+            return functools.partial(
+                self.inject_lambda_context, log_event=log_event, correlation_id_path=correlation_id_path
+            )
 
         log_event = resolve_truthy_env_var_choice(
             choice=log_event, env=os.getenv(constants.LOGGER_LOG_EVENT_ENV, &#34;false&#34;)
@@ -753,6 +780,9 @@ $ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
             lambda_context = build_lambda_context_model(context)
             cold_start = _is_cold_start()
             self.structure_logs(append=True, cold_start=cold_start, **lambda_context.__dict__)
+
+            if correlation_id_path:
+                self.set_correlation_id(jmespath.search(correlation_id_path, event))
 
             if log_event:
                 logger.debug(&#34;Event received&#34;)
@@ -787,6 +817,16 @@ $ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
                 # Set a new formatter for a logger handler
                 handler.setFormatter(JsonFormatter(**self._default_log_keys, **kwargs))
 
+    def set_correlation_id(self, value: str):
+        &#34;&#34;&#34;Sets the correlation_id in the logging json
+
+        Parameters
+        ----------
+        value : str
+            Value for the correlation id
+        &#34;&#34;&#34;
+        self.structure_logs(append=True, correlation_id=value)
+
     @staticmethod
     def _get_log_level(level: Union[str, int]) -&gt; Union[str, int]:
         &#34;&#34;&#34; Returns preferred log level set by the customer in upper case &#34;&#34;&#34;
@@ -817,7 +857,7 @@ $ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
 <h3>Methods</h3>
 <dl>
 <dt id="aws_lambda_powertools.logging.logger.Logger.inject_lambda_context"><code class="name flex">
-<span>def <span class="ident">inject_lambda_context</span></span>(<span>self, lambda_handler=None, log_event=None)</span>
+<span>def <span class="ident">inject_lambda_context</span></span>(<span>self, lambda_handler=None, log_event=None, correlation_id_path=None)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Decorator to capture Lambda contextual info and inject into logger</p>
@@ -827,6 +867,8 @@ $ export POWERTOOLS_LOGGER_SAMPLE_RATE=0.01 # 1% debug sampling
 <dd>Method to inject the lambda context</dd>
 <dt><strong><code>log_event</code></strong> :&ensp;<code>bool</code>, optional</dt>
 <dd>Instructs logger to log Lambda Event, by default False</dd>
+<dt><strong><code>correlation_id_path</code></strong> :&ensp;<code>str</code>, optional</dt>
+<dd>Optional JMESPath for the correlation_id</dd>
 </dl>
 <h2 id="environment-variables">Environment variables</h2>
 <dl>
@@ -861,7 +903,9 @@ def handler(event, context):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def inject_lambda_context(self, lambda_handler: Callable[[Dict, Any], Any] = None, log_event: bool = None):
+<pre><code class="python">def inject_lambda_context(
+    self, lambda_handler: Callable[[Dict, Any], Any] = None, log_event: bool = None, correlation_id_path: str = None
+):
     &#34;&#34;&#34;Decorator to capture Lambda contextual info and inject into logger
 
     Parameters
@@ -870,6 +914,8 @@ def handler(event, context):
         Method to inject the lambda context
     log_event : bool, optional
         Instructs logger to log Lambda Event, by default False
+    correlation_id_path: str, optional
+        Optional JMESPath for the correlation_id
 
     Environment variables
     ---------------------
@@ -908,7 +954,9 @@ def handler(event, context):
     # Return a partial function with args filled
     if lambda_handler is None:
         logger.debug(&#34;Decorator called with parameters&#34;)
-        return functools.partial(self.inject_lambda_context, log_event=log_event)
+        return functools.partial(
+            self.inject_lambda_context, log_event=log_event, correlation_id_path=correlation_id_path
+        )
 
     log_event = resolve_truthy_env_var_choice(
         choice=log_event, env=os.getenv(constants.LOGGER_LOG_EVENT_ENV, &#34;false&#34;)
@@ -920,6 +968,9 @@ def handler(event, context):
         cold_start = _is_cold_start()
         self.structure_logs(append=True, cold_start=cold_start, **lambda_context.__dict__)
 
+        if correlation_id_path:
+            self.set_correlation_id(jmespath.search(correlation_id_path, event))
+
         if log_event:
             logger.debug(&#34;Event received&#34;)
             self.info(event)
@@ -927,6 +978,31 @@ def handler(event, context):
         return lambda_handler(event, context)
 
     return decorate</code></pre>
+</details>
+</dd>
+<dt id="aws_lambda_powertools.logging.logger.Logger.set_correlation_id"><code class="name flex">
+<span>def <span class="ident">set_correlation_id</span></span>(<span>self, value)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Sets the correlation_id in the logging json</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>value</code></strong> :&ensp;<code>str</code></dt>
+<dd>Value for the correlation id</dd>
+</dl></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def set_correlation_id(self, value: str):
+    &#34;&#34;&#34;Sets the correlation_id in the logging json
+
+    Parameters
+    ----------
+    value : str
+        Value for the correlation id
+    &#34;&#34;&#34;
+    self.structure_logs(append=True, correlation_id=value)</code></pre>
 </details>
 </dd>
 <dt id="aws_lambda_powertools.logging.logger.Logger.structure_logs"><code class="name flex">
@@ -1000,6 +1076,7 @@ across future log statements.</p>
 <h4><code><a title="aws_lambda_powertools.logging.logger.Logger" href="#aws_lambda_powertools.logging.logger.Logger">Logger</a></code></h4>
 <ul class="">
 <li><code><a title="aws_lambda_powertools.logging.logger.Logger.inject_lambda_context" href="#aws_lambda_powertools.logging.logger.Logger.inject_lambda_context">inject_lambda_context</a></code></li>
+<li><code><a title="aws_lambda_powertools.logging.logger.Logger.set_correlation_id" href="#aws_lambda_powertools.logging.logger.Logger.set_correlation_id">set_correlation_id</a></code></li>
 <li><code><a title="aws_lambda_powertools.logging.logger.Logger.structure_logs" href="#aws_lambda_powertools.logging.logger.Logger.structure_logs">structure_logs</a></code></li>
 </ul>
 </li>

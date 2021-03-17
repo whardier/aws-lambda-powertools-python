@@ -37,6 +37,8 @@ from uuid import uuid4
 import boto3
 from botocore.config import Config
 
+from ...shared import constants
+from ...shared.functions import resolve_env_var_choice
 from .base import DEFAULT_PROVIDERS, BaseProvider
 
 CLIENT_ID = str(uuid4())
@@ -60,6 +62,7 @@ class AppConfigProvider(BaseProvider):
     **Retrieves the latest configuration value from App Config**
 
         &gt;&gt;&gt; from aws_lambda_powertools.utilities import parameters
+        &gt;&gt;&gt;
         &gt;&gt;&gt; appconf_provider = parameters.AppConfigProvider(environment=&#34;my_env&#34;, application=&#34;my_app&#34;)
         &gt;&gt;&gt;
         &gt;&gt;&gt; value : bytes = appconf_provider.get(&#34;my_conf&#34;)
@@ -93,7 +96,9 @@ class AppConfigProvider(BaseProvider):
 
         config = config or Config()
         self.client = boto3.client(&#34;appconfig&#34;, config=config)
-        self.application = application or os.getenv(&#34;POWERTOOLS_SERVICE_NAME&#34;) or &#34;application_undefined&#34;
+        self.application = resolve_env_var_choice(
+            choice=application, env=os.getenv(constants.SERVICE_NAME_ENV, &#34;service_undefined&#34;)
+        )
         self.environment = environment
         self.current_version = &#34;&#34;
 
@@ -129,7 +134,12 @@ class AppConfigProvider(BaseProvider):
 
 
 def get_app_config(
-    name: str, environment: str, application: Optional[str] = None, transform: Optional[str] = None, **sdk_options
+    name: str,
+    environment: str,
+    application: Optional[str] = None,
+    transform: Optional[str] = None,
+    force_fetch: bool = False,
+    **sdk_options
 ) -&gt; Union[str, list, dict, bytes]:
     &#34;&#34;&#34;
     Retrieve a configuration value from AWS App Config.
@@ -144,6 +154,8 @@ def get_app_config(
         Application of the configuration
     transform: str, optional
         Transforms the content from a JSON object (&#39;json&#39;) or base64 binary string (&#39;binary&#39;)
+    force_fetch: bool, optional
+        Force update even before a cached item has expired, defaults to False
     sdk_options: dict, optional
         Dictionary of options that will be passed to the Parameter Store get_parameter API call
 
@@ -182,7 +194,7 @@ def get_app_config(
 
     sdk_options[&#34;ClientId&#34;] = CLIENT_ID
 
-    return DEFAULT_PROVIDERS[&#34;appconfig&#34;].get(name, transform=transform, **sdk_options)</code></pre>
+    return DEFAULT_PROVIDERS[&#34;appconfig&#34;].get(name, transform=transform, force_fetch=force_fetch, **sdk_options)</code></pre>
 </details>
 </section>
 <section>
@@ -193,7 +205,7 @@ def get_app_config(
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="aws_lambda_powertools.utilities.parameters.appconfig.get_app_config"><code class="name flex">
-<span>def <span class="ident">get_app_config</span></span>(<span>name, environment, application=None, transform=None, **sdk_options)</span>
+<span>def <span class="ident">get_app_config</span></span>(<span>name, environment, application=None, transform=None, force_fetch=False, **sdk_options)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Retrieve a configuration value from AWS App Config.</p>
@@ -207,6 +219,8 @@ def get_app_config(
 <dd>Application of the configuration</dd>
 <dt><strong><code>transform</code></strong> :&ensp;<code>str</code>, optional</dt>
 <dd>Transforms the content from a JSON object ('json') or base64 binary string ('binary')</dd>
+<dt><strong><code>force_fetch</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Force update even before a cached item has expired, defaults to False</dd>
 <dt><strong><code>sdk_options</code></strong> :&ensp;<code>dict</code>, optional</dt>
 <dd>Dictionary of options that will be passed to the Parameter Store get_parameter API call</dd>
 </dl>
@@ -240,7 +254,12 @@ My configuration's JSON value
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_app_config(
-    name: str, environment: str, application: Optional[str] = None, transform: Optional[str] = None, **sdk_options
+    name: str,
+    environment: str,
+    application: Optional[str] = None,
+    transform: Optional[str] = None,
+    force_fetch: bool = False,
+    **sdk_options
 ) -&gt; Union[str, list, dict, bytes]:
     &#34;&#34;&#34;
     Retrieve a configuration value from AWS App Config.
@@ -255,6 +274,8 @@ My configuration's JSON value
         Application of the configuration
     transform: str, optional
         Transforms the content from a JSON object (&#39;json&#39;) or base64 binary string (&#39;binary&#39;)
+    force_fetch: bool, optional
+        Force update even before a cached item has expired, defaults to False
     sdk_options: dict, optional
         Dictionary of options that will be passed to the Parameter Store get_parameter API call
 
@@ -293,7 +314,7 @@ My configuration's JSON value
 
     sdk_options[&#34;ClientId&#34;] = CLIENT_ID
 
-    return DEFAULT_PROVIDERS[&#34;appconfig&#34;].get(name, transform=transform, **sdk_options)</code></pre>
+    return DEFAULT_PROVIDERS[&#34;appconfig&#34;].get(name, transform=transform, force_fetch=force_fetch, **sdk_options)</code></pre>
 </details>
 </dd>
 </dl>
@@ -319,6 +340,7 @@ My configuration's JSON value
 <h2 id="example">Example</h2>
 <p><strong>Retrieves the latest configuration value from App Config</strong></p>
 <pre><code>&gt;&gt;&gt; from aws_lambda_powertools.utilities import parameters
+&gt;&gt;&gt;
 &gt;&gt;&gt; appconf_provider = parameters.AppConfigProvider(environment="my_env", application="my_app")
 &gt;&gt;&gt;
 &gt;&gt;&gt; value : bytes = appconf_provider.get("my_conf")
@@ -361,6 +383,7 @@ My configuration value
     **Retrieves the latest configuration value from App Config**
 
         &gt;&gt;&gt; from aws_lambda_powertools.utilities import parameters
+        &gt;&gt;&gt;
         &gt;&gt;&gt; appconf_provider = parameters.AppConfigProvider(environment=&#34;my_env&#34;, application=&#34;my_app&#34;)
         &gt;&gt;&gt;
         &gt;&gt;&gt; value : bytes = appconf_provider.get(&#34;my_conf&#34;)
@@ -394,7 +417,9 @@ My configuration value
 
         config = config or Config()
         self.client = boto3.client(&#34;appconfig&#34;, config=config)
-        self.application = application or os.getenv(&#34;POWERTOOLS_SERVICE_NAME&#34;) or &#34;application_undefined&#34;
+        self.application = resolve_env_var_choice(
+            choice=application, env=os.getenv(constants.SERVICE_NAME_ENV, &#34;service_undefined&#34;)
+        )
         self.environment = environment
         self.current_version = &#34;&#34;
 

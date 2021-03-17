@@ -119,6 +119,7 @@ class SSMProvider(BaseProvider):
         max_age: int = DEFAULT_MAX_AGE_SECS,
         transform: Optional[str] = None,
         decrypt: bool = False,
+        force_fetch: bool = False,
         **sdk_options
     ) -&gt; Union[str, list, dict, bytes]:
         &#34;&#34;&#34;
@@ -136,6 +137,8 @@ class SSMProvider(BaseProvider):
             values.
         decrypt: bool, optional
             If the parameter value should be decrypted
+        force_fetch: bool, optional
+            Force update even before a cached item has expired, defaults to False
         sdk_options: dict, optional
             Arguments that will be passed directly to the underlying API call
 
@@ -151,7 +154,7 @@ class SSMProvider(BaseProvider):
         # Add to `decrypt` sdk_options to we can have an explicit option for this
         sdk_options[&#34;decrypt&#34;] = decrypt
 
-        return super().get(name, max_age, transform, **sdk_options)
+        return super().get(name, max_age, transform, force_fetch, **sdk_options)
 
     def _get(self, name: str, decrypt: bool = False, **sdk_options) -&gt; str:
         &#34;&#34;&#34;
@@ -212,7 +215,7 @@ class SSMProvider(BaseProvider):
 
 
 def get_parameter(
-    name: str, transform: Optional[str] = None, decrypt: bool = False, **sdk_options
+    name: str, transform: Optional[str] = None, decrypt: bool = False, force_fetch: bool = False, **sdk_options
 ) -&gt; Union[str, list, dict, bytes]:
     &#34;&#34;&#34;
     Retrieve a parameter value from AWS Systems Manager (SSM) Parameter Store
@@ -225,6 +228,8 @@ def get_parameter(
         Transforms the content from a JSON object (&#39;json&#39;) or base64 binary string (&#39;binary&#39;)
     decrypt: bool, optional
         If the parameter values should be decrypted
+    force_fetch: bool, optional
+        Force update even before a cached item has expired, defaults to False
     sdk_options: dict, optional
         Dictionary of options that will be passed to the Parameter Store get_parameter API call
 
@@ -264,11 +269,16 @@ def get_parameter(
     # Add to `decrypt` sdk_options to we can have an explicit option for this
     sdk_options[&#34;decrypt&#34;] = decrypt
 
-    return DEFAULT_PROVIDERS[&#34;ssm&#34;].get(name, transform=transform, **sdk_options)
+    return DEFAULT_PROVIDERS[&#34;ssm&#34;].get(name, transform=transform, force_fetch=force_fetch, **sdk_options)
 
 
 def get_parameters(
-    path: str, transform: Optional[str] = None, recursive: bool = True, decrypt: bool = False, **sdk_options
+    path: str,
+    transform: Optional[str] = None,
+    recursive: bool = True,
+    decrypt: bool = False,
+    force_fetch: bool = False,
+    **sdk_options
 ) -&gt; Union[Dict[str, str], Dict[str, dict], Dict[str, bytes]]:
     &#34;&#34;&#34;
     Retrieve multiple parameter values from AWS Systems Manager (SSM) Parameter Store
@@ -283,6 +293,8 @@ def get_parameters(
         If this should retrieve the parameter values recursively or not, defaults to True
     decrypt: bool, optional
         If the parameter values should be decrypted
+    force_fetch: bool, optional
+        Force update even before a cached item has expired, defaults to False
     sdk_options: dict, optional
         Dictionary of options that will be passed to the Parameter Store get_parameters_by_path API call
 
@@ -322,7 +334,7 @@ def get_parameters(
     sdk_options[&#34;recursive&#34;] = recursive
     sdk_options[&#34;decrypt&#34;] = decrypt
 
-    return DEFAULT_PROVIDERS[&#34;ssm&#34;].get_multiple(path, transform=transform, **sdk_options)</code></pre>
+    return DEFAULT_PROVIDERS[&#34;ssm&#34;].get_multiple(path, transform=transform, force_fetch=force_fetch, **sdk_options)</code></pre>
 </details>
 </section>
 <section>
@@ -333,7 +345,7 @@ def get_parameters(
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="aws_lambda_powertools.utilities.parameters.ssm.get_parameter"><code class="name flex">
-<span>def <span class="ident">get_parameter</span></span>(<span>name, transform=None, decrypt=False, **sdk_options)</span>
+<span>def <span class="ident">get_parameter</span></span>(<span>name, transform=None, decrypt=False, force_fetch=False, **sdk_options)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Retrieve a parameter value from AWS Systems Manager (SSM) Parameter Store</p>
@@ -345,6 +357,8 @@ def get_parameters(
 <dd>Transforms the content from a JSON object ('json') or base64 binary string ('binary')</dd>
 <dt><strong><code>decrypt</code></strong> :&ensp;<code>bool</code>, optional</dt>
 <dd>If the parameter values should be decrypted</dd>
+<dt><strong><code>force_fetch</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Force update even before a cached item has expired, defaults to False</dd>
 <dt><strong><code>sdk_options</code></strong> :&ensp;<code>dict</code>, optional</dt>
 <dd>Dictionary of options that will be passed to the Parameter Store get_parameter API call</dd>
 </dl>
@@ -378,7 +392,7 @@ My parameter value
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_parameter(
-    name: str, transform: Optional[str] = None, decrypt: bool = False, **sdk_options
+    name: str, transform: Optional[str] = None, decrypt: bool = False, force_fetch: bool = False, **sdk_options
 ) -&gt; Union[str, list, dict, bytes]:
     &#34;&#34;&#34;
     Retrieve a parameter value from AWS Systems Manager (SSM) Parameter Store
@@ -391,6 +405,8 @@ My parameter value
         Transforms the content from a JSON object (&#39;json&#39;) or base64 binary string (&#39;binary&#39;)
     decrypt: bool, optional
         If the parameter values should be decrypted
+    force_fetch: bool, optional
+        Force update even before a cached item has expired, defaults to False
     sdk_options: dict, optional
         Dictionary of options that will be passed to the Parameter Store get_parameter API call
 
@@ -430,11 +446,11 @@ My parameter value
     # Add to `decrypt` sdk_options to we can have an explicit option for this
     sdk_options[&#34;decrypt&#34;] = decrypt
 
-    return DEFAULT_PROVIDERS[&#34;ssm&#34;].get(name, transform=transform, **sdk_options)</code></pre>
+    return DEFAULT_PROVIDERS[&#34;ssm&#34;].get(name, transform=transform, force_fetch=force_fetch, **sdk_options)</code></pre>
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parameters.ssm.get_parameters"><code class="name flex">
-<span>def <span class="ident">get_parameters</span></span>(<span>path, transform=None, recursive=True, decrypt=False, **sdk_options)</span>
+<span>def <span class="ident">get_parameters</span></span>(<span>path, transform=None, recursive=True, decrypt=False, force_fetch=False, **sdk_options)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Retrieve multiple parameter values from AWS Systems Manager (SSM) Parameter Store</p>
@@ -448,6 +464,8 @@ My parameter value
 <dd>If this should retrieve the parameter values recursively or not, defaults to True</dd>
 <dt><strong><code>decrypt</code></strong> :&ensp;<code>bool</code>, optional</dt>
 <dd>If the parameter values should be decrypted</dd>
+<dt><strong><code>force_fetch</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Force update even before a cached item has expired, defaults to False</dd>
 <dt><strong><code>sdk_options</code></strong> :&ensp;<code>dict</code>, optional</dt>
 <dd>Dictionary of options that will be passed to the Parameter Store get_parameters_by_path API call</dd>
 </dl>
@@ -481,7 +499,12 @@ a given path.</dd>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_parameters(
-    path: str, transform: Optional[str] = None, recursive: bool = True, decrypt: bool = False, **sdk_options
+    path: str,
+    transform: Optional[str] = None,
+    recursive: bool = True,
+    decrypt: bool = False,
+    force_fetch: bool = False,
+    **sdk_options
 ) -&gt; Union[Dict[str, str], Dict[str, dict], Dict[str, bytes]]:
     &#34;&#34;&#34;
     Retrieve multiple parameter values from AWS Systems Manager (SSM) Parameter Store
@@ -496,6 +519,8 @@ a given path.</dd>
         If this should retrieve the parameter values recursively or not, defaults to True
     decrypt: bool, optional
         If the parameter values should be decrypted
+    force_fetch: bool, optional
+        Force update even before a cached item has expired, defaults to False
     sdk_options: dict, optional
         Dictionary of options that will be passed to the Parameter Store get_parameters_by_path API call
 
@@ -535,7 +560,7 @@ a given path.</dd>
     sdk_options[&#34;recursive&#34;] = recursive
     sdk_options[&#34;decrypt&#34;] = decrypt
 
-    return DEFAULT_PROVIDERS[&#34;ssm&#34;].get_multiple(path, transform=transform, **sdk_options)</code></pre>
+    return DEFAULT_PROVIDERS[&#34;ssm&#34;].get_multiple(path, transform=transform, force_fetch=force_fetch, **sdk_options)</code></pre>
 </details>
 </dd>
 </dl>
@@ -686,6 +711,7 @@ My parameter value
         max_age: int = DEFAULT_MAX_AGE_SECS,
         transform: Optional[str] = None,
         decrypt: bool = False,
+        force_fetch: bool = False,
         **sdk_options
     ) -&gt; Union[str, list, dict, bytes]:
         &#34;&#34;&#34;
@@ -703,6 +729,8 @@ My parameter value
             values.
         decrypt: bool, optional
             If the parameter value should be decrypted
+        force_fetch: bool, optional
+            Force update even before a cached item has expired, defaults to False
         sdk_options: dict, optional
             Arguments that will be passed directly to the underlying API call
 
@@ -718,7 +746,7 @@ My parameter value
         # Add to `decrypt` sdk_options to we can have an explicit option for this
         sdk_options[&#34;decrypt&#34;] = decrypt
 
-        return super().get(name, max_age, transform, **sdk_options)
+        return super().get(name, max_age, transform, force_fetch, **sdk_options)
 
     def _get(self, name: str, decrypt: bool = False, **sdk_options) -&gt; str:
         &#34;&#34;&#34;
@@ -792,7 +820,7 @@ My parameter value
 <h3>Methods</h3>
 <dl>
 <dt id="aws_lambda_powertools.utilities.parameters.ssm.SSMProvider.get"><code class="name flex">
-<span>def <span class="ident">get</span></span>(<span>self, name, max_age=5, transform=None, decrypt=False, **sdk_options)</span>
+<span>def <span class="ident">get</span></span>(<span>self, name, max_age=5, transform=None, decrypt=False, force_fetch=False, **sdk_options)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Retrieve a parameter value or return the cached value</p>
@@ -808,6 +836,8 @@ are "json" for JSON strings and "binary" for base 64 encoded
 values.</dd>
 <dt><strong><code>decrypt</code></strong> :&ensp;<code>bool</code>, optional</dt>
 <dd>If the parameter value should be decrypted</dd>
+<dt><strong><code>force_fetch</code></strong> :&ensp;<code>bool</code>, optional</dt>
+<dd>Force update even before a cached item has expired, defaults to False</dd>
 <dt><strong><code>sdk_options</code></strong> :&ensp;<code>dict</code>, optional</dt>
 <dd>Arguments that will be passed directly to the underlying API call</dd>
 </dl>
@@ -829,6 +859,7 @@ a given name.</dd>
     max_age: int = DEFAULT_MAX_AGE_SECS,
     transform: Optional[str] = None,
     decrypt: bool = False,
+    force_fetch: bool = False,
     **sdk_options
 ) -&gt; Union[str, list, dict, bytes]:
     &#34;&#34;&#34;
@@ -846,6 +877,8 @@ a given name.</dd>
         values.
     decrypt: bool, optional
         If the parameter value should be decrypted
+    force_fetch: bool, optional
+        Force update even before a cached item has expired, defaults to False
     sdk_options: dict, optional
         Arguments that will be passed directly to the underlying API call
 
@@ -861,7 +894,7 @@ a given name.</dd>
     # Add to `decrypt` sdk_options to we can have an explicit option for this
     sdk_options[&#34;decrypt&#34;] = decrypt
 
-    return super().get(name, max_age, transform, **sdk_options)</code></pre>
+    return super().get(name, max_age, transform, force_fetch, **sdk_options)</code></pre>
 </details>
 </dd>
 </dl>

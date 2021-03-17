@@ -222,14 +222,16 @@ def idempotent(
             self._cache = LRUDict(max_items=config.local_cache_max_items)
         self.hash_function = getattr(hashlib, config.hash_function)
 
-    def _get_hashed_idempotency_key(self, lambda_event: Dict[str, Any]) -&gt; str:
+    def _get_hashed_idempotency_key(self, event: Dict[str, Any], context: LambdaContext) -&gt; str:
         &#34;&#34;&#34;
         Extract data from lambda event using event key jmespath, and return a hashed representation
 
         Parameters
         ----------
-        lambda_event: Dict[str, Any]
+        event: Dict[str, Any]
             Lambda event
+        context: LambdaContext
+            Lambda context
 
         Returns
         -------
@@ -237,19 +239,18 @@ def idempotent(
             Hashed representation of the data extracted by the jmespath expression
 
         &#34;&#34;&#34;
-        data = lambda_event
+        data = event
 
         if self.event_key_jmespath:
-            data = self.event_key_compiled_jmespath.search(
-                lambda_event, options=jmespath.Options(**self.jmespath_options)
-            )
+            data = self.event_key_compiled_jmespath.search(event, options=jmespath.Options(**self.jmespath_options))
 
         if self.is_missing_idempotency_key(data):
             if self.raise_on_no_idempotency_key:
                 raise IdempotencyKeyError(&#34;No data found to create a hashed idempotency_key&#34;)
             warnings.warn(f&#34;No value found for idempotency_key. jmespath: {self.event_key_jmespath}&#34;)
 
-        return self._generate_hash(data)
+        generated_hash = self._generate_hash(data)
+        return f&#34;{context.function_name}#{generated_hash}&#34;
 
     @staticmethod
     def is_missing_idempotency_key(data) -&gt; bool:
@@ -368,7 +369,7 @@ def idempotent(
         if idempotency_key in self._cache:
             del self._cache[idempotency_key]
 
-    def save_success(self, event: Dict[str, Any], result: dict) -&gt; None:
+    def save_success(self, event: Dict[str, Any], context: LambdaContext, result: dict) -&gt; None:
         &#34;&#34;&#34;
         Save record of function&#39;s execution completing successfully
 
@@ -376,13 +377,15 @@ def idempotent(
         ----------
         event: Dict[str, Any]
             Lambda event
+        context: LambdaContext
+            Lambda context
         result: dict
             The response from lambda handler
         &#34;&#34;&#34;
         response_data = json.dumps(result, cls=Encoder)
 
         data_record = DataRecord(
-            idempotency_key=self._get_hashed_idempotency_key(event),
+            idempotency_key=self._get_hashed_idempotency_key(event, context),
             status=STATUS_CONSTANTS[&#34;COMPLETED&#34;],
             expiry_timestamp=self._get_expiry_timestamp(),
             response_data=response_data,
@@ -396,7 +399,7 @@ def idempotent(
 
         self._save_to_cache(data_record)
 
-    def save_inprogress(self, event: Dict[str, Any]) -&gt; None:
+    def save_inprogress(self, event: Dict[str, Any], context: LambdaContext) -&gt; None:
         &#34;&#34;&#34;
         Save record of function&#39;s execution being in progress
 
@@ -404,9 +407,11 @@ def idempotent(
         ----------
         event: Dict[str, Any]
             Lambda event
+        context: LambdaContext
+            Lambda context
         &#34;&#34;&#34;
         data_record = DataRecord(
-            idempotency_key=self._get_hashed_idempotency_key(event),
+            idempotency_key=self._get_hashed_idempotency_key(event, context),
             status=STATUS_CONSTANTS[&#34;INPROGRESS&#34;],
             expiry_timestamp=self._get_expiry_timestamp(),
             payload_hash=self._get_hashed_payload(event),
@@ -419,7 +424,7 @@ def idempotent(
 
         self._put_record(data_record)
 
-    def delete_record(self, event: Dict[str, Any], exception: Exception):
+    def delete_record(self, event: Dict[str, Any], context: LambdaContext, exception: Exception):
         &#34;&#34;&#34;
         Delete record from the persistence store
 
@@ -427,10 +432,12 @@ def idempotent(
         ----------
         event: Dict[str, Any]
             Lambda event
+        context: LambdaContext
+            Lambda context
         exception
             The exception raised by the lambda handler
         &#34;&#34;&#34;
-        data_record = DataRecord(idempotency_key=self._get_hashed_idempotency_key(event))
+        data_record = DataRecord(idempotency_key=self._get_hashed_idempotency_key(event, context))
 
         logger.debug(
             f&#34;Lambda raised an exception ({type(exception).__name__}). Clearing in progress record in persistence &#34;
@@ -440,7 +447,7 @@ def idempotent(
 
         self._delete_from_cache(data_record.idempotency_key)
 
-    def get_record(self, event: Dict[str, Any]) -&gt; DataRecord:
+    def get_record(self, event: Dict[str, Any], context: LambdaContext) -&gt; DataRecord:
         &#34;&#34;&#34;
         Calculate idempotency key for lambda_event, then retrieve item from persistence store using idempotency key
         and return it as a DataRecord instance.and return it as a DataRecord instance.
@@ -448,6 +455,9 @@ def idempotent(
         Parameters
         ----------
         event: Dict[str, Any]
+            Lambda event
+        context: LambdaContext
+            Lambda context
 
         Returns
         -------
@@ -462,7 +472,7 @@ def idempotent(
             Event payload doesn&#39;t match the stored record for the given idempotency key
         &#34;&#34;&#34;
 
-        idempotency_key = self._get_hashed_idempotency_key(event)
+        idempotency_key = self._get_hashed_idempotency_key(event, context)
 
         cached_record = self._retrieve_from_cache(idempotency_key=idempotency_key)
         if cached_record:
@@ -612,7 +622,7 @@ def is_missing_idempotency_key(data) -&gt; bool:
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.idempotency.BasePersistenceLayer.delete_record"><code class="name flex">
-<span>def <span class="ident">delete_record</span></span>(<span>self, event, exception)</span>
+<span>def <span class="ident">delete_record</span></span>(<span>self, event, context, exception)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Delete record from the persistence store</p>
@@ -620,6 +630,8 @@ def is_missing_idempotency_key(data) -&gt; bool:
 <dl>
 <dt><strong><code>event</code></strong> :&ensp;<code>Dict</code>[<code>str</code>, <code>Any</code>]</dt>
 <dd>Lambda event</dd>
+<dt><strong><code>context</code></strong> :&ensp;<code>LambdaContext</code></dt>
+<dd>Lambda context</dd>
 <dt><strong><code>exception</code></strong></dt>
 <dd>The exception raised by the lambda handler</dd>
 </dl></section>
@@ -627,7 +639,7 @@ def is_missing_idempotency_key(data) -&gt; bool:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def delete_record(self, event: Dict[str, Any], exception: Exception):
+<pre><code class="python">def delete_record(self, event: Dict[str, Any], context: LambdaContext, exception: Exception):
     &#34;&#34;&#34;
     Delete record from the persistence store
 
@@ -635,10 +647,12 @@ def is_missing_idempotency_key(data) -&gt; bool:
     ----------
     event: Dict[str, Any]
         Lambda event
+    context: LambdaContext
+        Lambda context
     exception
         The exception raised by the lambda handler
     &#34;&#34;&#34;
-    data_record = DataRecord(idempotency_key=self._get_hashed_idempotency_key(event))
+    data_record = DataRecord(idempotency_key=self._get_hashed_idempotency_key(event, context))
 
     logger.debug(
         f&#34;Lambda raised an exception ({type(exception).__name__}). Clearing in progress record in persistence &#34;
@@ -650,7 +664,7 @@ def is_missing_idempotency_key(data) -&gt; bool:
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.idempotency.BasePersistenceLayer.get_record"><code class="name flex">
-<span>def <span class="ident">get_record</span></span>(<span>self, event)</span>
+<span>def <span class="ident">get_record</span></span>(<span>self, event, context)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Calculate idempotency key for lambda_event, then retrieve item from persistence store using idempotency key
@@ -658,7 +672,9 @@ and return it as a DataRecord instance.and return it as a DataRecord instance.</
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>event</code></strong> :&ensp;<code>Dict</code>[<code>str</code>, <code>Any</code>]</dt>
-<dd>&nbsp;</dd>
+<dd>Lambda event</dd>
+<dt><strong><code>context</code></strong> :&ensp;<code>LambdaContext</code></dt>
+<dd>Lambda context</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>
@@ -676,7 +692,7 @@ and return it as a DataRecord instance.and return it as a DataRecord instance.</
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_record(self, event: Dict[str, Any]) -&gt; DataRecord:
+<pre><code class="python">def get_record(self, event: Dict[str, Any], context: LambdaContext) -&gt; DataRecord:
     &#34;&#34;&#34;
     Calculate idempotency key for lambda_event, then retrieve item from persistence store using idempotency key
     and return it as a DataRecord instance.and return it as a DataRecord instance.
@@ -684,6 +700,9 @@ and return it as a DataRecord instance.and return it as a DataRecord instance.</
     Parameters
     ----------
     event: Dict[str, Any]
+        Lambda event
+    context: LambdaContext
+        Lambda context
 
     Returns
     -------
@@ -698,7 +717,7 @@ and return it as a DataRecord instance.and return it as a DataRecord instance.</
         Event payload doesn&#39;t match the stored record for the given idempotency key
     &#34;&#34;&#34;
 
-    idempotency_key = self._get_hashed_idempotency_key(event)
+    idempotency_key = self._get_hashed_idempotency_key(event, context)
 
     cached_record = self._retrieve_from_cache(idempotency_key=idempotency_key)
     if cached_record:
@@ -715,7 +734,7 @@ and return it as a DataRecord instance.and return it as a DataRecord instance.</
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.idempotency.BasePersistenceLayer.save_inprogress"><code class="name flex">
-<span>def <span class="ident">save_inprogress</span></span>(<span>self, event)</span>
+<span>def <span class="ident">save_inprogress</span></span>(<span>self, event, context)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Save record of function's execution being in progress</p>
@@ -723,12 +742,14 @@ and return it as a DataRecord instance.and return it as a DataRecord instance.</
 <dl>
 <dt><strong><code>event</code></strong> :&ensp;<code>Dict</code>[<code>str</code>, <code>Any</code>]</dt>
 <dd>Lambda event</dd>
+<dt><strong><code>context</code></strong> :&ensp;<code>LambdaContext</code></dt>
+<dd>Lambda context</dd>
 </dl></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def save_inprogress(self, event: Dict[str, Any]) -&gt; None:
+<pre><code class="python">def save_inprogress(self, event: Dict[str, Any], context: LambdaContext) -&gt; None:
     &#34;&#34;&#34;
     Save record of function&#39;s execution being in progress
 
@@ -736,9 +757,11 @@ and return it as a DataRecord instance.and return it as a DataRecord instance.</
     ----------
     event: Dict[str, Any]
         Lambda event
+    context: LambdaContext
+        Lambda context
     &#34;&#34;&#34;
     data_record = DataRecord(
-        idempotency_key=self._get_hashed_idempotency_key(event),
+        idempotency_key=self._get_hashed_idempotency_key(event, context),
         status=STATUS_CONSTANTS[&#34;INPROGRESS&#34;],
         expiry_timestamp=self._get_expiry_timestamp(),
         payload_hash=self._get_hashed_payload(event),
@@ -753,7 +776,7 @@ and return it as a DataRecord instance.and return it as a DataRecord instance.</
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.idempotency.BasePersistenceLayer.save_success"><code class="name flex">
-<span>def <span class="ident">save_success</span></span>(<span>self, event, result)</span>
+<span>def <span class="ident">save_success</span></span>(<span>self, event, context, result)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Save record of function's execution completing successfully</p>
@@ -761,6 +784,8 @@ and return it as a DataRecord instance.and return it as a DataRecord instance.</
 <dl>
 <dt><strong><code>event</code></strong> :&ensp;<code>Dict</code>[<code>str</code>, <code>Any</code>]</dt>
 <dd>Lambda event</dd>
+<dt><strong><code>context</code></strong> :&ensp;<code>LambdaContext</code></dt>
+<dd>Lambda context</dd>
 <dt><strong><code>result</code></strong> :&ensp;<code>dict</code></dt>
 <dd>The response from lambda handler</dd>
 </dl></section>
@@ -768,7 +793,7 @@ and return it as a DataRecord instance.and return it as a DataRecord instance.</
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def save_success(self, event: Dict[str, Any], result: dict) -&gt; None:
+<pre><code class="python">def save_success(self, event: Dict[str, Any], context: LambdaContext, result: dict) -&gt; None:
     &#34;&#34;&#34;
     Save record of function&#39;s execution completing successfully
 
@@ -776,13 +801,15 @@ and return it as a DataRecord instance.and return it as a DataRecord instance.</
     ----------
     event: Dict[str, Any]
         Lambda event
+    context: LambdaContext
+        Lambda context
     result: dict
         The response from lambda handler
     &#34;&#34;&#34;
     response_data = json.dumps(result, cls=Encoder)
 
     data_record = DataRecord(
-        idempotency_key=self._get_hashed_idempotency_key(event),
+        idempotency_key=self._get_hashed_idempotency_key(event, context),
         status=STATUS_CONSTANTS[&#34;COMPLETED&#34;],
         expiry_timestamp=self._get_expiry_timestamp(),
         response_data=response_data,
