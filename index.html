@@ -670,8 +670,7 @@
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="nt">AwsLambdaPowertoolsPythonLayer</span><span class="p">:</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="nt">AwsLambdaPowertoolsPythonLayer</span><span class="p">:</span>
   <span class="nt">Type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AWS::Serverless::Application</span>
   <span class="nt">Properties</span><span class="p">:</span>
     <span class="nt">Location</span><span class="p">:</span>
@@ -681,10 +680,9 @@
 <span class="nt">MyLambdaFunction</span><span class="p">:</span>
   <span class="nt">Type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">AWS::Serverless::Function</span>
   <span class="nt">Properties</span><span class="p">:</span>
-    <span class="nt">Location</span><span class="p">:</span>
-<span class="hll">      <span class="nt">Layers</span><span class="p">:</span>
-</span><span class="hll">         <span class="c1"># fetch Layer ARN from SAR App stack output</span>
-</span><span class="hll">         <span class="p p-Indicator">-</span> <span class="kt">!GetAtt</span> <span class="l l-Scalar l-Scalar-Plain">AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn</span>
+    <span class="nt">Layers</span><span class="p">:</span>
+<span class="hll">          <span class="c1"># fetch Layer ARN from SAR App stack output</span>
+</span><span class="hll">      <span class="p p-Indicator">-</span> <span class="kt">!GetAtt</span> <span class="l l-Scalar l-Scalar-Plain">AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn</span>
 </span></code></pre></div>
 </td></tr></table>
 <details class="tip"><summary>Example of least-privileged IAM permissions to deploy Layer</summary><blockquote>
@@ -962,7 +960,7 @@
 <div class="md-source-date">
   <small>
     
-      Last update: 2021-02-19
+      Last update: 2021-03-18
     
   </small>
 </div>
