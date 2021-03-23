@@ -3,15 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.5" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>aws_lambda_powertools.utilities.idempotency API documentation</title>
 <meta name="description" content="Utility for adding idempotency to lambda functions" />
-<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
-<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
-<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
 </head>
 <body>
 <main>
@@ -42,19 +44,19 @@ __all__ = (&#34;DynamoDBPersistenceLayer&#34;, &#34;BasePersistenceLayer&#34;, &
 <dl>
 <dt><code class="name"><a title="aws_lambda_powertools.utilities.idempotency.config" href="config.html">aws_lambda_powertools.utilities.idempotency.config</a></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 <dt><code class="name"><a title="aws_lambda_powertools.utilities.idempotency.exceptions" href="exceptions.html">aws_lambda_powertools.utilities.idempotency.exceptions</a></code></dt>
 <dd>
-<section class="desc"><p>Idempotency errors</p></section>
+<div class="desc"><p>Idempotency errors</p></div>
 </dd>
 <dt><code class="name"><a title="aws_lambda_powertools.utilities.idempotency.idempotency" href="idempotency.html">aws_lambda_powertools.utilities.idempotency.idempotency</a></code></dt>
 <dd>
-<section class="desc"><p>Primary interface for idempotent Lambda functions utility</p></section>
+<div class="desc"><p>Primary interface for idempotent Lambda functions utility</p></div>
 </dd>
 <dt><code class="name"><a title="aws_lambda_powertools.utilities.idempotency.persistence" href="persistence/index.html">aws_lambda_powertools.utilities.idempotency.persistence</a></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 </dl>
 </section>
@@ -64,10 +66,10 @@ __all__ = (&#34;DynamoDBPersistenceLayer&#34;, &#34;BasePersistenceLayer&#34;, &
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="aws_lambda_powertools.utilities.idempotency.idempotent"><code class="name flex">
-<span>def <span class="ident">idempotent</span></span>(<span>handler, event, context, persistence_store, config=None)</span>
+<span>def <span class="ident">idempotent</span></span>(<span>handler: Callable[[Any, aws_lambda_powertools.utilities.lambda_context.LambdaContext], Any], event: Dict[str, Any], context: <a title="aws_lambda_powertools.utilities.typing.lambda_context.LambdaContext" href="../typing/lambda_context.html#aws_lambda_powertools.utilities.typing.lambda_context.LambdaContext">LambdaContext</a>, persistence_store: <a title="aws_lambda_powertools.utilities.idempotency.persistence.base.BasePersistenceLayer" href="persistence/base.html#aws_lambda_powertools.utilities.idempotency.persistence.base.BasePersistenceLayer">BasePersistenceLayer</a>, config: <a title="aws_lambda_powertools.utilities.idempotency.config.IdempotencyConfig" href="config.html#aws_lambda_powertools.utilities.idempotency.config.IdempotencyConfig">IdempotencyConfig</a> = None) ‑> Any</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Middleware to handle idempotency</p>
+<div class="desc"><p>Middleware to handle idempotency</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>handler</code></strong> :&ensp;<code>Callable</code></dt>
@@ -76,9 +78,9 @@ __all__ = (&#34;DynamoDBPersistenceLayer&#34;, &#34;BasePersistenceLayer&#34;, &
 <dd>Lambda's Event</dd>
 <dt><strong><code>context</code></strong> :&ensp;<code>Dict</code></dt>
 <dd>Lambda's Context</dd>
-<dt><strong><code>persistence_store</code></strong> :&ensp;<a title="aws_lambda_powertools.utilities.idempotency.BasePersistenceLayer" href="#aws_lambda_powertools.utilities.idempotency.BasePersistenceLayer"><code>BasePersistenceLayer</code></a></dt>
+<dt><strong><code>persistence_store</code></strong> :&ensp;<code><a title="aws_lambda_powertools.utilities.idempotency.BasePersistenceLayer" href="#aws_lambda_powertools.utilities.idempotency.BasePersistenceLayer">BasePersistenceLayer</a></code></dt>
 <dd>Instance of BasePersistenceLayer to store data</dd>
-<dt><strong><a title="aws_lambda_powertools.utilities.idempotency.config" href="config.html"><code>aws_lambda_powertools.utilities.idempotency.config</code></a></strong> :&ensp;<a title="aws_lambda_powertools.utilities.idempotency.IdempotencyConfig" href="#aws_lambda_powertools.utilities.idempotency.IdempotencyConfig"><code>IdempotencyConfig</code></a></dt>
+<dt><strong><code>config</code></strong> :&ensp;<code><a title="aws_lambda_powertools.utilities.idempotency.IdempotencyConfig" href="#aws_lambda_powertools.utilities.idempotency.IdempotencyConfig">IdempotencyConfig</a></code></dt>
 <dd>Configuration</dd>
 </dl>
 <h2 id="examples">Examples</h2>
@@ -93,7 +95,7 @@ __all__ = (&#34;DynamoDBPersistenceLayer&#34;, &#34;BasePersistenceLayer&#34;, &
 &gt;&gt;&gt; @idempotent(config=idem_config, persistence_store=persistence_layer)
 &gt;&gt;&gt; def handler(event, context):
 &gt;&gt;&gt;     return {"StatusCode": 200}
-</code></pre></section>
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -167,8 +169,8 @@ def idempotent(
 <span>class <span class="ident">BasePersistenceLayer</span></span>
 </code></dt>
 <dd>
-<section class="desc"><p>Abstract Base Class for Idempotency persistence layer.</p>
-<p>Initialize the defaults</p></section>
+<div class="desc"><p>Abstract Base Class for Idempotency persistence layer.</p>
+<p>Initialize the defaults</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -558,10 +560,10 @@ def idempotent(
 <h3>Static methods</h3>
 <dl>
 <dt id="aws_lambda_powertools.utilities.idempotency.BasePersistenceLayer.is_missing_idempotency_key"><code class="name flex">
-<span>def <span class="ident">is_missing_idempotency_key</span></span>(<span>data)</span>
+<span>def <span class="ident">is_missing_idempotency_key</span></span>(<span>data) ‑> bool</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -577,15 +579,15 @@ def is_missing_idempotency_key(data) -&gt; bool:
 <h3>Methods</h3>
 <dl>
 <dt id="aws_lambda_powertools.utilities.idempotency.BasePersistenceLayer.configure"><code class="name flex">
-<span>def <span class="ident">configure</span></span>(<span>self, config)</span>
+<span>def <span class="ident">configure</span></span>(<span>self, config: <a title="aws_lambda_powertools.utilities.idempotency.config.IdempotencyConfig" href="config.html#aws_lambda_powertools.utilities.idempotency.config.IdempotencyConfig">IdempotencyConfig</a>) ‑> NoneType</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Initialize the base persistence layer from the configuration settings</p>
+<div class="desc"><p>Initialize the base persistence layer from the configuration settings</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><a title="aws_lambda_powertools.utilities.idempotency.config" href="config.html"><code>aws_lambda_powertools.utilities.idempotency.config</code></a></strong> :&ensp;<a title="aws_lambda_powertools.utilities.idempotency.IdempotencyConfig" href="#aws_lambda_powertools.utilities.idempotency.IdempotencyConfig"><code>IdempotencyConfig</code></a></dt>
+<dt><strong><code>config</code></strong> :&ensp;<code><a title="aws_lambda_powertools.utilities.idempotency.IdempotencyConfig" href="#aws_lambda_powertools.utilities.idempotency.IdempotencyConfig">IdempotencyConfig</a></code></dt>
 <dd>Idempotency configuration settings</dd>
-</dl></section>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -622,19 +624,19 @@ def is_missing_idempotency_key(data) -&gt; bool:
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.idempotency.BasePersistenceLayer.delete_record"><code class="name flex">
-<span>def <span class="ident">delete_record</span></span>(<span>self, event, context, exception)</span>
+<span>def <span class="ident">delete_record</span></span>(<span>self, event: Dict[str, Any], context: <a title="aws_lambda_powertools.utilities.typing.lambda_context.LambdaContext" href="../typing/lambda_context.html#aws_lambda_powertools.utilities.typing.lambda_context.LambdaContext">LambdaContext</a>, exception: Exception)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Delete record from the persistence store</p>
+<div class="desc"><p>Delete record from the persistence store</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><code>event</code></strong> :&ensp;<code>Dict</code>[<code>str</code>, <code>Any</code>]</dt>
+<dt><strong><code>event</code></strong> :&ensp;<code>Dict[str, Any]</code></dt>
 <dd>Lambda event</dd>
 <dt><strong><code>context</code></strong> :&ensp;<code>LambdaContext</code></dt>
 <dd>Lambda context</dd>
 <dt><strong><code>exception</code></strong></dt>
 <dd>The exception raised by the lambda handler</dd>
-</dl></section>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -664,14 +666,14 @@ def is_missing_idempotency_key(data) -&gt; bool:
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.idempotency.BasePersistenceLayer.get_record"><code class="name flex">
-<span>def <span class="ident">get_record</span></span>(<span>self, event, context)</span>
+<span>def <span class="ident">get_record</span></span>(<span>self, event: Dict[str, Any], context: <a title="aws_lambda_powertools.utilities.typing.lambda_context.LambdaContext" href="../typing/lambda_context.html#aws_lambda_powertools.utilities.typing.lambda_context.LambdaContext">LambdaContext</a>) ‑> <a title="aws_lambda_powertools.utilities.idempotency.persistence.base.DataRecord" href="persistence/base.html#aws_lambda_powertools.utilities.idempotency.persistence.base.DataRecord">DataRecord</a></span>
 </code></dt>
 <dd>
-<section class="desc"><p>Calculate idempotency key for lambda_event, then retrieve item from persistence store using idempotency key
+<div class="desc"><p>Calculate idempotency key for lambda_event, then retrieve item from persistence store using idempotency key
 and return it as a DataRecord instance.and return it as a DataRecord instance.</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><code>event</code></strong> :&ensp;<code>Dict</code>[<code>str</code>, <code>Any</code>]</dt>
+<dt><strong><code>event</code></strong> :&ensp;<code>Dict[str, Any]</code></dt>
 <dd>Lambda event</dd>
 <dt><strong><code>context</code></strong> :&ensp;<code>LambdaContext</code></dt>
 <dd>Lambda context</dd>
@@ -687,7 +689,7 @@ and return it as a DataRecord instance.and return it as a DataRecord instance.</
 <dd>Exception raised if no record exists in persistence store with the idempotency key</dd>
 <dt><code>IdempotencyValidationError</code></dt>
 <dd>Event payload doesn't match the stored record for the given idempotency key</dd>
-</dl></section>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -734,17 +736,17 @@ and return it as a DataRecord instance.and return it as a DataRecord instance.</
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.idempotency.BasePersistenceLayer.save_inprogress"><code class="name flex">
-<span>def <span class="ident">save_inprogress</span></span>(<span>self, event, context)</span>
+<span>def <span class="ident">save_inprogress</span></span>(<span>self, event: Dict[str, Any], context: <a title="aws_lambda_powertools.utilities.typing.lambda_context.LambdaContext" href="../typing/lambda_context.html#aws_lambda_powertools.utilities.typing.lambda_context.LambdaContext">LambdaContext</a>) ‑> NoneType</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Save record of function's execution being in progress</p>
+<div class="desc"><p>Save record of function's execution being in progress</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><code>event</code></strong> :&ensp;<code>Dict</code>[<code>str</code>, <code>Any</code>]</dt>
+<dt><strong><code>event</code></strong> :&ensp;<code>Dict[str, Any]</code></dt>
 <dd>Lambda event</dd>
 <dt><strong><code>context</code></strong> :&ensp;<code>LambdaContext</code></dt>
 <dd>Lambda context</dd>
-</dl></section>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -776,19 +778,19 @@ and return it as a DataRecord instance.and return it as a DataRecord instance.</
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.idempotency.BasePersistenceLayer.save_success"><code class="name flex">
-<span>def <span class="ident">save_success</span></span>(<span>self, event, context, result)</span>
+<span>def <span class="ident">save_success</span></span>(<span>self, event: Dict[str, Any], context: <a title="aws_lambda_powertools.utilities.typing.lambda_context.LambdaContext" href="../typing/lambda_context.html#aws_lambda_powertools.utilities.typing.lambda_context.LambdaContext">LambdaContext</a>, result: dict) ‑> NoneType</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Save record of function's execution completing successfully</p>
+<div class="desc"><p>Save record of function's execution completing successfully</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><code>event</code></strong> :&ensp;<code>Dict</code>[<code>str</code>, <code>Any</code>]</dt>
+<dt><strong><code>event</code></strong> :&ensp;<code>Dict[str, Any]</code></dt>
 <dd>Lambda event</dd>
 <dt><strong><code>context</code></strong> :&ensp;<code>LambdaContext</code></dt>
 <dd>Lambda context</dd>
 <dt><strong><code>result</code></strong> :&ensp;<code>dict</code></dt>
 <dd>The response from lambda handler</dd>
-</dl></section>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -828,10 +830,10 @@ and return it as a DataRecord instance.and return it as a DataRecord instance.</
 </dd>
 <dt id="aws_lambda_powertools.utilities.idempotency.DynamoDBPersistenceLayer"><code class="flex name class">
 <span>class <span class="ident">DynamoDBPersistenceLayer</span></span>
-<span>(</span><span>table_name, key_attr='id', expiry_attr='expiration', status_attr='status', data_attr='data', validation_key_attr='validation', boto_config=None, boto3_session=None)</span>
+<span>(</span><span>table_name: str, key_attr: str = 'id', expiry_attr: str = 'expiration', status_attr: str = 'status', data_attr: str = 'data', validation_key_attr: str = 'validation', boto_config: Union[botocore.config.Config, NoneType] = None, boto3_session: Union[boto3.session.Session, NoneType] = None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Abstract Base Class for Idempotency persistence layer.</p>
+<div class="desc"><p>Abstract Base Class for Idempotency persistence layer.</p>
 <p>Initialize the DynamoDB client</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
@@ -849,10 +851,6 @@ and return it as a DataRecord instance.and return it as a DataRecord instance.</
 <dd>Botocore configuration to pass during client initialization</dd>
 <dt><strong><code>boto3_session</code></strong> :&ensp;<code>boto3.session.Session</code>, optional</dt>
 <dd>Boto3 session to use for AWS API communication</dd>
-<dt><strong><code>args</code></strong></dt>
-<dd>&nbsp;</dd>
-<dt><strong><code>kwargs</code></strong></dt>
-<dd>&nbsp;</dd>
 </dl>
 <h2 id="examples">Examples</h2>
 <p><strong>Create a DynamoDB persistence layer with custom settings</strong></p>
@@ -865,7 +863,7 @@ and return it as a DataRecord instance.and return it as a DataRecord instance.</
 &gt;&gt;&gt; @idempotent(persistence_store=persistence_store)
 &gt;&gt;&gt; def handler(event, context):
 &gt;&gt;&gt;     return {"StatusCode": 200}
-</code></pre></section>
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -901,9 +899,6 @@ and return it as a DataRecord instance.and return it as a DataRecord instance.</
             Botocore configuration to pass during client initialization
         boto3_session : boto3.session.Session, optional
             Boto3 session to use for AWS API communication
-
-        args
-        kwargs
 
         Examples
         --------
@@ -1016,7 +1011,7 @@ and return it as a DataRecord instance.and return it as a DataRecord instance.</
 
     def _delete_record(self, data_record: DataRecord) -&gt; None:
         logger.debug(f&#34;Deleting record for idempotency key: {data_record.idempotency_key}&#34;)
-        self.table.delete_item(Key={self.key_attr: data_record.idempotency_key},)</code></pre>
+        self.table.delete_item(Key={self.key_attr: data_record.idempotency_key})</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1038,10 +1033,10 @@ and return it as a DataRecord instance.and return it as a DataRecord instance.</
 </dd>
 <dt id="aws_lambda_powertools.utilities.idempotency.IdempotencyConfig"><code class="flex name class">
 <span>class <span class="ident">IdempotencyConfig</span></span>
-<span>(</span><span>event_key_jmespath='', payload_validation_jmespath='', jmespath_options=None, raise_on_no_idempotency_key=False, expires_after_seconds=3600, use_local_cache=False, local_cache_max_items=256, hash_function='md5')</span>
+<span>(</span><span>event_key_jmespath: str = '', payload_validation_jmespath: str = '', jmespath_options: Dict = None, raise_on_no_idempotency_key: bool = False, expires_after_seconds: int = 3600, use_local_cache: bool = False, local_cache_max_items: int = 256, hash_function: str = 'md5')</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Initialize the base persistence layer</p>
+<div class="desc"><p>Initialize the base persistence layer</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>event_key_jmespath</code></strong> :&ensp;<code>str</code></dt>
@@ -1058,7 +1053,7 @@ and return it as a DataRecord instance.and return it as a DataRecord instance.</
 <dd>Max number of items to store in local cache, by default 1024</dd>
 <dt><strong><code>hash_function</code></strong> :&ensp;<code>str</code>, optional</dt>
 <dd>Function to use for calculating hashes, by default md5.</dd>
-</dl></section>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1157,9 +1152,7 @@ and return it as a DataRecord instance.and return it as a DataRecord instance.</
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.5</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad()</script>
 </body>
 </html>

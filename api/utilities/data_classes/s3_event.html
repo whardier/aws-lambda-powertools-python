@@ -3,15 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.5" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>aws_lambda_powertools.utilities.data_classes.s3_event API documentation</title>
 <meta name="description" content="" />
-<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
-<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
-<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
 </head>
 <body>
 <main>
@@ -226,10 +228,10 @@ class S3Event(DictWrapper):
 <dl>
 <dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Bucket"><code class="flex name class">
 <span>class <span class="ident">S3Bucket</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -253,9 +255,9 @@ class S3Event(DictWrapper):
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Bucket.arn"><code class="name">var <span class="ident">arn</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Bucket.arn"><code class="name">var <span class="ident">arn</span> : str</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -265,9 +267,9 @@ def arn(self) -&gt; str:
     return self[&#34;s3&#34;][&#34;bucket&#34;][&#34;arn&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Bucket.name"><code class="name">var <span class="ident">name</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Bucket.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -277,9 +279,9 @@ def name(self) -&gt; str:
     return self[&#34;s3&#34;][&#34;bucket&#34;][&#34;name&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Bucket.owner_identity"><code class="name">var <span class="ident">owner_identity</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Bucket.owner_identity"><code class="name">var <span class="ident">owner_identity</span> : <a title="aws_lambda_powertools.utilities.data_classes.s3_event.S3Identity" href="#aws_lambda_powertools.utilities.data_classes.s3_event.S3Identity">S3Identity</a></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -301,16 +303,16 @@ def owner_identity(self) -&gt; S3Identity:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Event"><code class="flex name class">
 <span>class <span class="ident">S3Event</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>S3 event notification</p>
+<div class="desc"><p>S3 event notification</p>
 <h2 id="documentation">Documentation:</h2>
 <ul>
 <li><a href="https://docs.aws.amazon.com/lambda/latest/dg/with-s3.html">https://docs.aws.amazon.com/lambda/latest/dg/with-s3.html</a></li>
 <li><a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">https://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html</a></li>
 <li><a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/notification-content-structure.html">https://docs.aws.amazon.com/AmazonS3/latest/dev/notification-content-structure.html</a></li>
-</ul></section>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -351,9 +353,9 @@ def owner_identity(self) -&gt; S3Identity:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Event.bucket_name"><code class="name">var <span class="ident">bucket_name</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Event.bucket_name"><code class="name">var <span class="ident">bucket_name</span> : str</code></dt>
 <dd>
-<section class="desc"><p>Get the bucket name for the first s3 event record</p></section>
+<div class="desc"><p>Get the bucket name for the first s3 event record</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -364,9 +366,9 @@ def bucket_name(self) -&gt; str:
     return self[&#34;Records&#34;][0][&#34;s3&#34;][&#34;bucket&#34;][&#34;name&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Event.object_key"><code class="name">var <span class="ident">object_key</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Event.object_key"><code class="name">var <span class="ident">object_key</span> : str</code></dt>
 <dd>
-<section class="desc"><p>Get the object key for the first s3 event record and unquote plus</p></section>
+<div class="desc"><p>Get the object key for the first s3 event record and unquote plus</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -377,9 +379,9 @@ def object_key(self) -&gt; str:
     return unquote_plus(self[&#34;Records&#34;][0][&#34;s3&#34;][&#34;object&#34;][&#34;key&#34;])</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Event.record"><code class="name">var <span class="ident">record</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Event.record"><code class="name">var <span class="ident">record</span> : <a title="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord" href="#aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord">S3EventRecord</a></code></dt>
 <dd>
-<section class="desc"><p>Get the first s3 event record</p></section>
+<div class="desc"><p>Get the first s3 event record</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -390,9 +392,9 @@ def record(self) -&gt; S3EventRecord:
     return next(self.records)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Event.records"><code class="name">var <span class="ident">records</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Event.records"><code class="name">var <span class="ident">records</span> : Iterator[<a title="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord" href="#aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord">S3EventRecord</a>]</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -415,10 +417,10 @@ def records(self) -&gt; Iterator[S3EventRecord]:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord"><code class="flex name class">
 <span>class <span class="ident">S3EventRecord</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -484,9 +486,9 @@ def records(self) -&gt; Iterator[S3EventRecord]:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord.aws_region"><code class="name">var <span class="ident">aws_region</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord.aws_region"><code class="name">var <span class="ident">aws_region</span> : str</code></dt>
 <dd>
-<section class="desc"><p>aws region eg: us-east-1</p></section>
+<div class="desc"><p>aws region eg: us-east-1</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -497,9 +499,9 @@ def aws_region(self) -&gt; str:
     return self[&#34;awsRegion&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord.event_name"><code class="name">var <span class="ident">event_name</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord.event_name"><code class="name">var <span class="ident">event_name</span> : str</code></dt>
 <dd>
-<section class="desc"><p>Event type</p></section>
+<div class="desc"><p>Event type</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -510,9 +512,9 @@ def event_name(self) -&gt; str:
     return self[&#34;eventName&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord.event_source"><code class="name">var <span class="ident">event_source</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord.event_source"><code class="name">var <span class="ident">event_source</span> : str</code></dt>
 <dd>
-<section class="desc"><p>The AWS service from which the S3 event originated. For S3, this is aws:s3</p></section>
+<div class="desc"><p>The AWS service from which the S3 event originated. For S3, this is aws:s3</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -523,10 +525,10 @@ def event_source(self) -&gt; str:
     return self[&#34;eventSource&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord.event_time"><code class="name">var <span class="ident">event_time</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord.event_time"><code class="name">var <span class="ident">event_time</span> : str</code></dt>
 <dd>
-<section class="desc"><p>The time, in ISO-8601 format, for example, 1970-01-01T00:00:00.000Z, when S3 finished
-processing the request</p></section>
+<div class="desc"><p>The time, in ISO-8601 format, for example, 1970-01-01T00:00:00.000Z, when S3 finished
+processing the request</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -538,9 +540,9 @@ def event_time(self) -&gt; str:
     return self[&#34;eventTime&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord.event_version"><code class="name">var <span class="ident">event_version</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord.event_version"><code class="name">var <span class="ident">event_version</span> : str</code></dt>
 <dd>
-<section class="desc"><p>The eventVersion key value contains a major and minor version in the form <major>.<minor>.</p></section>
+<div class="desc"><p>The eventVersion key value contains a major and minor version in the form <major>.<minor>.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -551,9 +553,9 @@ def event_version(self) -&gt; str:
     return self[&#34;eventVersion&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord.glacier_event_data"><code class="name">var <span class="ident">glacier_event_data</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord.glacier_event_data"><code class="name">var <span class="ident">glacier_event_data</span> : Union[<a title="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecordGlacierEventData" href="#aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecordGlacierEventData">S3EventRecordGlacierEventData</a>, NoneType]</code></dt>
 <dd>
-<section class="desc"><p>The glacierEventData key is only visible for s3:ObjectRestore:Completed events.</p></section>
+<div class="desc"><p>The glacierEventData key is only visible for s3:ObjectRestore:Completed events.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -565,9 +567,9 @@ def glacier_event_data(self) -&gt; Optional[S3EventRecordGlacierEventData]:
     return None if item is None else S3EventRecordGlacierEventData(item)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord.request_parameters"><code class="name">var <span class="ident">request_parameters</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord.request_parameters"><code class="name">var <span class="ident">request_parameters</span> : <a title="aws_lambda_powertools.utilities.data_classes.s3_event.S3RequestParameters" href="#aws_lambda_powertools.utilities.data_classes.s3_event.S3RequestParameters">S3RequestParameters</a></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -577,12 +579,12 @@ def request_parameters(self) -&gt; S3RequestParameters:
     return S3RequestParameters(self._data)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord.response_elements"><code class="name">var <span class="ident">response_elements</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord.response_elements"><code class="name">var <span class="ident">response_elements</span> : Dict[str, str]</code></dt>
 <dd>
-<section class="desc"><p>The responseElements key value is useful if you want to trace a request by following up with AWS Support.</p>
+<div class="desc"><p>The responseElements key value is useful if you want to trace a request by following up with AWS Support.</p>
 <p>Both x-amz-request-id and x-amz-id-2 help Amazon S3 trace an individual request. These values are the same
 as those that Amazon S3 returns in the response to the request that initiates the events, so they can be
-used to match the event to the request.</p></section>
+used to match the event to the request.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -598,9 +600,9 @@ def response_elements(self) -&gt; Dict[str, str]:
     return self[&#34;responseElements&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord.s3"><code class="name">var <span class="ident">s3</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord.s3"><code class="name">var <span class="ident">s3</span> : <a title="aws_lambda_powertools.utilities.data_classes.s3_event.S3Message" href="#aws_lambda_powertools.utilities.data_classes.s3_event.S3Message">S3Message</a></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -610,9 +612,9 @@ def s3(self) -&gt; S3Message:
     return S3Message(self._data)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord.user_identity"><code class="name">var <span class="ident">user_identity</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecord.user_identity"><code class="name">var <span class="ident">user_identity</span> : <a title="aws_lambda_powertools.utilities.data_classes.s3_event.S3Identity" href="#aws_lambda_powertools.utilities.data_classes.s3_event.S3Identity">S3Identity</a></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -634,10 +636,10 @@ def user_identity(self) -&gt; S3Identity:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecordGlacierEventData"><code class="flex name class">
 <span>class <span class="ident">S3EventRecordGlacierEventData</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -657,10 +659,10 @@ def user_identity(self) -&gt; S3Identity:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecordGlacierEventData.restore_event_data"><code class="name">var <span class="ident">restore_event_data</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecordGlacierEventData.restore_event_data"><code class="name">var <span class="ident">restore_event_data</span> : <a title="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecordGlacierRestoreEventData" href="#aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecordGlacierRestoreEventData">S3EventRecordGlacierRestoreEventData</a></code></dt>
 <dd>
-<section class="desc"><p>The restoreEventData key contains attributes related to your restore request.</p>
-<p>The glacierEventData key is only visible for s3:ObjectRestore:Completed events</p></section>
+<div class="desc"><p>The restoreEventData key contains attributes related to your restore request.</p>
+<p>The glacierEventData key is only visible for s3:ObjectRestore:Completed events</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -686,10 +688,10 @@ def restore_event_data(self) -&gt; S3EventRecordGlacierRestoreEventData:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecordGlacierRestoreEventData"><code class="flex name class">
 <span>class <span class="ident">S3EventRecordGlacierRestoreEventData</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -711,9 +713,9 @@ def restore_event_data(self) -&gt; S3EventRecordGlacierRestoreEventData:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecordGlacierRestoreEventData.lifecycle_restoration_expiry_time"><code class="name">var <span class="ident">lifecycle_restoration_expiry_time</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecordGlacierRestoreEventData.lifecycle_restoration_expiry_time"><code class="name">var <span class="ident">lifecycle_restoration_expiry_time</span> : str</code></dt>
 <dd>
-<section class="desc"><p>Time when the object restoration will be expired.</p></section>
+<div class="desc"><p>Time when the object restoration will be expired.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -724,9 +726,9 @@ def lifecycle_restoration_expiry_time(self) -&gt; str:
     return self[&#34;restoreEventData&#34;][&#34;lifecycleRestorationExpiryTime&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecordGlacierRestoreEventData.lifecycle_restore_storage_class"><code class="name">var <span class="ident">lifecycle_restore_storage_class</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3EventRecordGlacierRestoreEventData.lifecycle_restore_storage_class"><code class="name">var <span class="ident">lifecycle_restore_storage_class</span> : str</code></dt>
 <dd>
-<section class="desc"><p>Source storage class for restore</p></section>
+<div class="desc"><p>Source storage class for restore</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -749,10 +751,10 @@ def lifecycle_restore_storage_class(self) -&gt; str:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Identity"><code class="flex name class">
 <span>class <span class="ident">S3Identity</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -768,9 +770,9 @@ def lifecycle_restore_storage_class(self) -&gt; str:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Identity.principal_id"><code class="name">var <span class="ident">principal_id</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Identity.principal_id"><code class="name">var <span class="ident">principal_id</span> : str</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -792,10 +794,10 @@ def principal_id(self) -&gt; str:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Message"><code class="flex name class">
 <span>class <span class="ident">S3Message</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -826,9 +828,9 @@ def principal_id(self) -&gt; str:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Message.bucket"><code class="name">var <span class="ident">bucket</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Message.bucket"><code class="name">var <span class="ident">bucket</span> : <a title="aws_lambda_powertools.utilities.data_classes.s3_event.S3Bucket" href="#aws_lambda_powertools.utilities.data_classes.s3_event.S3Bucket">S3Bucket</a></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -838,9 +840,9 @@ def bucket(self) -&gt; S3Bucket:
     return S3Bucket(self._data)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Message.configuration_id"><code class="name">var <span class="ident">configuration_id</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Message.configuration_id"><code class="name">var <span class="ident">configuration_id</span> : str</code></dt>
 <dd>
-<section class="desc"><p>ID found in the bucket notification configuration</p></section>
+<div class="desc"><p>ID found in the bucket notification configuration</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -851,9 +853,9 @@ def configuration_id(self) -&gt; str:
     return self[&#34;s3&#34;][&#34;configurationId&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Message.get_object"><code class="name">var <span class="ident">get_object</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Message.get_object"><code class="name">var <span class="ident">get_object</span> : <a title="aws_lambda_powertools.utilities.data_classes.s3_event.S3Object" href="#aws_lambda_powertools.utilities.data_classes.s3_event.S3Object">S3Object</a></code></dt>
 <dd>
-<section class="desc"><p>Get the <code>object</code> property as an S3Object</p></section>
+<div class="desc"><p>Get the <code>object</code> property as an S3Object</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -865,9 +867,9 @@ def get_object(self) -&gt; S3Object:
     return S3Object(self._data)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Message.s3_schema_version"><code class="name">var <span class="ident">s3_schema_version</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Message.s3_schema_version"><code class="name">var <span class="ident">s3_schema_version</span> : str</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -889,10 +891,10 @@ def s3_schema_version(self) -&gt; str:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Object"><code class="flex name class">
 <span>class <span class="ident">S3Object</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -931,9 +933,9 @@ def s3_schema_version(self) -&gt; str:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Object.etag"><code class="name">var <span class="ident">etag</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Object.etag"><code class="name">var <span class="ident">etag</span> : str</code></dt>
 <dd>
-<section class="desc"><p>object eTag</p></section>
+<div class="desc"><p>object eTag</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -944,9 +946,9 @@ def etag(self) -&gt; str:
     return self[&#34;s3&#34;][&#34;object&#34;][&#34;eTag&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Object.key"><code class="name">var <span class="ident">key</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Object.key"><code class="name">var <span class="ident">key</span> : str</code></dt>
 <dd>
-<section class="desc"><p>Object key</p></section>
+<div class="desc"><p>Object key</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -957,10 +959,10 @@ def key(self) -&gt; str:
     return self[&#34;s3&#34;][&#34;object&#34;][&#34;key&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Object.sequencer"><code class="name">var <span class="ident">sequencer</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Object.sequencer"><code class="name">var <span class="ident">sequencer</span> : str</code></dt>
 <dd>
-<section class="desc"><p>A string representation of a hexadecimal value used to determine event sequence,
-only used with PUTs and DELETEs</p></section>
+<div class="desc"><p>A string representation of a hexadecimal value used to determine event sequence,
+only used with PUTs and DELETEs</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -973,9 +975,9 @@ def sequencer(self) -&gt; str:
     return self[&#34;s3&#34;][&#34;object&#34;][&#34;sequencer&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Object.size"><code class="name">var <span class="ident">size</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Object.size"><code class="name">var <span class="ident">size</span> : int</code></dt>
 <dd>
-<section class="desc"><p>Object byte size</p></section>
+<div class="desc"><p>Object byte size</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -986,9 +988,9 @@ def size(self) -&gt; int:
     return int(self[&#34;s3&#34;][&#34;object&#34;][&#34;size&#34;])</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Object.version_id"><code class="name">var <span class="ident">version_id</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3Object.version_id"><code class="name">var <span class="ident">version_id</span> : Union[str, NoneType]</code></dt>
 <dd>
-<section class="desc"><p>Object version if bucket is versioning-enabled, otherwise null</p></section>
+<div class="desc"><p>Object version if bucket is versioning-enabled, otherwise null</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1011,10 +1013,10 @@ def version_id(self) -&gt; Optional[str]:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3RequestParameters"><code class="flex name class">
 <span>class <span class="ident">S3RequestParameters</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1030,9 +1032,9 @@ def version_id(self) -&gt; Optional[str]:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3RequestParameters.source_ip_address"><code class="name">var <span class="ident">source_ip_address</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.s3_event.S3RequestParameters.source_ip_address"><code class="name">var <span class="ident">source_ip_address</span> : str</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1150,9 +1152,7 @@ def source_ip_address(self) -&gt; str:
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.5</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad()</script>
 </body>
 </html>

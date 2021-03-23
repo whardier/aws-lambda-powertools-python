@@ -3,15 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.5" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>aws_lambda_powertools.utilities.parameters API documentation</title>
 <meta name="description" content="Parameter retrieval and caching utility" />
-<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
-<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
-<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
 </head>
 <body>
 <main>
@@ -58,27 +60,27 @@ __all__ = [
 <dl>
 <dt><code class="name"><a title="aws_lambda_powertools.utilities.parameters.appconfig" href="appconfig.html">aws_lambda_powertools.utilities.parameters.appconfig</a></code></dt>
 <dd>
-<section class="desc"><p>AWS App Config configuration retrieval and caching utility</p></section>
+<div class="desc"><p>AWS App Config configuration retrieval and caching utility</p></div>
 </dd>
 <dt><code class="name"><a title="aws_lambda_powertools.utilities.parameters.base" href="base.html">aws_lambda_powertools.utilities.parameters.base</a></code></dt>
 <dd>
-<section class="desc"><p>Base for Parameter providers</p></section>
+<div class="desc"><p>Base for Parameter providers</p></div>
 </dd>
 <dt><code class="name"><a title="aws_lambda_powertools.utilities.parameters.dynamodb" href="dynamodb.html">aws_lambda_powertools.utilities.parameters.dynamodb</a></code></dt>
 <dd>
-<section class="desc"><p>Amazon DynamoDB parameter retrieval and caching utility</p></section>
+<div class="desc"><p>Amazon DynamoDB parameter retrieval and caching utility</p></div>
 </dd>
 <dt><code class="name"><a title="aws_lambda_powertools.utilities.parameters.exceptions" href="exceptions.html">aws_lambda_powertools.utilities.parameters.exceptions</a></code></dt>
 <dd>
-<section class="desc"><p>Parameter retrieval exceptions</p></section>
+<div class="desc"><p>Parameter retrieval exceptions</p></div>
 </dd>
 <dt><code class="name"><a title="aws_lambda_powertools.utilities.parameters.secrets" href="secrets.html">aws_lambda_powertools.utilities.parameters.secrets</a></code></dt>
 <dd>
-<section class="desc"><p>AWS Secrets Manager parameter retrieval and caching utility</p></section>
+<div class="desc"><p>AWS Secrets Manager parameter retrieval and caching utility</p></div>
 </dd>
 <dt><code class="name"><a title="aws_lambda_powertools.utilities.parameters.ssm" href="ssm.html">aws_lambda_powertools.utilities.parameters.ssm</a></code></dt>
 <dd>
-<section class="desc"><p>AWS SSM Parameter retrieval and caching utility</p></section>
+<div class="desc"><p>AWS SSM Parameter retrieval and caching utility</p></div>
 </dd>
 </dl>
 </section>
@@ -88,10 +90,10 @@ __all__ = [
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="aws_lambda_powertools.utilities.parameters.get_app_config"><code class="name flex">
-<span>def <span class="ident">get_app_config</span></span>(<span>name, environment, application=None, transform=None, force_fetch=False, **sdk_options)</span>
+<span>def <span class="ident">get_app_config</span></span>(<span>name: str, environment: str, application: Union[str, NoneType] = None, transform: Union[str, NoneType] = None, force_fetch: bool = False, **sdk_options) ‑> Union[str, list, dict, bytes]</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Retrieve a configuration value from AWS App Config.</p>
+<div class="desc"><p>Retrieve a configuration value from AWS App Config.</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
@@ -109,10 +111,10 @@ __all__ = [
 </dl>
 <h2 id="raises">Raises</h2>
 <dl>
-<dt><a title="aws_lambda_powertools.utilities.parameters.GetParameterError" href="#aws_lambda_powertools.utilities.parameters.GetParameterError"><code>GetParameterError</code></a></dt>
+<dt><code><a title="aws_lambda_powertools.utilities.parameters.GetParameterError" href="#aws_lambda_powertools.utilities.parameters.GetParameterError">GetParameterError</a></code></dt>
 <dd>When the parameter provider fails to retrieve a parameter value for
 a given name.</dd>
-<dt><a title="aws_lambda_powertools.utilities.parameters.TransformParameterError" href="#aws_lambda_powertools.utilities.parameters.TransformParameterError"><code>TransformParameterError</code></a></dt>
+<dt><code><a title="aws_lambda_powertools.utilities.parameters.TransformParameterError" href="#aws_lambda_powertools.utilities.parameters.TransformParameterError">TransformParameterError</a></code></dt>
 <dd>When the parameter provider fails to transform a parameter value.</dd>
 </dl>
 <h2 id="example">Example</h2>
@@ -131,7 +133,7 @@ My configuration value
 &gt;&gt;&gt;
 &gt;&gt;&gt; print(value)
 My configuration's JSON value
-</code></pre></section>
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -201,10 +203,10 @@ My configuration's JSON value
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parameters.get_parameter"><code class="name flex">
-<span>def <span class="ident">get_parameter</span></span>(<span>name, transform=None, decrypt=False, force_fetch=False, **sdk_options)</span>
+<span>def <span class="ident">get_parameter</span></span>(<span>name: str, transform: Union[str, NoneType] = None, decrypt: bool = False, force_fetch: bool = False, **sdk_options) ‑> Union[str, list, dict, bytes]</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Retrieve a parameter value from AWS Systems Manager (SSM) Parameter Store</p>
+<div class="desc"><p>Retrieve a parameter value from AWS Systems Manager (SSM) Parameter Store</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
@@ -220,10 +222,10 @@ My configuration's JSON value
 </dl>
 <h2 id="raises">Raises</h2>
 <dl>
-<dt><a title="aws_lambda_powertools.utilities.parameters.GetParameterError" href="#aws_lambda_powertools.utilities.parameters.GetParameterError"><code>GetParameterError</code></a></dt>
+<dt><code><a title="aws_lambda_powertools.utilities.parameters.GetParameterError" href="#aws_lambda_powertools.utilities.parameters.GetParameterError">GetParameterError</a></code></dt>
 <dd>When the parameter provider fails to retrieve a parameter value for
 a given name.</dd>
-<dt><a title="aws_lambda_powertools.utilities.parameters.TransformParameterError" href="#aws_lambda_powertools.utilities.parameters.TransformParameterError"><code>TransformParameterError</code></a></dt>
+<dt><code><a title="aws_lambda_powertools.utilities.parameters.TransformParameterError" href="#aws_lambda_powertools.utilities.parameters.TransformParameterError">TransformParameterError</a></code></dt>
 <dd>When the parameter provider fails to transform a parameter value.</dd>
 </dl>
 <h2 id="example">Example</h2>
@@ -242,7 +244,7 @@ My parameter value
 &gt;&gt;&gt;
 &gt;&gt;&gt; print(value)
 My parameter value
-</code></pre></section>
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -306,10 +308,10 @@ My parameter value
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parameters.get_parameters"><code class="name flex">
-<span>def <span class="ident">get_parameters</span></span>(<span>path, transform=None, recursive=True, decrypt=False, force_fetch=False, **sdk_options)</span>
+<span>def <span class="ident">get_parameters</span></span>(<span>path: str, transform: Union[str, NoneType] = None, recursive: bool = True, decrypt: bool = False, force_fetch: bool = False, **sdk_options) ‑> Union[Dict[str, str], Dict[str, dict], Dict[str, bytes]]</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Retrieve multiple parameter values from AWS Systems Manager (SSM) Parameter Store</p>
+<div class="desc"><p>Retrieve multiple parameter values from AWS Systems Manager (SSM) Parameter Store</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
@@ -327,10 +329,10 @@ My parameter value
 </dl>
 <h2 id="raises">Raises</h2>
 <dl>
-<dt><a title="aws_lambda_powertools.utilities.parameters.GetParameterError" href="#aws_lambda_powertools.utilities.parameters.GetParameterError"><code>GetParameterError</code></a></dt>
+<dt><code><a title="aws_lambda_powertools.utilities.parameters.GetParameterError" href="#aws_lambda_powertools.utilities.parameters.GetParameterError">GetParameterError</a></code></dt>
 <dd>When the parameter provider fails to retrieve parameter values for
 a given path.</dd>
-<dt><a title="aws_lambda_powertools.utilities.parameters.TransformParameterError" href="#aws_lambda_powertools.utilities.parameters.TransformParameterError"><code>TransformParameterError</code></a></dt>
+<dt><code><a title="aws_lambda_powertools.utilities.parameters.TransformParameterError" href="#aws_lambda_powertools.utilities.parameters.TransformParameterError">TransformParameterError</a></code></dt>
 <dd>When the parameter provider fails to transform a parameter value.</dd>
 </dl>
 <h2 id="example">Example</h2>
@@ -349,7 +351,7 @@ a given path.</dd>
 <pre><code>&gt;&gt;&gt; from aws_lambda_powertools.utilities.parameters import get_parameter
 &gt;&gt;&gt;
 &gt;&gt;&gt; values = get_parameters("/my/path/prefix", transform='binary')
-</code></pre></section>
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -420,10 +422,10 @@ a given path.</dd>
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parameters.get_secret"><code class="name flex">
-<span>def <span class="ident">get_secret</span></span>(<span>name, transform=None, force_fetch=False, **sdk_options)</span>
+<span>def <span class="ident">get_secret</span></span>(<span>name: str, transform: Union[str, NoneType] = None, force_fetch: bool = False, **sdk_options) ‑> Union[str, dict, bytes]</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Retrieve a parameter value from AWS Secrets Manager</p>
+<div class="desc"><p>Retrieve a parameter value from AWS Secrets Manager</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
@@ -437,10 +439,10 @@ a given path.</dd>
 </dl>
 <h2 id="raises">Raises</h2>
 <dl>
-<dt><a title="aws_lambda_powertools.utilities.parameters.GetParameterError" href="#aws_lambda_powertools.utilities.parameters.GetParameterError"><code>GetParameterError</code></a></dt>
+<dt><code><a title="aws_lambda_powertools.utilities.parameters.GetParameterError" href="#aws_lambda_powertools.utilities.parameters.GetParameterError">GetParameterError</a></code></dt>
 <dd>When the parameter provider fails to retrieve a parameter value for
 a given name.</dd>
-<dt><a title="aws_lambda_powertools.utilities.parameters.TransformParameterError" href="#aws_lambda_powertools.utilities.parameters.TransformParameterError"><code>TransformParameterError</code></a></dt>
+<dt><code><a title="aws_lambda_powertools.utilities.parameters.TransformParameterError" href="#aws_lambda_powertools.utilities.parameters.TransformParameterError">TransformParameterError</a></code></dt>
 <dd>When the parameter provider fails to transform a parameter value.</dd>
 </dl>
 <h2 id="example">Example</h2>
@@ -458,7 +460,7 @@ a given name.</dd>
 <pre><code>&gt;&gt;&gt; from aws_lambda_powertools.utilities.parameters import get_secret
 &gt;&gt;&gt;
 &gt;&gt;&gt; get_secret("my-secret", VersionId="f658cac0-98a5-41d9-b993-8a76a7799194")
-</code></pre></section>
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -523,10 +525,10 @@ a given name.</dd>
 <dl>
 <dt id="aws_lambda_powertools.utilities.parameters.AppConfigProvider"><code class="flex name class">
 <span>class <span class="ident">AppConfigProvider</span></span>
-<span>(</span><span>environment, application=None, config=None)</span>
+<span>(</span><span>environment: str, application: Union[str, NoneType] = None, config: Union[botocore.config.Config, NoneType] = None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>AWS App Config Provider</p>
+<div class="desc"><p>AWS App Config Provider</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>environment</code></strong> :&ensp;<code>str</code></dt>
@@ -559,7 +561,7 @@ My configuration value
 &gt;&gt;&gt; print(value)
 My configuration value
 </code></pre>
-<p>Initialize the App Config client</p></section>
+<p>Initialize the App Config client</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -607,9 +609,7 @@ My configuration value
 
     client = None
 
-    def __init__(
-        self, environment: str, application: Optional[str] = None, config: Optional[Config] = None,
-    ):
+    def __init__(self, environment: str, application: Optional[str] = None, config: Optional[Config] = None):
         &#34;&#34;&#34;
         Initialize the App Config client
         &#34;&#34;&#34;
@@ -661,7 +661,7 @@ My configuration value
 <dl>
 <dt id="aws_lambda_powertools.utilities.parameters.AppConfigProvider.client"><code class="name">var <span class="ident">client</span></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -678,8 +678,8 @@ My configuration value
 <span>class <span class="ident">BaseProvider</span></span>
 </code></dt>
 <dd>
-<section class="desc"><p>Abstract Base Class for Parameter providers</p>
-<p>Initialize the base provider</p></section>
+<div class="desc"><p>Abstract Base Class for Parameter providers</p>
+<p>Initialize the base provider</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -759,7 +759,7 @@ My configuration value
         if transform is not None:
             value = transform_value(value, transform)
 
-        self.store[key] = ExpirableValue(value, datetime.now() + timedelta(seconds=max_age),)
+        self.store[key] = ExpirableValue(value, datetime.now() + timedelta(seconds=max_age))
 
         return value
 
@@ -828,7 +828,7 @@ My configuration value
 
                 values[key] = transform_value(value, _transform, raise_on_transform_error)
 
-        self.store[key] = ExpirableValue(values, datetime.now() + timedelta(seconds=max_age),)
+        self.store[key] = ExpirableValue(values, datetime.now() + timedelta(seconds=max_age))
 
         return values
 
@@ -854,16 +854,16 @@ My configuration value
 <dl>
 <dt id="aws_lambda_powertools.utilities.parameters.BaseProvider.store"><code class="name">var <span class="ident">store</span></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 </dl>
 <h3>Methods</h3>
 <dl>
 <dt id="aws_lambda_powertools.utilities.parameters.BaseProvider.get"><code class="name flex">
-<span>def <span class="ident">get</span></span>(<span>self, name, max_age=5, transform=None, force_fetch=False, **sdk_options)</span>
+<span>def <span class="ident">get</span></span>(<span>self, name: str, max_age: int = 5, transform: Union[str, NoneType] = None, force_fetch: bool = False, **sdk_options) ‑> Union[str, list, dict, bytes]</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Retrieve a parameter value or return the cached value</p>
+<div class="desc"><p>Retrieve a parameter value or return the cached value</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
@@ -881,12 +881,12 @@ values.</dd>
 </dl>
 <h2 id="raises">Raises</h2>
 <dl>
-<dt><a title="aws_lambda_powertools.utilities.parameters.GetParameterError" href="#aws_lambda_powertools.utilities.parameters.GetParameterError"><code>GetParameterError</code></a></dt>
+<dt><code><a title="aws_lambda_powertools.utilities.parameters.GetParameterError" href="#aws_lambda_powertools.utilities.parameters.GetParameterError">GetParameterError</a></code></dt>
 <dd>When the parameter provider fails to retrieve a parameter value for
 a given name.</dd>
-<dt><a title="aws_lambda_powertools.utilities.parameters.TransformParameterError" href="#aws_lambda_powertools.utilities.parameters.TransformParameterError"><code>TransformParameterError</code></a></dt>
+<dt><code><a title="aws_lambda_powertools.utilities.parameters.TransformParameterError" href="#aws_lambda_powertools.utilities.parameters.TransformParameterError">TransformParameterError</a></code></dt>
 <dd>When the parameter provider fails to transform a parameter value.</dd>
-</dl></section>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -949,16 +949,16 @@ a given name.</dd>
     if transform is not None:
         value = transform_value(value, transform)
 
-    self.store[key] = ExpirableValue(value, datetime.now() + timedelta(seconds=max_age),)
+    self.store[key] = ExpirableValue(value, datetime.now() + timedelta(seconds=max_age))
 
     return value</code></pre>
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parameters.BaseProvider.get_multiple"><code class="name flex">
-<span>def <span class="ident">get_multiple</span></span>(<span>self, path, max_age=5, transform=None, raise_on_transform_error=False, force_fetch=False, **sdk_options)</span>
+<span>def <span class="ident">get_multiple</span></span>(<span>self, path: str, max_age: int = 5, transform: Union[str, NoneType] = None, raise_on_transform_error: bool = False, force_fetch: bool = False, **sdk_options) ‑> Union[Dict[str, str], Dict[str, dict], Dict[str, bytes]]</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Retrieve multiple parameters based on a path prefix</p>
+<div class="desc"><p>Retrieve multiple parameters based on a path prefix</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>path</code></strong> :&ensp;<code>str</code></dt>
@@ -979,12 +979,12 @@ return a None value for each transform that failed</dd>
 </dl>
 <h2 id="raises">Raises</h2>
 <dl>
-<dt><a title="aws_lambda_powertools.utilities.parameters.GetParameterError" href="#aws_lambda_powertools.utilities.parameters.GetParameterError"><code>GetParameterError</code></a></dt>
+<dt><code><a title="aws_lambda_powertools.utilities.parameters.GetParameterError" href="#aws_lambda_powertools.utilities.parameters.GetParameterError">GetParameterError</a></code></dt>
 <dd>When the parameter provider fails to retrieve parameter values for
 a given path.</dd>
-<dt><a title="aws_lambda_powertools.utilities.parameters.TransformParameterError" href="#aws_lambda_powertools.utilities.parameters.TransformParameterError"><code>TransformParameterError</code></a></dt>
+<dt><code><a title="aws_lambda_powertools.utilities.parameters.TransformParameterError" href="#aws_lambda_powertools.utilities.parameters.TransformParameterError">TransformParameterError</a></code></dt>
 <dd>When the parameter provider fails to transform a parameter value.</dd>
-</dl></section>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1047,7 +1047,7 @@ a given path.</dd>
 
             values[key] = transform_value(value, _transform, raise_on_transform_error)
 
-    self.store[key] = ExpirableValue(values, datetime.now() + timedelta(seconds=max_age),)
+    self.store[key] = ExpirableValue(values, datetime.now() + timedelta(seconds=max_age))
 
     return values</code></pre>
 </details>
@@ -1056,10 +1056,10 @@ a given path.</dd>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parameters.DynamoDBProvider"><code class="flex name class">
 <span>class <span class="ident">DynamoDBProvider</span></span>
-<span>(</span><span>table_name, key_attr='id', sort_attr='sk', value_attr='value', config=None)</span>
+<span>(</span><span>table_name: str, key_attr: str = 'id', sort_attr: str = 'sk', value_attr: str = 'value', config: Union[botocore.config.Config, NoneType] = None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Amazon DynamoDB Parameter Provider</p>
+<div class="desc"><p>Amazon DynamoDB Parameter Provider</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>table_name</code></strong> :&ensp;<code>str</code></dt>
@@ -1171,7 +1171,7 @@ a   Parameter value a
 b   Parameter value b
 c   Parameter value c
 </code></pre>
-<p>Initialize the DynamoDB client</p></section>
+<p>Initialize the DynamoDB client</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1381,19 +1381,19 @@ c   Parameter value c
 <dl>
 <dt id="aws_lambda_powertools.utilities.parameters.DynamoDBProvider.key_attr"><code class="name">var <span class="ident">key_attr</span></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parameters.DynamoDBProvider.sort_attr"><code class="name">var <span class="ident">sort_attr</span></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parameters.DynamoDBProvider.table"><code class="name">var <span class="ident">table</span></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parameters.DynamoDBProvider.value_attr"><code class="name">var <span class="ident">value_attr</span></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -1408,10 +1408,10 @@ c   Parameter value c
 </dd>
 <dt id="aws_lambda_powertools.utilities.parameters.GetParameterError"><code class="flex name class">
 <span>class <span class="ident">GetParameterError</span></span>
-<span>(</span><span>...)</span>
+<span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>When a provider raises an exception on parameter retrieval</p></section>
+<div class="desc"><p>When a provider raises an exception on parameter retrieval</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1427,10 +1427,10 @@ c   Parameter value c
 </dd>
 <dt id="aws_lambda_powertools.utilities.parameters.SSMProvider"><code class="flex name class">
 <span>class <span class="ident">SSMProvider</span></span>
-<span>(</span><span>config=None)</span>
+<span>(</span><span>config: Union[botocore.config.Config, NoneType] = None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>AWS Systems Manager Parameter Store Provider</p>
+<div class="desc"><p>AWS Systems Manager Parameter Store Provider</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>config</code></strong> :&ensp;<code>botocore.config.Config</code>, optional</dt>
@@ -1482,7 +1482,7 @@ My parameter value
 /my/path/prefix/b   Parameter value b
 /my/path/prefix/c   Parameter value c
 </code></pre>
-<p>Initialize the SSM Parameter Store client</p></section>
+<p>Initialize the SSM Parameter Store client</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1550,9 +1550,7 @@ My parameter value
 
     client = None
 
-    def __init__(
-        self, config: Optional[Config] = None,
-    ):
+    def __init__(self, config: Optional[Config] = None):
         &#34;&#34;&#34;
         Initialize the SSM Parameter Store client
         &#34;&#34;&#34;
@@ -1671,16 +1669,16 @@ My parameter value
 <dl>
 <dt id="aws_lambda_powertools.utilities.parameters.SSMProvider.client"><code class="name">var <span class="ident">client</span></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 </dl>
 <h3>Methods</h3>
 <dl>
 <dt id="aws_lambda_powertools.utilities.parameters.SSMProvider.get"><code class="name flex">
-<span>def <span class="ident">get</span></span>(<span>self, name, max_age=5, transform=None, decrypt=False, force_fetch=False, **sdk_options)</span>
+<span>def <span class="ident">get</span></span>(<span>self, name: str, max_age: int = 5, transform: Union[str, NoneType] = None, decrypt: bool = False, force_fetch: bool = False, **sdk_options) ‑> Union[str, list, dict, bytes]</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Retrieve a parameter value or return the cached value</p>
+<div class="desc"><p>Retrieve a parameter value or return the cached value</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>name</code></strong> :&ensp;<code>str</code></dt>
@@ -1700,12 +1698,12 @@ values.</dd>
 </dl>
 <h2 id="raises">Raises</h2>
 <dl>
-<dt><a title="aws_lambda_powertools.utilities.parameters.GetParameterError" href="#aws_lambda_powertools.utilities.parameters.GetParameterError"><code>GetParameterError</code></a></dt>
+<dt><code><a title="aws_lambda_powertools.utilities.parameters.GetParameterError" href="#aws_lambda_powertools.utilities.parameters.GetParameterError">GetParameterError</a></code></dt>
 <dd>When the parameter provider fails to retrieve a parameter value for
 a given name.</dd>
-<dt><a title="aws_lambda_powertools.utilities.parameters.TransformParameterError" href="#aws_lambda_powertools.utilities.parameters.TransformParameterError"><code>TransformParameterError</code></a></dt>
+<dt><code><a title="aws_lambda_powertools.utilities.parameters.TransformParameterError" href="#aws_lambda_powertools.utilities.parameters.TransformParameterError">TransformParameterError</a></code></dt>
 <dd>When the parameter provider fails to transform a parameter value.</dd>
-</dl></section>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1766,10 +1764,10 @@ a given name.</dd>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parameters.SecretsProvider"><code class="flex name class">
 <span>class <span class="ident">SecretsProvider</span></span>
-<span>(</span><span>config=None)</span>
+<span>(</span><span>config: Union[botocore.config.Config, NoneType] = None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>AWS Secrets Manager Parameter Provider</p>
+<div class="desc"><p>AWS Secrets Manager Parameter Provider</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>config</code></strong> :&ensp;<code>botocore.config.Config</code>, optional</dt>
@@ -1806,7 +1804,7 @@ My parameter value
 &gt;&gt;&gt; print(value)
 My parameter value
 </code></pre>
-<p>Initialize the Secrets Manager client</p></section>
+<p>Initialize the Secrets Manager client</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1901,7 +1899,7 @@ My parameter value
 <dl>
 <dt id="aws_lambda_powertools.utilities.parameters.SecretsProvider.client"><code class="name">var <span class="ident">client</span></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -1916,10 +1914,10 @@ My parameter value
 </dd>
 <dt id="aws_lambda_powertools.utilities.parameters.TransformParameterError"><code class="flex name class">
 <span>class <span class="ident">TransformParameterError</span></span>
-<span>(</span><span>...)</span>
+<span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>When a provider fails to transform a parameter value</p></section>
+<div class="desc"><p>When a provider fails to transform a parameter value</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2015,9 +2013,7 @@ My parameter value
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.5</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad()</script>
 </body>
 </html>

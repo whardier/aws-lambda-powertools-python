@@ -3,15 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.5" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>aws_lambda_powertools.tracing API documentation</title>
 <meta name="description" content="Tracing utility" />
-<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
-<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
-<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
 </head>
 <body>
 <main>
@@ -40,15 +42,15 @@ __all__ = [&#34;Tracer&#34;, &#34;aiohttp_trace_config&#34;]</code></pre>
 <dl>
 <dt><code class="name"><a title="aws_lambda_powertools.tracing.base" href="base.html">aws_lambda_powertools.tracing.base</a></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 <dt><code class="name"><a title="aws_lambda_powertools.tracing.extensions" href="extensions.html">aws_lambda_powertools.tracing.extensions</a></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 <dt><code class="name"><a title="aws_lambda_powertools.tracing.tracer" href="tracer.html">aws_lambda_powertools.tracing.tracer</a></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 </dl>
 </section>
@@ -61,13 +63,13 @@ __all__ = [&#34;Tracer&#34;, &#34;aiohttp_trace_config&#34;]</code></pre>
 <span>def <span class="ident">aiohttp_trace_config</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>aiohttp extension for X-Ray (aws_xray_trace_config)</p>
+<div class="desc"><p>aiohttp extension for X-Ray (aws_xray_trace_config)</p>
 <p>It expects you to have aiohttp as a dependency.</p>
 <h2 id="returns">Returns</h2>
 <dl>
 <dt><code>TraceConfig</code></dt>
 <dd>aiohttp trace config</dd>
-</dl></section>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -96,10 +98,10 @@ __all__ = [&#34;Tracer&#34;, &#34;aiohttp_trace_config&#34;]</code></pre>
 <dl>
 <dt id="aws_lambda_powertools.tracing.Tracer"><code class="flex name class">
 <span>class <span class="ident">Tracer</span></span>
-<span>(</span><span>service=None, disabled=None, auto_patch=None, patch_modules=None, provider=None)</span>
+<span>(</span><span>service: str = None, disabled: bool = None, auto_patch: bool = None, patch_modules: Union[Tuple[str], NoneType] = None, provider: <a title="aws_lambda_powertools.tracing.base.BaseProvider" href="base.html#aws_lambda_powertools.tracing.base.BaseProvider">BaseProvider</a> = None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Tracer using AWS-XRay to provide decorators with known defaults for Lambda functions</p>
+<div class="desc"><p>Tracer using AWS-XRay to provide decorators with known defaults for Lambda functions</p>
 <p>When running locally, it detects whether it's running via SAM CLI,
 and if it is it returns dummy segments/subsegments instead.</p>
 <p>By default, it patches all available libraries supported by X-Ray SDK. Patching is
@@ -108,17 +110,15 @@ automatically disabled when running locally via SAM CLI or by any other means. <
 <p>Tracer keeps a copy of its configuration as it can be instantiated more than once. This
 is useful when you are using your own middlewares and want to utilize an existing Tracer.
 Make sure to set <code>auto_patch=False</code> in subsequent Tracer instances to avoid double patching.</p>
-<h2 id="environment-variables">Environment variables</h2>
-<dl>
-<dt><strong><code>POWERTOOLS_TRACE_DISABLED</code></strong> :&ensp;<code>str</code></dt>
-<dd>disable tracer (e.g. <code>"true", "True", "TRUE"</code>)</dd>
-<dt><strong><code>POWERTOOLS_SERVICE_NAME</code></strong> :&ensp;<code>str</code></dt>
-<dd>service name</dd>
-<dt><strong><code>POWERTOOLS_TRACER_CAPTURE_RESPONSE</code></strong> :&ensp;<code>str</code></dt>
-<dd>disable auto-capture response as metadata (e.g. <code>"true", "True", "TRUE"</code>)</dd>
-<dt><strong><code>POWERTOOLS_TRACER_CAPTURE_ERROR</code></strong> :&ensp;<code>str</code></dt>
-<dd>disable auto-capture error as metadata (e.g. <code>"true", "True", "TRUE"</code>)</dd>
-</dl>
+<h2 id="environment-variables">Environment Variables</h2>
+<p>POWERTOOLS_TRACE_DISABLED : str
+disable tracer (e.g. <code>"true", "True", "TRUE"</code>)
+POWERTOOLS_SERVICE_NAME : str
+service name
+POWERTOOLS_TRACER_CAPTURE_RESPONSE : str
+disable auto-capture response as metadata (e.g. <code>"true", "True", "TRUE"</code>)
+POWERTOOLS_TRACER_CAPTURE_ERROR : str
+disable auto-capture error as metadata (e.g. <code>"true", "True", "TRUE"</code>)</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>service</code></strong> :&ensp;<code>str</code></dt>
@@ -128,14 +128,14 @@ Make sure to set <code>auto_patch=False</code> in subsequent Tracer instances to
 <dt><strong><code>disabled</code></strong> :&ensp;<code>bool</code></dt>
 <dd>Flag to explicitly disable tracing, useful when running/testing locally
 <code>Env POWERTOOLS_TRACE_DISABLED="true"</code></dd>
-<dt><strong><code>patch_modules</code></strong> :&ensp;<code>Tuple</code>[<code>str</code>]</dt>
+<dt><strong><code>patch_modules</code></strong> :&ensp;<code>Tuple[str]</code></dt>
 <dd>Tuple of modules supported by tracing provider to patch, by default all modules are patched</dd>
 <dt><strong><code>provider</code></strong> :&ensp;<code>BaseProvider</code></dt>
 <dd>Tracing provider, by default it is aws_xray_sdk.core.xray_recorder</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <dl>
-<dt><a title="aws_lambda_powertools.tracing.Tracer" href="#aws_lambda_powertools.tracing.Tracer"><code>Tracer</code></a></dt>
+<dt><code><a title="aws_lambda_powertools.tracing.Tracer" href="#aws_lambda_powertools.tracing.Tracer">Tracer</a></code></dt>
 <dd>Tracer instance with imported modules patched</dd>
 </dl>
 <h2 id="example">Example</h2>
@@ -203,7 +203,7 @@ tracer = Tracer()
 <h2 id="limitations">Limitations</h2>
 <ul>
 <li>Async handler not supported</li>
-</ul></section>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -926,10 +926,10 @@ tracer = Tracer()
 <h3>Methods</h3>
 <dl>
 <dt id="aws_lambda_powertools.tracing.Tracer.capture_lambda_handler"><code class="name flex">
-<span>def <span class="ident">capture_lambda_handler</span></span>(<span>self, lambda_handler=None, capture_response=None, capture_error=None)</span>
+<span>def <span class="ident">capture_lambda_handler</span></span>(<span>self, lambda_handler: Callable[[Dict, Any, Union[Dict, NoneType]], Any] = None, capture_response: Union[bool, NoneType] = None, capture_error: Union[bool, NoneType] = None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Decorator to create subsegment for lambda handlers</p>
+<div class="desc"><p>Decorator to create subsegment for lambda handlers</p>
 <p>As Lambda follows (event, context) signature we can remove some of the boilerplate
 and also capture any exception any Lambda function throws or its response as metadata</p>
 <h2 id="parameters">Parameters</h2>
@@ -958,7 +958,7 @@ def handler(event, context):
 <dl>
 <dt><code>err</code></dt>
 <dd>Exception raised by method</dd>
-</dl></section>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1052,10 +1052,10 @@ def handler(event, context):
 </details>
 </dd>
 <dt id="aws_lambda_powertools.tracing.Tracer.capture_method"><code class="name flex">
-<span>def <span class="ident">capture_method</span></span>(<span>self, method=None, capture_response=None, capture_error=None)</span>
+<span>def <span class="ident">capture_method</span></span>(<span>self, method: Callable = None, capture_response: Union[bool, NoneType] = None, capture_error: Union[bool, NoneType] = None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Decorator to create subsegment for arbitrary functions</p>
+<div class="desc"><p>Decorator to create subsegment for arbitrary functions</p>
 <p>It also captures both response and exceptions as metadata
 and creates a subsegment named <code>## &lt;method_name&gt;</code></p>
 <p>When running <a href="https://docs.python.org/3/library/asyncio-task.html#id6">async functions concurrently</a>,
@@ -1188,7 +1188,7 @@ async def async_tasks():
 <dl>
 <dt><code>err</code></dt>
 <dd>Exception raised by method</dd>
-</dl></section>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1381,16 +1381,16 @@ async def async_tasks():
 </details>
 </dd>
 <dt id="aws_lambda_powertools.tracing.Tracer.patch"><code class="name flex">
-<span>def <span class="ident">patch</span></span>(<span>self, modules=None)</span>
+<span>def <span class="ident">patch</span></span>(<span>self, modules: Tuple[str] = None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Patch modules for instrumentation.</p>
+<div class="desc"><p>Patch modules for instrumentation.</p>
 <p>Patches all supported modules by default if none are given.</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><code>modules</code></strong> :&ensp;<code>Tuple</code>[<code>str</code>]</dt>
+<dt><strong><code>modules</code></strong> :&ensp;<code>Tuple[str]</code></dt>
 <dd>List of modules to be patched, optional by default</dd>
-</dl></section>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1416,22 +1416,22 @@ async def async_tasks():
 </details>
 </dd>
 <dt id="aws_lambda_powertools.tracing.Tracer.put_annotation"><code class="name flex">
-<span>def <span class="ident">put_annotation</span></span>(<span>self, key, value)</span>
+<span>def <span class="ident">put_annotation</span></span>(<span>self, key: str, value: Union[str, numbers.Number, bool])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Adds annotation to existing segment or subsegment</p>
+<div class="desc"><p>Adds annotation to existing segment or subsegment</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>key</code></strong> :&ensp;<code>str</code></dt>
 <dd>Annotation key</dd>
-<dt><strong><code>value</code></strong> :&ensp;<code>Union</code>[<code>str</code>, <code>numbers.Number</code>, <code>bool</code>]</dt>
+<dt><strong><code>value</code></strong> :&ensp;<code>Union[str, numbers.Number, bool]</code></dt>
 <dd>Value for annotation</dd>
 </dl>
 <h2 id="example">Example</h2>
 <p>Custom annotation for a pseudo service named payment</p>
 <pre><code>tracer = Tracer(service="payment")
 tracer.put_annotation("PaymentStatus", "CONFIRMED")
-</code></pre></section>
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1462,10 +1462,10 @@ tracer.put_annotation("PaymentStatus", "CONFIRMED")
 </details>
 </dd>
 <dt id="aws_lambda_powertools.tracing.Tracer.put_metadata"><code class="name flex">
-<span>def <span class="ident">put_metadata</span></span>(<span>self, key, value, namespace=None)</span>
+<span>def <span class="ident">put_metadata</span></span>(<span>self, key: str, value: Any, namespace: str = None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Adds metadata to existing segment or subsegment</p>
+<div class="desc"><p>Adds metadata to existing segment or subsegment</p>
 <h2 id="parameters">Parameters</h2>
 <dl>
 <dt><strong><code>key</code></strong> :&ensp;<code>str</code></dt>
@@ -1480,7 +1480,7 @@ tracer.put_annotation("PaymentStatus", "CONFIRMED")
 <pre><code>tracer = Tracer(service="payment")
 response = collect_payment()
 tracer.put_metadata("Payment collection", response)
-</code></pre></section>
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1560,9 +1560,7 @@ tracer.put_metadata("Payment collection", response)
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.5</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad()</script>
 </body>
 </html>

@@ -3,15 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.5" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>aws_lambda_powertools.utilities.parser API documentation</title>
 <meta name="description" content="Advanced event_parser utility" />
-<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
-<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
-<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
 </head>
 <body>
 <main>
@@ -50,27 +52,27 @@ __all__ = [
 <dl>
 <dt><code class="name"><a title="aws_lambda_powertools.utilities.parser.envelopes" href="envelopes/index.html">aws_lambda_powertools.utilities.parser.envelopes</a></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 <dt><code class="name"><a title="aws_lambda_powertools.utilities.parser.exceptions" href="exceptions.html">aws_lambda_powertools.utilities.parser.exceptions</a></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 <dt><code class="name"><a title="aws_lambda_powertools.utilities.parser.models" href="models/index.html">aws_lambda_powertools.utilities.parser.models</a></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 <dt><code class="name"><a title="aws_lambda_powertools.utilities.parser.parser" href="parser.html">aws_lambda_powertools.utilities.parser.parser</a></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 <dt><code class="name"><a title="aws_lambda_powertools.utilities.parser.pydantic" href="pydantic.html">aws_lambda_powertools.utilities.parser.pydantic</a></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 <dt><code class="name"><a title="aws_lambda_powertools.utilities.parser.types" href="types.html">aws_lambda_powertools.utilities.parser.types</a></code></dt>
 <dd>
-<section class="desc"><p>Generics and other shared types used across parser</p></section>
+<div class="desc"><p>Generics and other shared types used across parser</p></div>
 </dd>
 </dl>
 </section>
@@ -80,13 +82,13 @@ __all__ = [
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="aws_lambda_powertools.utilities.parser.Field"><code class="name flex">
-<span>def <span class="ident">Field</span></span>(<span>default=PydanticUndefined, *, default_factory=None, alias=None, title=None, description=None, const=None, gt=None, ge=None, lt=None, le=None, multiple_of=None, min_items=None, max_items=None, min_length=None, max_length=None, regex=None, **extra)</span>
+<span>def <span class="ident">Field</span></span>(<span>default: Any = PydanticUndefined, *, default_factory: Union[Callable[[], Any], NoneType] = None, alias: unicode = None, title: unicode = None, description: unicode = None, const: bool = None, gt: float = None, ge: float = None, lt: float = None, le: float = None, multiple_of: float = None, min_items: int = None, max_items: int = None, min_length: int = None, max_length: int = None, regex: unicode = None, **extra: Any) ‑> Any</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Used to provide extra information about a field, either for the model schema or complex validation. Some arguments
+<div class="desc"><p>Used to provide extra information about a field, either for the model schema or complex validation. Some arguments
 apply only to number fields (<code>int</code>, <code>float</code>, <code>Decimal</code>) and some apply only to <code>str</code>.</p>
 <p>:param default: since this is replacing the field’s default, its first argument is used
-to set the default, use ellipsis (<code>...</code>) to indicate the field is required
+to set the default, use ellipsis (<code>&hellip;</code>) to indicate the field is required
 :param default_factory: callable that will be called when a default value is needed for this field
 If both <code>default</code> and <code>default_factory</code> are set, an error is raised.
 :param alias: the public name of the field
@@ -109,13 +111,13 @@ schema will have a <code>maximum</code> validation keyword
 schema will have a <code>maxLength</code> validation keyword
 :param regex: only applies to strings, requires the field match agains a regular expression
 pattern string. The schema will have a <code>pattern</code> validation keyword
-:param **extra: any additional keyword arguments will be added as is to the schema</p></section>
+:param **extra: any additional keyword arguments will be added as is to the schema</p></div>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parser.event_parser"><code class="name flex">
-<span>def <span class="ident">event_parser</span></span>(<span>handler, event, context, model, envelope=None)</span>
+<span>def <span class="ident">event_parser</span></span>(<span>handler: Callable[[Any, aws_lambda_powertools.utilities.lambda_context.LambdaContext], Any], event: Dict[str, Any], context: <a title="aws_lambda_powertools.utilities.typing.lambda_context.LambdaContext" href="../typing/lambda_context.html#aws_lambda_powertools.utilities.typing.lambda_context.LambdaContext">LambdaContext</a>, model: ~Model, envelope: Union[~Envelope, NoneType] = None) ‑> Any</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Lambda handler decorator to parse &amp; validate events using Pydantic models</p>
+<div class="desc"><p>Lambda handler decorator to parse &amp; validate events using Pydantic models</p>
 <p>It requires a model that implements Pydantic BaseModel to parse &amp; validate the event.</p>
 <p>When an envelope is given, it'll use the following logic:</p>
 <ol>
@@ -148,28 +150,28 @@ def handler(event: Order, context: LambdaContext):
 </code></pre>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><code>handler</code></strong> :&ensp; <code>Callable</code></dt>
+<dt><strong><code>handler</code></strong> :&ensp;<code> Callable</code></dt>
 <dd>Method to annotate on</dd>
-<dt><strong><code>event</code></strong> :&ensp;
-<code>Dict</code></dt>
+<dt><strong><code>event</code></strong> :&ensp;<code>
+Dict</code></dt>
 <dd>Lambda event to be parsed &amp; validated</dd>
-<dt><strong><code>context</code></strong> :&ensp; <code>LambdaContext</code></dt>
+<dt><strong><code>context</code></strong> :&ensp;<code> LambdaContext</code></dt>
 <dd>Lambda context object</dd>
-<dt><strong><code>model</code></strong> :&ensp;
-<code>Model</code></dt>
+<dt><strong><code>model</code></strong> :&ensp;<code>
+Model</code></dt>
 <dd>Your data model that will replace the event.</dd>
 <dt><strong><code>envelope</code></strong> :&ensp;<code>Envelope</code></dt>
 <dd>Optional envelope to extract the model from</dd>
 </dl>
 <h2 id="raises">Raises</h2>
 <dl>
-<dt><a title="aws_lambda_powertools.utilities.parser.ValidationError" href="#aws_lambda_powertools.utilities.parser.ValidationError"><code>ValidationError</code></a></dt>
+<dt><code><a title="aws_lambda_powertools.utilities.parser.ValidationError" href="#aws_lambda_powertools.utilities.parser.ValidationError">ValidationError</a></code></dt>
 <dd>When input event does not conform with model provided</dd>
 <dt><code>InvalidModelTypeError</code></dt>
 <dd>When model given does not implement BaseModel</dd>
 <dt><code>InvalidEnvelopeError</code></dt>
 <dd>When envelope given does not implement BaseEnvelope</dd>
-</dl></section>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -248,10 +250,10 @@ def event_parser(
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parser.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>event, model, envelope=None)</span>
+<span>def <span class="ident">parse</span></span>(<span>event: Dict[str, Any], model: ~Model, envelope: Union[~Envelope, NoneType] = None) ‑> ~Model</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Standalone function to parse &amp; validate events using Pydantic models</p>
+<div class="desc"><p>Standalone function to parse &amp; validate events using Pydantic models</p>
 <p>Typically used when you need fine-grained control over error handling compared to event_parser decorator.</p>
 <h2 id="example">Example</h2>
 <p><strong>Lambda handler decorator to parse &amp; validate event</strong></p>
@@ -282,24 +284,24 @@ def handler(event: Order, context: LambdaContext):
 </code></pre>
 <h2 id="parameters">Parameters</h2>
 <dl>
-<dt><strong><code>event</code></strong> :&ensp;
-<code>Dict</code></dt>
+<dt><strong><code>event</code></strong> :&ensp;<code>
+Dict</code></dt>
 <dd>Lambda event to be parsed &amp; validated</dd>
-<dt><strong><code>model</code></strong> :&ensp;
-<code>Model</code></dt>
+<dt><strong><code>model</code></strong> :&ensp;<code>
+Model</code></dt>
 <dd>Your data model that will replace the event</dd>
 <dt><strong><code>envelope</code></strong> :&ensp;<code>Envelope</code></dt>
 <dd>Optional envelope to extract the model from</dd>
 </dl>
 <h2 id="raises">Raises</h2>
 <dl>
-<dt><a title="aws_lambda_powertools.utilities.parser.ValidationError" href="#aws_lambda_powertools.utilities.parser.ValidationError"><code>ValidationError</code></a></dt>
+<dt><code><a title="aws_lambda_powertools.utilities.parser.ValidationError" href="#aws_lambda_powertools.utilities.parser.ValidationError">ValidationError</a></code></dt>
 <dd>When input event does not conform with model provided</dd>
 <dt><code>InvalidModelTypeError</code></dt>
 <dd>When model given does not implement BaseModel</dd>
 <dt><code>InvalidEnvelopeError</code></dt>
 <dd>When envelope given does not implement BaseEnvelope</dd>
-</dl></section>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -376,24 +378,24 @@ def handler(event: Order, context: LambdaContext):
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parser.root_validator"><code class="name flex">
-<span>def <span class="ident">root_validator</span></span>(<span>*, pre=False, allow_reuse=False, skip_on_failure=False)</span>
+<span>def <span class="ident">root_validator</span></span>(<span>*, pre: bool = False, allow_reuse: bool = False, skip_on_failure: bool = False) ‑> Union[classmethod, Callable[[Callable[..., Any]], classmethod]]</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Decorate methods on a model indicating that they should be used to validate (and perhaps modify) data either
-before or after standard model parsing/validation is performed.</p></section>
+<div class="desc"><p>Decorate methods on a model indicating that they should be used to validate (and perhaps modify) data either
+before or after standard model parsing/validation is performed.</p></div>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parser.validator"><code class="name flex">
-<span>def <span class="ident">validator</span></span>(<span>*fields, pre=False, each_item=False, always=False, check_fields=True, whole=None, allow_reuse=False)</span>
+<span>def <span class="ident">validator</span></span>(<span>*fields: unicode, pre: bool = False, each_item: bool = False, always: bool = False, check_fields: bool = True, whole: bool = None, allow_reuse: bool = False) ‑> Callable[[Callable[..., Any]], classmethod]</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Decorate methods on the class indicating that they should be used to validate fields
+<div class="desc"><p>Decorate methods on the class indicating that they should be used to validate fields
 :param fields: which field(s) the method should be called on
 :param pre: whether or not this validator should be called before the standard validators (else after)
 :param each_item: for complex objects (sets, lists etc.) whether to validate individual elements rather than the
 whole object
 :param always: whether this method and other validators should be called even if the value is missing
 :param check_fields: whether to check that the fields actually exist on the model
-:param allow_reuse: whether to track and raise an error if another validator refers to the decorated function</p></section>
+:param allow_reuse: whether to track and raise an error if another validator refers to the decorated function</p></div>
 </dd>
 </dl>
 </section>
@@ -404,7 +406,7 @@ whole object
 <span>class <span class="ident">BaseEnvelope</span></span>
 </code></dt>
 <dd>
-<section class="desc"><p>ABC implementation for creating a supported Envelope</p></section>
+<div class="desc"><p>ABC implementation for creating a supported Envelope</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -476,10 +478,10 @@ whole object
 <h3>Methods</h3>
 <dl>
 <dt id="aws_lambda_powertools.utilities.parser.BaseEnvelope.parse"><code class="name flex">
-<span>def <span class="ident">parse</span></span>(<span>self, data, model)</span>
+<span>def <span class="ident">parse</span></span>(<span>self, data: Union[Dict[str, Any], Any, NoneType], model: Type[~Model])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Implementation to parse data against envelope model, then against the data model</p>
+<div class="desc"><p>Implementation to parse data against envelope model, then against the data model</p>
 <p>NOTE: Call <code>_parse</code> method to fully parse data with model provided.</p>
 <h2 id="example">Example</h2>
 <p><strong>EventBridge envelope implementation example</strong></p>
@@ -488,7 +490,7 @@ whole object
 parsed_envelope = EventBridgeModel(**data)</p>
 <pre><code># 2. parses portion of data within the envelope against model
 return self._parse(data=parsed_envelope.detail, model=data_model)
-</code></pre></section>
+</code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -518,10 +520,11 @@ def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Type[Model]):
 </dd>
 <dt id="aws_lambda_powertools.utilities.parser.BaseModel"><code class="flex name class">
 <span>class <span class="ident">BaseModel</span></span>
+<span>(</span><span>**data: Any)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
-<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></section>
+<div class="desc"><p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises ValidationError if the input data cannot be parsed to form a valid model.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>pydantic.utils.Representation</li>
@@ -577,117 +580,117 @@ def parse(self, data: Optional[Union[Dict[str, Any], Any]], model: Type[Model]):
 <dl>
 <dt id="aws_lambda_powertools.utilities.parser.BaseModel.Config"><code class="name">var <span class="ident">Config</span></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 </dl>
 <h3>Static methods</h3>
 <dl>
 <dt id="aws_lambda_powertools.utilities.parser.BaseModel.construct"><code class="name flex">
-<span>def <span class="ident">construct</span></span>(<span>**values)</span>
+<span>def <span class="ident">construct</span></span>(<span>**values: Any) ‑> Model</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Creates a new model setting <strong>dict</strong> and <strong>fields_set</strong> from trusted or pre-validated data.
-Default values are respected, but no other validation is performed.</p></section>
+<div class="desc"><p>Creates a new model setting <strong>dict</strong> and <strong>fields_set</strong> from trusted or pre-validated data.
+Default values are respected, but no other validation is performed.</p></div>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parser.BaseModel.from_orm"><code class="name flex">
-<span>def <span class="ident">from_orm</span></span>(<span>obj)</span>
+<span>def <span class="ident">from_orm</span></span>(<span>obj: Any) ‑> Model</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parser.BaseModel.parse_file"><code class="name flex">
-<span>def <span class="ident">parse_file</span></span>(<span>path, *, content_type=None, encoding='utf8', proto=None, allow_pickle=False)</span>
+<span>def <span class="ident">parse_file</span></span>(<span>path: Union[str, pathlib.Path], *, content_type: unicode = None, encoding: unicode = 'utf8', proto: pydantic.parse.Protocol = None, allow_pickle: bool = False) ‑> Model</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parser.BaseModel.parse_obj"><code class="name flex">
-<span>def <span class="ident">parse_obj</span></span>(<span>obj)</span>
+<span>def <span class="ident">parse_obj</span></span>(<span>obj: Any) ‑> Model</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parser.BaseModel.parse_raw"><code class="name flex">
-<span>def <span class="ident">parse_raw</span></span>(<span>b, *, content_type=None, encoding='utf8', proto=None, allow_pickle=False)</span>
+<span>def <span class="ident">parse_raw</span></span>(<span>b: Union[str, bytes], *, content_type: unicode = None, encoding: unicode = 'utf8', proto: pydantic.parse.Protocol = None, allow_pickle: bool = False) ‑> Model</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parser.BaseModel.schema"><code class="name flex">
-<span>def <span class="ident">schema</span></span>(<span>by_alias=True, ref_template='#/definitions/{model}')</span>
+<span>def <span class="ident">schema</span></span>(<span>by_alias: bool = True, ref_template: unicode = '#/definitions/{model}') ‑> DictStrAny</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parser.BaseModel.schema_json"><code class="name flex">
-<span>def <span class="ident">schema_json</span></span>(<span>*, by_alias=True, ref_template='#/definitions/{model}', **dumps_kwargs)</span>
+<span>def <span class="ident">schema_json</span></span>(<span>*, by_alias: bool = True, ref_template: unicode = '#/definitions/{model}', **dumps_kwargs: Any) ‑> unicode</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parser.BaseModel.update_forward_refs"><code class="name flex">
-<span>def <span class="ident">update_forward_refs</span></span>(<span>**localns)</span>
+<span>def <span class="ident">update_forward_refs</span></span>(<span>**localns: Any) ‑> NoneType</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Try to update ForwardRefs on fields based on this Model, globalns and localns.</p></section>
+<div class="desc"><p>Try to update ForwardRefs on fields based on this Model, globalns and localns.</p></div>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parser.BaseModel.validate"><code class="name flex">
-<span>def <span class="ident">validate</span></span>(<span>value)</span>
+<span>def <span class="ident">validate</span></span>(<span>value: Any) ‑> Model</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 </dl>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.parser.BaseModel.fields"><code class="name">var <span class="ident">fields</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.parser.BaseModel.fields"><code class="name">var <span class="ident">fields</span> : Dict[str, pydantic.fields.ModelField]</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 </dl>
 <h3>Methods</h3>
 <dl>
 <dt id="aws_lambda_powertools.utilities.parser.BaseModel.copy"><code class="name flex">
-<span>def <span class="ident">copy</span></span>(<span>self, *, include=None, exclude=None, update=None, deep=False)</span>
+<span>def <span class="ident">copy</span></span>(<span>self: Model, *, include: Union[ForwardRef('AbstractSetIntStr'), ForwardRef('MappingIntStrAny')] = None, exclude: Union[ForwardRef('AbstractSetIntStr'), ForwardRef('MappingIntStrAny')] = None, update: DictStrAny = None, deep: bool = False) ‑> Model</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Duplicate a model, optionally choose which fields to include, exclude and change.</p>
+<div class="desc"><p>Duplicate a model, optionally choose which fields to include, exclude and change.</p>
 <p>:param include: fields to include in new model
 :param exclude: fields to exclude from new model, as with values this takes precedence over include
 :param update: values to change/add in the new model. Note: the data is not validated before creating
 the new model: you should trust this data
 :param deep: set to <code>True</code> to make a deep copy of the model
-:return: new model instance</p></section>
+:return: new model instance</p></div>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parser.BaseModel.dict"><code class="name flex">
-<span>def <span class="ident">dict</span></span>(<span>self, *, include=None, exclude=None, by_alias=False, skip_defaults=None, exclude_unset=False, exclude_defaults=False, exclude_none=False)</span>
+<span>def <span class="ident">dict</span></span>(<span>self, *, include: Union[ForwardRef('AbstractSetIntStr'), ForwardRef('MappingIntStrAny')] = None, exclude: Union[ForwardRef('AbstractSetIntStr'), ForwardRef('MappingIntStrAny')] = None, by_alias: bool = False, skip_defaults: bool = None, exclude_unset: bool = False, exclude_defaults: bool = False, exclude_none: bool = False) ‑> DictStrAny</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Generate a dictionary representation of the model, optionally specifying which fields to include or exclude.</p></section>
+<div class="desc"><p>Generate a dictionary representation of the model, optionally specifying which fields to include or exclude.</p></div>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parser.BaseModel.json"><code class="name flex">
-<span>def <span class="ident">json</span></span>(<span>self, *, include=None, exclude=None, by_alias=False, skip_defaults=None, exclude_unset=False, exclude_defaults=False, exclude_none=False, encoder=None, **dumps_kwargs)</span>
+<span>def <span class="ident">json</span></span>(<span>self, *, include: Union[ForwardRef('AbstractSetIntStr'), ForwardRef('MappingIntStrAny')] = None, exclude: Union[ForwardRef('AbstractSetIntStr'), ForwardRef('MappingIntStrAny')] = None, by_alias: bool = False, skip_defaults: bool = None, exclude_unset: bool = False, exclude_defaults: bool = False, exclude_none: bool = False, encoder: Union[Callable[[Any], Any], NoneType] = None, **dumps_kwargs: Any) ‑> unicode</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Generate a JSON representation of the model, <code>include</code> and <code>exclude</code> arguments as per <code>dict()</code>.</p>
-<p><code>encoder</code> is an optional function to supply as <code>default</code> to json.dumps(), other arguments as per <code>json.dumps()</code>.</p></section>
+<div class="desc"><p>Generate a JSON representation of the model, <code>include</code> and <code>exclude</code> arguments as per <code>dict()</code>.</p>
+<p><code>encoder</code> is an optional function to supply as <code>default</code> to json.dumps(), other arguments as per <code>json.dumps()</code>.</p></div>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parser.BaseModel.to_string"><code class="name flex">
-<span>def <span class="ident">to_string</span></span>(<span>self, pretty=False)</span>
+<span>def <span class="ident">to_string</span></span>(<span>self, pretty: bool = False) ‑> unicode</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 </dl>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parser.ValidationError"><code class="flex name class">
 <span>class <span class="ident">ValidationError</span></span>
-<span>(</span><span>errors, model)</span>
+<span>(</span><span>errors: Sequence[Union[Sequence[Any], pydantic.error_wrappers.ErrorWrapper]], model: ModelOrDc)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Mixin to provide <strong>str</strong>, <strong>repr</strong>, and <strong>pretty</strong> methods. See #884 for more details.</p>
+<div class="desc"><p>Mixin to provide <strong>str</strong>, <strong>repr</strong>, and <strong>pretty</strong> methods. See #884 for more details.</p>
 <p><strong>pretty</strong> is used by <a href="https://python-devtools.helpmanual.io/">devtools</a> to provide human readable representations
-of objects.</p></section>
+of objects.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>pydantic.utils.Representation</li>
@@ -699,26 +702,26 @@ of objects.</p></section>
 <dl>
 <dt id="aws_lambda_powertools.utilities.parser.ValidationError.model"><code class="name">var <span class="ident">model</span></code></dt>
 <dd>
-<section class="desc"><p>Return an attribute of instance, which is of type owner.</p></section>
+<div class="desc"><p>Return an attribute of instance, which is of type owner.</p></div>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parser.ValidationError.raw_errors"><code class="name">var <span class="ident">raw_errors</span></code></dt>
 <dd>
-<section class="desc"><p>Return an attribute of instance, which is of type owner.</p></section>
+<div class="desc"><p>Return an attribute of instance, which is of type owner.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
 <dl>
 <dt id="aws_lambda_powertools.utilities.parser.ValidationError.errors"><code class="name flex">
-<span>def <span class="ident">errors</span></span>(<span>self)</span>
+<span>def <span class="ident">errors</span></span>(<span>self) ‑> List[Dict[str, Any]]</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 <dt id="aws_lambda_powertools.utilities.parser.ValidationError.json"><code class="name flex">
-<span>def <span class="ident">json</span></span>(<span>self, *, indent=2)</span>
+<span>def <span class="ident">json</span></span>(<span>self, *, indent: Union[NoneType, int, str] = 2) ‑> unicode</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 </dd>
 </dl>
 </dd>
@@ -798,9 +801,7 @@ of objects.</p></section>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.5</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad()</script>
 </body>
 </html>

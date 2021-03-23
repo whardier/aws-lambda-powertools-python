@@ -3,15 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.5" />
+<meta name="generator" content="pdoc 0.9.2" />
 <title>aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event API documentation</title>
 <meta name="description" content="" />
-<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
-<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
-<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
 </head>
 <body>
 <main>
@@ -615,7 +617,7 @@ class DefineAuthChallengeTriggerEventRequest(DictWrapper):
     @property
     def user_not_found(self) -&gt; Optional[bool]:
         &#34;&#34;&#34;A Boolean that is populated when PreventUserExistenceErrors is set to ENABLED for your user pool client.
-        A value of true means that the user id (user name, email address, etc.) did not match any existing users. &#34;&#34;&#34;
+        A value of true means that the user id (user name, email address, etc.) did not match any existing users.&#34;&#34;&#34;
         return self[&#34;request&#34;].get(&#34;userNotFound&#34;)
 
     @property
@@ -860,12 +862,12 @@ class VerifyAuthChallengeResponseTriggerEvent(BaseTriggerEvent):
 <dl>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent"><code class="flex name class">
 <span>class <span class="ident">BaseTriggerEvent</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Common attributes shared by all User Pool Lambda Trigger Events</p>
+<div class="desc"><p>Common attributes shared by all User Pool Lambda Trigger Events</p>
 <h2 id="documentation">Documentation:</h2>
-<p><a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html">https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html</a></p></section>
+<p><a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html">https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html</a></p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -927,9 +929,9 @@ class VerifyAuthChallengeResponseTriggerEvent(BaseTriggerEvent):
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.caller_context"><code class="name">var <span class="ident">caller_context</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.caller_context"><code class="name">var <span class="ident">caller_context</span> : <a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CallerContext" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CallerContext">CallerContext</a></code></dt>
 <dd>
-<section class="desc"><p>The caller context</p></section>
+<div class="desc"><p>The caller context</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -940,9 +942,9 @@ def caller_context(self) -&gt; CallerContext:
     return CallerContext(self._data)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.region"><code class="name">var <span class="ident">region</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.region"><code class="name">var <span class="ident">region</span> : str</code></dt>
 <dd>
-<section class="desc"><p>The AWS Region, as an AWSRegion instance.</p></section>
+<div class="desc"><p>The AWS Region, as an AWSRegion instance.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -953,9 +955,9 @@ def region(self) -&gt; str:
     return self[&#34;region&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.trigger_source"><code class="name">var <span class="ident">trigger_source</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.trigger_source"><code class="name">var <span class="ident">trigger_source</span> : str</code></dt>
 <dd>
-<section class="desc"><p>The name of the event that triggered the Lambda function.</p></section>
+<div class="desc"><p>The name of the event that triggered the Lambda function.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -966,9 +968,9 @@ def trigger_source(self) -&gt; str:
     return self[&#34;triggerSource&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.user_name"><code class="name">var <span class="ident">user_name</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.user_name"><code class="name">var <span class="ident">user_name</span> : str</code></dt>
 <dd>
-<section class="desc"><p>The username of the current user.</p></section>
+<div class="desc"><p>The username of the current user.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -979,9 +981,9 @@ def user_name(self) -&gt; str:
     return self[&#34;userName&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.user_pool_id"><code class="name">var <span class="ident">user_pool_id</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.user_pool_id"><code class="name">var <span class="ident">user_pool_id</span> : str</code></dt>
 <dd>
-<section class="desc"><p>The user pool ID for the user pool.</p></section>
+<div class="desc"><p>The user pool ID for the user pool.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -992,9 +994,9 @@ def user_pool_id(self) -&gt; str:
     return self[&#34;userPoolId&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.version"><code class="name">var <span class="ident">version</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.BaseTriggerEvent.version"><code class="name">var <span class="ident">version</span> : str</code></dt>
 <dd>
-<section class="desc"><p>The version number of your Lambda function.</p></section>
+<div class="desc"><p>The version number of your Lambda function.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1017,10 +1019,10 @@ def version(self) -&gt; str:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CallerContext"><code class="flex name class">
 <span>class <span class="ident">CallerContext</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1042,9 +1044,9 @@ def version(self) -&gt; str:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CallerContext.aws_sdk_version"><code class="name">var <span class="ident">aws_sdk_version</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CallerContext.aws_sdk_version"><code class="name">var <span class="ident">aws_sdk_version</span> : str</code></dt>
 <dd>
-<section class="desc"><p>The AWS SDK version number.</p></section>
+<div class="desc"><p>The AWS SDK version number.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1055,9 +1057,9 @@ def aws_sdk_version(self) -&gt; str:
     return self[&#34;callerContext&#34;][&#34;awsSdkVersion&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CallerContext.client_id"><code class="name">var <span class="ident">client_id</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CallerContext.client_id"><code class="name">var <span class="ident">client_id</span> : str</code></dt>
 <dd>
-<section class="desc"><p>The ID of the client associated with the user pool.</p></section>
+<div class="desc"><p>The ID of the client associated with the user pool.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1080,10 +1082,10 @@ def client_id(self) -&gt; str:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult"><code class="flex name class">
 <span>class <span class="ident">ChallengeResult</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1113,9 +1115,9 @@ def client_id(self) -&gt; str:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult.challenge_metadata"><code class="name">var <span class="ident">challenge_metadata</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult.challenge_metadata"><code class="name">var <span class="ident">challenge_metadata</span> : Union[str, NoneType]</code></dt>
 <dd>
-<section class="desc"><p>Your name for the custom challenge. Used only if challengeName is CUSTOM_CHALLENGE.</p></section>
+<div class="desc"><p>Your name for the custom challenge. Used only if challengeName is CUSTOM_CHALLENGE.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1126,11 +1128,11 @@ def challenge_metadata(self) -&gt; Optional[str]:
     return self.get(&#34;challengeMetadata&#34;)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult.challenge_name"><code class="name">var <span class="ident">challenge_name</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult.challenge_name"><code class="name">var <span class="ident">challenge_name</span> : str</code></dt>
 <dd>
-<section class="desc"><p>The challenge type.</p>
+<div class="desc"><p>The challenge type.</p>
 <p>One of: CUSTOM_CHALLENGE, SRP_A, PASSWORD_VERIFIER, SMS_MFA, DEVICE_SRP_AUTH,
-DEVICE_PASSWORD_VERIFIER, or ADMIN_NO_SRP_AUTH.</p></section>
+DEVICE_PASSWORD_VERIFIER, or ADMIN_NO_SRP_AUTH.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1144,9 +1146,9 @@ def challenge_name(self) -&gt; str:
     return self[&#34;challengeName&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult.challenge_result"><code class="name">var <span class="ident">challenge_result</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult.challenge_result"><code class="name">var <span class="ident">challenge_result</span> : bool</code></dt>
 <dd>
-<section class="desc"><p>Set to true if the user successfully completed the challenge, or false otherwise.</p></section>
+<div class="desc"><p>Set to true if the user successfully completed the challenge, or false otherwise.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1169,10 +1171,10 @@ def challenge_result(self) -&gt; bool:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails"><code class="flex name class">
 <span>class <span class="ident">ClaimsOverrideDetails</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1236,9 +1238,9 @@ def challenge_result(self) -&gt; bool:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails.claims_to_add_or_override"><code class="name">var <span class="ident">claims_to_add_or_override</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails.claims_to_add_or_override"><code class="name">var <span class="ident">claims_to_add_or_override</span> : Union[Dict[str, str], NoneType]</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1248,9 +1250,9 @@ def claims_to_add_or_override(self) -&gt; Optional[Dict[str, str]]:
     return self.get(&#34;claimsToAddOrOverride&#34;)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails.claims_to_suppress"><code class="name">var <span class="ident">claims_to_suppress</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails.claims_to_suppress"><code class="name">var <span class="ident">claims_to_suppress</span> : Union[List[str], NoneType]</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1260,9 +1262,9 @@ def claims_to_suppress(self) -&gt; Optional[List[str]]:
     return self.get(&#34;claimsToSuppress&#34;)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails.group_configuration"><code class="name">var <span class="ident">group_configuration</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails.group_configuration"><code class="name">var <span class="ident">group_configuration</span> : Union[<a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.GroupOverrideDetails" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.GroupOverrideDetails">GroupOverrideDetails</a>, NoneType]</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1277,10 +1279,10 @@ def group_configuration(self) -&gt; Optional[GroupOverrideDetails]:
 <h3>Methods</h3>
 <dl>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails.set_group_configuration_groups_to_override"><code class="name flex">
-<span>def <span class="ident">set_group_configuration_groups_to_override</span></span>(<span>self, value)</span>
+<span>def <span class="ident">set_group_configuration_groups_to_override</span></span>(<span>self, value: List[str])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>A list of the group names that are associated with the user that the identity token is issued for.</p></section>
+<div class="desc"><p>A list of the group names that are associated with the user that the identity token is issued for.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1292,10 +1294,10 @@ def group_configuration(self) -&gt; Optional[GroupOverrideDetails]:
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails.set_group_configuration_iam_roles_to_override"><code class="name flex">
-<span>def <span class="ident">set_group_configuration_iam_roles_to_override</span></span>(<span>self, value)</span>
+<span>def <span class="ident">set_group_configuration_iam_roles_to_override</span></span>(<span>self, value: List[str])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>A list of the current IAM roles associated with these groups.</p></section>
+<div class="desc"><p>A list of the current IAM roles associated with these groups.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1307,10 +1309,10 @@ def group_configuration(self) -&gt; Optional[GroupOverrideDetails]:
 </details>
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails.set_group_configuration_preferred_role"><code class="name flex">
-<span>def <span class="ident">set_group_configuration_preferred_role</span></span>(<span>self, value)</span>
+<span>def <span class="ident">set_group_configuration_preferred_role</span></span>(<span>self, value: str)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>A string indicating the preferred IAM role.</p></section>
+<div class="desc"><p>A string indicating the preferred IAM role.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1333,10 +1335,10 @@ def group_configuration(self) -&gt; Optional[GroupOverrideDetails]:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEvent"><code class="flex name class">
 <span>class <span class="ident">CreateAuthChallengeTriggerEvent</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Create Auth Challenge Lambda Trigger</p>
+<div class="desc"><p>Create Auth Challenge Lambda Trigger</p>
 <p>Amazon Cognito invokes this trigger after Define Auth Challenge if a custom challenge has been
 specified as part of the Define Auth Challenge trigger.
 It creates a custom authentication flow.</p>
@@ -1348,7 +1350,7 @@ It creates a custom authentication flow.</p>
 <h2 id="documentation">Documentation:</h2>
 <ul>
 <li><a href="https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-create-auth-challenge.html">https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-create-auth-challenge.html</a></li>
-</ul></section>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1388,9 +1390,9 @@ It creates a custom authentication flow.</p>
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEvent.request"><code class="name">var <span class="ident">request</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEvent.request"><code class="name">var <span class="ident">request</span> : <a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest">CreateAuthChallengeTriggerEventRequest</a></code></dt>
 <dd>
-<section class="desc"><p>Create Auth Challenge Request Parameters</p></section>
+<div class="desc"><p>Create Auth Challenge Request Parameters</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1401,9 +1403,9 @@ def request(self) -&gt; CreateAuthChallengeTriggerEventRequest:
     return CreateAuthChallengeTriggerEventRequest(self._data)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEvent.response"><code class="name">var <span class="ident">response</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEvent.response"><code class="name">var <span class="ident">response</span> : <a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventResponse" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventResponse">CreateAuthChallengeTriggerEventResponse</a></code></dt>
 <dd>
-<section class="desc"><p>Create Auth Challenge Response Parameters</p></section>
+<div class="desc"><p>Create Auth Challenge Response Parameters</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1432,10 +1434,10 @@ def response(self) -&gt; CreateAuthChallengeTriggerEventResponse:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest"><code class="flex name class">
 <span>class <span class="ident">CreateAuthChallengeTriggerEventRequest</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1473,9 +1475,9 @@ def response(self) -&gt; CreateAuthChallengeTriggerEventResponse:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.challenge_name"><code class="name">var <span class="ident">challenge_name</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.challenge_name"><code class="name">var <span class="ident">challenge_name</span> : str</code></dt>
 <dd>
-<section class="desc"><p>The name of the new challenge.</p></section>
+<div class="desc"><p>The name of the new challenge.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1486,10 +1488,10 @@ def challenge_name(self) -&gt; str:
     return self[&#34;request&#34;][&#34;challengeName&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span> : Union[Dict[str, str], NoneType]</code></dt>
 <dd>
-<section class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function that you
-specify for the create auth challenge trigger..</p></section>
+<div class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function that you
+specify for the create auth challenge trigger..</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1501,9 +1503,9 @@ def client_metadata(self) -&gt; Optional[Dict[str, str]]:
     return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.session"><code class="name">var <span class="ident">session</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.session"><code class="name">var <span class="ident">session</span> : List[<a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult">ChallengeResult</a>]</code></dt>
 <dd>
-<section class="desc"><p>An array of ChallengeResult elements, each of which contains the following elements:</p></section>
+<div class="desc"><p>An array of ChallengeResult elements, each of which contains the following elements:</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1514,9 +1516,9 @@ def session(self) -&gt; List[ChallengeResult]:
     return [ChallengeResult(result) for result in self[&#34;request&#34;][&#34;session&#34;]]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.user_attributes"><code class="name">var <span class="ident">user_attributes</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.user_attributes"><code class="name">var <span class="ident">user_attributes</span> : Dict[str, str]</code></dt>
 <dd>
-<section class="desc"><p>One or more name-value pairs representing user attributes. The attribute names are the keys.</p></section>
+<div class="desc"><p>One or more name-value pairs representing user attributes. The attribute names are the keys.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1527,9 +1529,9 @@ def user_attributes(self) -&gt; Dict[str, str]:
     return self[&#34;request&#34;][&#34;userAttributes&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.user_not_found"><code class="name">var <span class="ident">user_not_found</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventRequest.user_not_found"><code class="name">var <span class="ident">user_not_found</span> : Union[bool, NoneType]</code></dt>
 <dd>
-<section class="desc"><p>This boolean is populated when PreventUserExistenceErrors is set to ENABLED for your User Pool client.</p></section>
+<div class="desc"><p>This boolean is populated when PreventUserExistenceErrors is set to ENABLED for your User Pool client.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1552,10 +1554,10 @@ def user_not_found(self) -&gt; Optional[bool]:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventResponse"><code class="flex name class">
 <span>class <span class="ident">CreateAuthChallengeTriggerEventResponse</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1600,9 +1602,9 @@ def user_not_found(self) -&gt; Optional[bool]:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventResponse.challenge_metadata"><code class="name">var <span class="ident">challenge_metadata</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventResponse.challenge_metadata"><code class="name">var <span class="ident">challenge_metadata</span> : str</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1612,9 +1614,9 @@ def challenge_metadata(self) -&gt; str:
     return self[&#34;response&#34;][&#34;challengeMetadata&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventResponse.private_challenge_parameters"><code class="name">var <span class="ident">private_challenge_parameters</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventResponse.private_challenge_parameters"><code class="name">var <span class="ident">private_challenge_parameters</span> : Dict[str, str]</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1624,9 +1626,9 @@ def private_challenge_parameters(self) -&gt; Dict[str, str]:
     return self[&#34;response&#34;][&#34;privateChallengeParameters&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventResponse.public_challenge_parameters"><code class="name">var <span class="ident">public_challenge_parameters</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CreateAuthChallengeTriggerEventResponse.public_challenge_parameters"><code class="name">var <span class="ident">public_challenge_parameters</span> : Dict[str, str]</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1648,10 +1650,10 @@ def public_challenge_parameters(self) -&gt; Dict[str, str]:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEvent"><code class="flex name class">
 <span>class <span class="ident">CustomMessageTriggerEvent</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Custom Message Lambda Trigger</p>
+<div class="desc"><p>Custom Message Lambda Trigger</p>
 <h2 id="notes">Notes:</h2>
 <p><code>triggerSource</code> can be one of the following:</p>
 <ul>
@@ -1669,7 +1671,7 @@ request it for a new email or phone number.</li>
 <h2 id="documentation">Documentation:</h2>
 <ul>
 <li><a href="https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-custom-message.html">https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-custom-message.html</a></li>
-</ul></section>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1711,9 +1713,9 @@ request it for a new email or phone number.</li>
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEvent.request"><code class="name">var <span class="ident">request</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEvent.request"><code class="name">var <span class="ident">request</span> : <a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventRequest" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventRequest">CustomMessageTriggerEventRequest</a></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1723,9 +1725,9 @@ def request(self) -&gt; CustomMessageTriggerEventRequest:
     return CustomMessageTriggerEventRequest(self._data)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEvent.response"><code class="name">var <span class="ident">response</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEvent.response"><code class="name">var <span class="ident">response</span> : <a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventResponse" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventResponse">CustomMessageTriggerEventResponse</a></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1753,10 +1755,10 @@ def response(self) -&gt; CustomMessageTriggerEventResponse:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventRequest"><code class="flex name class">
 <span>class <span class="ident">CustomMessageTriggerEventRequest</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1789,10 +1791,10 @@ def response(self) -&gt; CustomMessageTriggerEventResponse:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span> : Union[Dict[str, str], NoneType]</code></dt>
 <dd>
-<section class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function
-that you specify for the pre sign-up trigger.</p></section>
+<div class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function
+that you specify for the pre sign-up trigger.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1804,9 +1806,9 @@ def client_metadata(self) -&gt; Optional[Dict[str, str]]:
     return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventRequest.code_parameter"><code class="name">var <span class="ident">code_parameter</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventRequest.code_parameter"><code class="name">var <span class="ident">code_parameter</span> : str</code></dt>
 <dd>
-<section class="desc"><p>A string for you to use as the placeholder for the verification code in the custom message.</p></section>
+<div class="desc"><p>A string for you to use as the placeholder for the verification code in the custom message.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1817,9 +1819,9 @@ def code_parameter(self) -&gt; str:
     return self[&#34;request&#34;][&#34;codeParameter&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventRequest.user_attributes"><code class="name">var <span class="ident">user_attributes</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventRequest.user_attributes"><code class="name">var <span class="ident">user_attributes</span> : Dict[str, str]</code></dt>
 <dd>
-<section class="desc"><p>One or more name-value pairs representing user attributes. The attribute names are the keys.</p></section>
+<div class="desc"><p>One or more name-value pairs representing user attributes. The attribute names are the keys.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1830,9 +1832,9 @@ def user_attributes(self) -&gt; Dict[str, str]:
     return self[&#34;request&#34;][&#34;userAttributes&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventRequest.username_parameter"><code class="name">var <span class="ident">username_parameter</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventRequest.username_parameter"><code class="name">var <span class="ident">username_parameter</span> : str</code></dt>
 <dd>
-<section class="desc"><p>The username parameter. It is a required request parameter for the admin create user flow.</p></section>
+<div class="desc"><p>The username parameter. It is a required request parameter for the admin create user flow.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1855,10 +1857,10 @@ def username_parameter(self) -&gt; str:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventResponse"><code class="flex name class">
 <span>class <span class="ident">CustomMessageTriggerEventResponse</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1899,9 +1901,9 @@ def username_parameter(self) -&gt; str:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventResponse.email_message"><code class="name">var <span class="ident">email_message</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventResponse.email_message"><code class="name">var <span class="ident">email_message</span> : str</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1911,9 +1913,9 @@ def email_message(self) -&gt; str:
     return self[&#34;response&#34;][&#34;emailMessage&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventResponse.email_subject"><code class="name">var <span class="ident">email_subject</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventResponse.email_subject"><code class="name">var <span class="ident">email_subject</span> : str</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1923,9 +1925,9 @@ def email_subject(self) -&gt; str:
     return self[&#34;response&#34;][&#34;emailSubject&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventResponse.sms_message"><code class="name">var <span class="ident">sms_message</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.CustomMessageTriggerEventResponse.sms_message"><code class="name">var <span class="ident">sms_message</span> : str</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1947,10 +1949,10 @@ def sms_message(self) -&gt; str:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEvent"><code class="flex name class">
 <span>class <span class="ident">DefineAuthChallengeTriggerEvent</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Define Auth Challenge Lambda Trigger</p>
+<div class="desc"><p>Define Auth Challenge Lambda Trigger</p>
 <p>Amazon Cognito invokes this trigger to initiate the custom authentication flow.</p>
 <h2 id="notes">Notes:</h2>
 <p><code>triggerSource</code> can be one of the following:</p>
@@ -1960,7 +1962,7 @@ def sms_message(self) -&gt; str:
 <h2 id="documentation">Documentation:</h2>
 <ul>
 <li><a href="https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-define-auth-challenge.html">https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-define-auth-challenge.html</a></li>
-</ul></section>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1998,9 +2000,9 @@ def sms_message(self) -&gt; str:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEvent.request"><code class="name">var <span class="ident">request</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEvent.request"><code class="name">var <span class="ident">request</span> : <a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest">DefineAuthChallengeTriggerEventRequest</a></code></dt>
 <dd>
-<section class="desc"><p>Define Auth Challenge Request Parameters</p></section>
+<div class="desc"><p>Define Auth Challenge Request Parameters</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2011,9 +2013,9 @@ def request(self) -&gt; DefineAuthChallengeTriggerEventRequest:
     return DefineAuthChallengeTriggerEventRequest(self._data)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEvent.response"><code class="name">var <span class="ident">response</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEvent.response"><code class="name">var <span class="ident">response</span> : <a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventResponse" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventResponse">DefineAuthChallengeTriggerEventResponse</a></code></dt>
 <dd>
-<section class="desc"><p>Define Auth Challenge Response Parameters</p></section>
+<div class="desc"><p>Define Auth Challenge Response Parameters</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2042,10 +2044,10 @@ def response(self) -&gt; DefineAuthChallengeTriggerEventResponse:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest"><code class="flex name class">
 <span>class <span class="ident">DefineAuthChallengeTriggerEventRequest</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2059,7 +2061,7 @@ def response(self) -&gt; DefineAuthChallengeTriggerEventResponse:
     @property
     def user_not_found(self) -&gt; Optional[bool]:
         &#34;&#34;&#34;A Boolean that is populated when PreventUserExistenceErrors is set to ENABLED for your user pool client.
-        A value of true means that the user id (user name, email address, etc.) did not match any existing users. &#34;&#34;&#34;
+        A value of true means that the user id (user name, email address, etc.) did not match any existing users.&#34;&#34;&#34;
         return self[&#34;request&#34;].get(&#34;userNotFound&#34;)
 
     @property
@@ -2079,10 +2081,10 @@ def response(self) -&gt; DefineAuthChallengeTriggerEventResponse:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span> : Union[Dict[str, str], NoneType]</code></dt>
 <dd>
-<section class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function that you specify
-for the define auth challenge trigger.</p></section>
+<div class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function that you specify
+for the define auth challenge trigger.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2094,9 +2096,9 @@ def client_metadata(self) -&gt; Optional[Dict[str, str]]:
     return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest.session"><code class="name">var <span class="ident">session</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest.session"><code class="name">var <span class="ident">session</span> : List[<a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ChallengeResult">ChallengeResult</a>]</code></dt>
 <dd>
-<section class="desc"><p>An array of ChallengeResult elements, each of which contains the following elements:</p></section>
+<div class="desc"><p>An array of ChallengeResult elements, each of which contains the following elements:</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2107,9 +2109,9 @@ def session(self) -&gt; List[ChallengeResult]:
     return [ChallengeResult(result) for result in self[&#34;request&#34;][&#34;session&#34;]]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest.user_attributes"><code class="name">var <span class="ident">user_attributes</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest.user_attributes"><code class="name">var <span class="ident">user_attributes</span> : Dict[str, str]</code></dt>
 <dd>
-<section class="desc"><p>One or more name-value pairs representing user attributes. The attribute names are the keys.</p></section>
+<div class="desc"><p>One or more name-value pairs representing user attributes. The attribute names are the keys.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2120,10 +2122,10 @@ def user_attributes(self) -&gt; Dict[str, str]:
     return self[&#34;request&#34;][&#34;userAttributes&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest.user_not_found"><code class="name">var <span class="ident">user_not_found</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventRequest.user_not_found"><code class="name">var <span class="ident">user_not_found</span> : Union[bool, NoneType]</code></dt>
 <dd>
-<section class="desc"><p>A Boolean that is populated when PreventUserExistenceErrors is set to ENABLED for your user pool client.
-A value of true means that the user id (user name, email address, etc.) did not match any existing users.</p></section>
+<div class="desc"><p>A Boolean that is populated when PreventUserExistenceErrors is set to ENABLED for your user pool client.
+A value of true means that the user id (user name, email address, etc.) did not match any existing users.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2131,7 +2133,7 @@ A value of true means that the user id (user name, email address, etc.) did not 
 <pre><code class="python">@property
 def user_not_found(self) -&gt; Optional[bool]:
     &#34;&#34;&#34;A Boolean that is populated when PreventUserExistenceErrors is set to ENABLED for your user pool client.
-    A value of true means that the user id (user name, email address, etc.) did not match any existing users. &#34;&#34;&#34;
+    A value of true means that the user id (user name, email address, etc.) did not match any existing users.&#34;&#34;&#34;
     return self[&#34;request&#34;].get(&#34;userNotFound&#34;)</code></pre>
 </details>
 </dd>
@@ -2147,10 +2149,10 @@ def user_not_found(self) -&gt; Optional[bool]:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventResponse"><code class="flex name class">
 <span>class <span class="ident">DefineAuthChallengeTriggerEventResponse</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2191,9 +2193,9 @@ def user_not_found(self) -&gt; Optional[bool]:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventResponse.challenge_name"><code class="name">var <span class="ident">challenge_name</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventResponse.challenge_name"><code class="name">var <span class="ident">challenge_name</span> : str</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2203,9 +2205,9 @@ def challenge_name(self) -&gt; str:
     return self[&#34;response&#34;][&#34;challengeName&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventResponse.fail_authentication"><code class="name">var <span class="ident">fail_authentication</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventResponse.fail_authentication"><code class="name">var <span class="ident">fail_authentication</span> : bool</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2215,9 +2217,9 @@ def fail_authentication(self) -&gt; bool:
     return bool(self[&#34;response&#34;][&#34;failAuthentication&#34;])</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventResponse.issue_tokens"><code class="name">var <span class="ident">issue_tokens</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.DefineAuthChallengeTriggerEventResponse.issue_tokens"><code class="name">var <span class="ident">issue_tokens</span> : bool</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2239,10 +2241,10 @@ def issue_tokens(self) -&gt; bool:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.GroupOverrideDetails"><code class="flex name class">
 <span>class <span class="ident">GroupOverrideDetails</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2269,9 +2271,9 @@ def issue_tokens(self) -&gt; bool:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.GroupOverrideDetails.groups_to_override"><code class="name">var <span class="ident">groups_to_override</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.GroupOverrideDetails.groups_to_override"><code class="name">var <span class="ident">groups_to_override</span> : Union[List[str], NoneType]</code></dt>
 <dd>
-<section class="desc"><p>A list of the group names that are associated with the user that the identity token is issued for.</p></section>
+<div class="desc"><p>A list of the group names that are associated with the user that the identity token is issued for.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2282,9 +2284,9 @@ def groups_to_override(self) -&gt; Optional[List[str]]:
     return self.get(&#34;groupsToOverride&#34;)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.GroupOverrideDetails.iam_roles_to_override"><code class="name">var <span class="ident">iam_roles_to_override</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.GroupOverrideDetails.iam_roles_to_override"><code class="name">var <span class="ident">iam_roles_to_override</span> : Union[List[str], NoneType]</code></dt>
 <dd>
-<section class="desc"><p>A list of the current IAM roles associated with these groups.</p></section>
+<div class="desc"><p>A list of the current IAM roles associated with these groups.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2295,9 +2297,9 @@ def iam_roles_to_override(self) -&gt; Optional[List[str]]:
     return self.get(&#34;iamRolesToOverride&#34;)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.GroupOverrideDetails.preferred_role"><code class="name">var <span class="ident">preferred_role</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.GroupOverrideDetails.preferred_role"><code class="name">var <span class="ident">preferred_role</span> : Union[str, NoneType]</code></dt>
 <dd>
-<section class="desc"><p>A string indicating the preferred IAM role.</p></section>
+<div class="desc"><p>A string indicating the preferred IAM role.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2320,10 +2322,10 @@ def preferred_role(self) -&gt; Optional[str]:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostAuthenticationTriggerEvent"><code class="flex name class">
 <span>class <span class="ident">PostAuthenticationTriggerEvent</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Post Authentication Lambda Trigger</p>
+<div class="desc"><p>Post Authentication Lambda Trigger</p>
 <p>Amazon Cognito invokes this trigger after signing in a user, allowing you to add custom logic
 after authentication.</p>
 <h2 id="notes">Notes:</h2>
@@ -2334,7 +2336,7 @@ after authentication.</p>
 <h2 id="documentation">Documentation:</h2>
 <ul>
 <li><a href="https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-post-authentication.html">https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-post-authentication.html</a></li>
-</ul></section>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2368,9 +2370,9 @@ after authentication.</p>
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostAuthenticationTriggerEvent.request"><code class="name">var <span class="ident">request</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostAuthenticationTriggerEvent.request"><code class="name">var <span class="ident">request</span> : <a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostAuthenticationTriggerEventRequest" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostAuthenticationTriggerEventRequest">PostAuthenticationTriggerEventRequest</a></code></dt>
 <dd>
-<section class="desc"><p>Post Authentication Request Parameters</p></section>
+<div class="desc"><p>Post Authentication Request Parameters</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2399,10 +2401,10 @@ def request(self) -&gt; PostAuthenticationTriggerEventRequest:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostAuthenticationTriggerEventRequest"><code class="flex name class">
 <span>class <span class="ident">PostAuthenticationTriggerEventRequest</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2431,10 +2433,10 @@ def request(self) -&gt; PostAuthenticationTriggerEventRequest:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostAuthenticationTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostAuthenticationTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span> : Union[Dict[str, str], NoneType]</code></dt>
 <dd>
-<section class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function
-that you specify for the post authentication trigger.</p></section>
+<div class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function
+that you specify for the post authentication trigger.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2446,10 +2448,10 @@ def client_metadata(self) -&gt; Optional[Dict[str, str]]:
     return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostAuthenticationTriggerEventRequest.new_device_used"><code class="name">var <span class="ident">new_device_used</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostAuthenticationTriggerEventRequest.new_device_used"><code class="name">var <span class="ident">new_device_used</span> : bool</code></dt>
 <dd>
-<section class="desc"><p>This flag indicates if the user has signed in on a new device.
-It is set only if the remembered devices value of the user pool is set to <code>Always</code> or User <code>Opt-In</code>.</p></section>
+<div class="desc"><p>This flag indicates if the user has signed in on a new device.
+It is set only if the remembered devices value of the user pool is set to <code>Always</code> or User <code>Opt-In</code>.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2461,9 +2463,9 @@ def new_device_used(self) -&gt; bool:
     return self[&#34;request&#34;][&#34;newDeviceUsed&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostAuthenticationTriggerEventRequest.user_attributes"><code class="name">var <span class="ident">user_attributes</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostAuthenticationTriggerEventRequest.user_attributes"><code class="name">var <span class="ident">user_attributes</span> : Dict[str, str]</code></dt>
 <dd>
-<section class="desc"><p>One or more name-value pairs representing user attributes.</p></section>
+<div class="desc"><p>One or more name-value pairs representing user attributes.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2486,10 +2488,10 @@ def user_attributes(self) -&gt; Dict[str, str]:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostConfirmationTriggerEvent"><code class="flex name class">
 <span>class <span class="ident">PostConfirmationTriggerEvent</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Post Confirmation Lambda Trigger</p>
+<div class="desc"><p>Post Confirmation Lambda Trigger</p>
 <h2 id="notes">Notes:</h2>
 <p><code>triggerSource</code> can be one of the following:</p>
 <ul>
@@ -2499,7 +2501,7 @@ def user_attributes(self) -&gt; Dict[str, str]:
 <h2 id="documentation">Documentation:</h2>
 <ul>
 <li><a href="https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-post-confirmation.html">https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-post-confirmation.html</a></li>
-</ul></section>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2530,9 +2532,9 @@ def user_attributes(self) -&gt; Dict[str, str]:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostConfirmationTriggerEvent.request"><code class="name">var <span class="ident">request</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostConfirmationTriggerEvent.request"><code class="name">var <span class="ident">request</span> : <a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostConfirmationTriggerEventRequest" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostConfirmationTriggerEventRequest">PostConfirmationTriggerEventRequest</a></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2560,10 +2562,10 @@ def request(self) -&gt; PostConfirmationTriggerEventRequest:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostConfirmationTriggerEventRequest"><code class="flex name class">
 <span>class <span class="ident">PostConfirmationTriggerEventRequest</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2586,10 +2588,10 @@ def request(self) -&gt; PostConfirmationTriggerEventRequest:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostConfirmationTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostConfirmationTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span> : Union[Dict[str, str], NoneType]</code></dt>
 <dd>
-<section class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function
-that you specify for the post confirmation trigger.</p></section>
+<div class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function
+that you specify for the post confirmation trigger.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2601,9 +2603,9 @@ def client_metadata(self) -&gt; Optional[Dict[str, str]]:
     return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostConfirmationTriggerEventRequest.user_attributes"><code class="name">var <span class="ident">user_attributes</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PostConfirmationTriggerEventRequest.user_attributes"><code class="name">var <span class="ident">user_attributes</span> : Dict[str, str]</code></dt>
 <dd>
-<section class="desc"><p>One or more name-value pairs representing user attributes. The attribute names are the keys.</p></section>
+<div class="desc"><p>One or more name-value pairs representing user attributes. The attribute names are the keys.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2626,10 +2628,10 @@ def user_attributes(self) -&gt; Dict[str, str]:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreAuthenticationTriggerEvent"><code class="flex name class">
 <span>class <span class="ident">PreAuthenticationTriggerEvent</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Pre Authentication Lambda Trigger</p>
+<div class="desc"><p>Pre Authentication Lambda Trigger</p>
 <p>Amazon Cognito invokes this trigger when a user attempts to sign in, allowing custom validation
 to accept or deny the authentication request.</p>
 <h2 id="notes">Notes:</h2>
@@ -2640,7 +2642,7 @@ to accept or deny the authentication request.</p>
 <h2 id="documentation">Documentation:</h2>
 <ul>
 <li><a href="https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-pre-authentication.html">https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-pre-authentication.html</a></li>
-</ul></section>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2674,9 +2676,9 @@ to accept or deny the authentication request.</p>
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreAuthenticationTriggerEvent.request"><code class="name">var <span class="ident">request</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreAuthenticationTriggerEvent.request"><code class="name">var <span class="ident">request</span> : <a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreAuthenticationTriggerEventRequest" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreAuthenticationTriggerEventRequest">PreAuthenticationTriggerEventRequest</a></code></dt>
 <dd>
-<section class="desc"><p>Pre Authentication Request Parameters</p></section>
+<div class="desc"><p>Pre Authentication Request Parameters</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2705,10 +2707,10 @@ def request(self) -&gt; PreAuthenticationTriggerEventRequest:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreAuthenticationTriggerEventRequest"><code class="flex name class">
 <span>class <span class="ident">PreAuthenticationTriggerEventRequest</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2735,9 +2737,9 @@ def request(self) -&gt; PreAuthenticationTriggerEventRequest:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreAuthenticationTriggerEventRequest.user_attributes"><code class="name">var <span class="ident">user_attributes</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreAuthenticationTriggerEventRequest.user_attributes"><code class="name">var <span class="ident">user_attributes</span> : Dict[str, str]</code></dt>
 <dd>
-<section class="desc"><p>One or more name-value pairs representing user attributes.</p></section>
+<div class="desc"><p>One or more name-value pairs representing user attributes.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2748,9 +2750,9 @@ def user_attributes(self) -&gt; Dict[str, str]:
     return self[&#34;request&#34;][&#34;userAttributes&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreAuthenticationTriggerEventRequest.user_not_found"><code class="name">var <span class="ident">user_not_found</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreAuthenticationTriggerEventRequest.user_not_found"><code class="name">var <span class="ident">user_not_found</span> : Union[bool, NoneType]</code></dt>
 <dd>
-<section class="desc"><p>This boolean is populated when PreventUserExistenceErrors is set to ENABLED for your User Pool client.</p></section>
+<div class="desc"><p>This boolean is populated when PreventUserExistenceErrors is set to ENABLED for your User Pool client.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2761,9 +2763,9 @@ def user_not_found(self) -&gt; Optional[bool]:
     return self[&#34;request&#34;].get(&#34;userNotFound&#34;)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreAuthenticationTriggerEventRequest.validation_data"><code class="name">var <span class="ident">validation_data</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreAuthenticationTriggerEventRequest.validation_data"><code class="name">var <span class="ident">validation_data</span> : Union[Dict[str, str], NoneType]</code></dt>
 <dd>
-<section class="desc"><p>One or more key-value pairs containing the validation data in the user's sign-in request.</p></section>
+<div class="desc"><p>One or more key-value pairs containing the validation data in the user's sign-in request.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2786,10 +2788,10 @@ def validation_data(self) -&gt; Optional[Dict[str, str]]:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEvent"><code class="flex name class">
 <span>class <span class="ident">PreSignUpTriggerEvent</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Pre Sign-up Lambda Trigger</p>
+<div class="desc"><p>Pre Sign-up Lambda Trigger</p>
 <h2 id="notes">Notes:</h2>
 <p><code>triggerSource</code> can be one of the following:</p>
 <ul>
@@ -2800,7 +2802,7 @@ def validation_data(self) -&gt; Optional[Dict[str, str]]:
 <h2 id="documentation">Documentation:</h2>
 <ul>
 <li><a href="https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-pre-sign-up.html">https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-pre-sign-up.html</a></li>
-</ul></section>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2836,9 +2838,9 @@ def validation_data(self) -&gt; Optional[Dict[str, str]]:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEvent.request"><code class="name">var <span class="ident">request</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEvent.request"><code class="name">var <span class="ident">request</span> : <a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEventRequest" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEventRequest">PreSignUpTriggerEventRequest</a></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2848,9 +2850,9 @@ def request(self) -&gt; PreSignUpTriggerEventRequest:
     return PreSignUpTriggerEventRequest(self._data)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEvent.response"><code class="name">var <span class="ident">response</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEvent.response"><code class="name">var <span class="ident">response</span> : <a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEventResponse" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEventResponse">PreSignUpTriggerEventResponse</a></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2878,10 +2880,10 @@ def response(self) -&gt; PreSignUpTriggerEventResponse:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEventRequest"><code class="flex name class">
 <span>class <span class="ident">PreSignUpTriggerEventRequest</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2909,10 +2911,10 @@ def response(self) -&gt; PreSignUpTriggerEventResponse:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span> : Union[Dict[str, str], NoneType]</code></dt>
 <dd>
-<section class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function
-that you specify for the pre sign-up trigger.</p></section>
+<div class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function
+that you specify for the pre sign-up trigger.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2924,9 +2926,9 @@ def client_metadata(self) -&gt; Optional[Dict[str, str]]:
     return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEventRequest.user_attributes"><code class="name">var <span class="ident">user_attributes</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEventRequest.user_attributes"><code class="name">var <span class="ident">user_attributes</span> : Dict[str, str]</code></dt>
 <dd>
-<section class="desc"><p>One or more name-value pairs representing user attributes. The attribute names are the keys.</p></section>
+<div class="desc"><p>One or more name-value pairs representing user attributes. The attribute names are the keys.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2937,9 +2939,9 @@ def user_attributes(self) -&gt; Dict[str, str]:
     return self[&#34;request&#34;][&#34;userAttributes&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEventRequest.validation_data"><code class="name">var <span class="ident">validation_data</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEventRequest.validation_data"><code class="name">var <span class="ident">validation_data</span> : Union[Dict[str, str], NoneType]</code></dt>
 <dd>
-<section class="desc"><p>One or more name-value pairs containing the validation data in the request to register a user.</p></section>
+<div class="desc"><p>One or more name-value pairs containing the validation data in the request to register a user.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -2962,10 +2964,10 @@ def validation_data(self) -&gt; Optional[Dict[str, str]]:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEventResponse"><code class="flex name class">
 <span>class <span class="ident">PreSignUpTriggerEventResponse</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3004,9 +3006,9 @@ def validation_data(self) -&gt; Optional[Dict[str, str]]:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEventResponse.auto_confirm_user"><code class="name">var <span class="ident">auto_confirm_user</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEventResponse.auto_confirm_user"><code class="name">var <span class="ident">auto_confirm_user</span> : bool</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3016,9 +3018,9 @@ def auto_confirm_user(self) -&gt; bool:
     return bool(self[&#34;response&#34;][&#34;autoConfirmUser&#34;])</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEventResponse.auto_verify_email"><code class="name">var <span class="ident">auto_verify_email</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEventResponse.auto_verify_email"><code class="name">var <span class="ident">auto_verify_email</span> : bool</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3028,9 +3030,9 @@ def auto_verify_email(self) -&gt; bool:
     return bool(self[&#34;response&#34;][&#34;autoVerifyEmail&#34;])</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEventResponse.auto_verify_phone"><code class="name">var <span class="ident">auto_verify_phone</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreSignUpTriggerEventResponse.auto_verify_phone"><code class="name">var <span class="ident">auto_verify_phone</span> : bool</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3052,10 +3054,10 @@ def auto_verify_phone(self) -&gt; bool:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEvent"><code class="flex name class">
 <span>class <span class="ident">PreTokenGenerationTriggerEvent</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Pre Token Generation Lambda Trigger</p>
+<div class="desc"><p>Pre Token Generation Lambda Trigger</p>
 <p>Amazon Cognito invokes this trigger before token generation allowing you to customize identity token claims.</p>
 <h2 id="notes">Notes:</h2>
 <p><code>triggerSource</code> can be one of the following:</p>
@@ -3070,7 +3072,7 @@ when the user has to change a temporary password.</li>
 <h2 id="documentation">Documentation:</h2>
 <ul>
 <li><a href="https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-pre-token-generation.html">https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-pre-token-generation.html</a></li>
-</ul></section>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3113,9 +3115,9 @@ when the user has to change a temporary password.</li>
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEvent.request"><code class="name">var <span class="ident">request</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEvent.request"><code class="name">var <span class="ident">request</span> : <a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEventRequest" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEventRequest">PreTokenGenerationTriggerEventRequest</a></code></dt>
 <dd>
-<section class="desc"><p>Pre Token Generation Request Parameters</p></section>
+<div class="desc"><p>Pre Token Generation Request Parameters</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3126,9 +3128,9 @@ def request(self) -&gt; PreTokenGenerationTriggerEventRequest:
     return PreTokenGenerationTriggerEventRequest(self._data)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEvent.response"><code class="name">var <span class="ident">response</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEvent.response"><code class="name">var <span class="ident">response</span> : <a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEventResponse" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEventResponse">PreTokenGenerationTriggerEventResponse</a></code></dt>
 <dd>
-<section class="desc"><p>Pre Token Generation Response Parameters</p></section>
+<div class="desc"><p>Pre Token Generation Response Parameters</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3157,10 +3159,10 @@ def response(self) -&gt; PreTokenGenerationTriggerEventResponse:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEventRequest"><code class="flex name class">
 <span>class <span class="ident">PreTokenGenerationTriggerEventRequest</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3188,10 +3190,10 @@ def response(self) -&gt; PreTokenGenerationTriggerEventResponse:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span> : Union[Dict[str, str], NoneType]</code></dt>
 <dd>
-<section class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function
-that you specify for the pre token generation trigger.</p></section>
+<div class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function
+that you specify for the pre token generation trigger.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3203,9 +3205,9 @@ def client_metadata(self) -&gt; Optional[Dict[str, str]]:
     return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEventRequest.group_configuration"><code class="name">var <span class="ident">group_configuration</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEventRequest.group_configuration"><code class="name">var <span class="ident">group_configuration</span> : <a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.GroupOverrideDetails" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.GroupOverrideDetails">GroupOverrideDetails</a></code></dt>
 <dd>
-<section class="desc"><p>The input object containing the current group configuration</p></section>
+<div class="desc"><p>The input object containing the current group configuration</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3216,9 +3218,9 @@ def group_configuration(self) -&gt; GroupOverrideDetails:
     return GroupOverrideDetails(self[&#34;request&#34;][&#34;groupConfiguration&#34;])</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEventRequest.user_attributes"><code class="name">var <span class="ident">user_attributes</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEventRequest.user_attributes"><code class="name">var <span class="ident">user_attributes</span> : Dict[str, str]</code></dt>
 <dd>
-<section class="desc"><p>One or more name-value pairs representing user attributes.</p></section>
+<div class="desc"><p>One or more name-value pairs representing user attributes.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3241,10 +3243,10 @@ def user_attributes(self) -&gt; Dict[str, str]:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEventResponse"><code class="flex name class">
 <span>class <span class="ident">PreTokenGenerationTriggerEventResponse</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3262,9 +3264,9 @@ def user_attributes(self) -&gt; Dict[str, str]:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEventResponse.claims_override_details"><code class="name">var <span class="ident">claims_override_details</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.PreTokenGenerationTriggerEventResponse.claims_override_details"><code class="name">var <span class="ident">claims_override_details</span> : <a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.ClaimsOverrideDetails">ClaimsOverrideDetails</a></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3288,10 +3290,10 @@ def claims_override_details(self) -&gt; ClaimsOverrideDetails:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEvent"><code class="flex name class">
 <span>class <span class="ident">UserMigrationTriggerEvent</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Migrate User Lambda Trigger</p>
+<div class="desc"><p>Migrate User Lambda Trigger</p>
 <h2 id="notes">Notes:</h2>
 <p><code>triggerSource</code> can be one of the following:</p>
 <ul>
@@ -3301,7 +3303,7 @@ def claims_override_details(self) -&gt; ClaimsOverrideDetails:
 <h2 id="documentation">Documentation:</h2>
 <ul>
 <li><a href="https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-migrate-user.html">https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-migrate-user.html</a></li>
-</ul></section>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3336,9 +3338,9 @@ def claims_override_details(self) -&gt; ClaimsOverrideDetails:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEvent.request"><code class="name">var <span class="ident">request</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEvent.request"><code class="name">var <span class="ident">request</span> : <a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventRequest" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventRequest">UserMigrationTriggerEventRequest</a></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3348,9 +3350,9 @@ def request(self) -&gt; UserMigrationTriggerEventRequest:
     return UserMigrationTriggerEventRequest(self._data)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEvent.response"><code class="name">var <span class="ident">response</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEvent.response"><code class="name">var <span class="ident">response</span> : <a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventResponse" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventResponse">UserMigrationTriggerEventResponse</a></code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3378,10 +3380,10 @@ def response(self) -&gt; UserMigrationTriggerEventResponse:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventRequest"><code class="flex name class">
 <span>class <span class="ident">UserMigrationTriggerEventRequest</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3408,10 +3410,10 @@ def response(self) -&gt; UserMigrationTriggerEventResponse:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span> : Union[Dict[str, str], NoneType]</code></dt>
 <dd>
-<section class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function
-that you specify for the pre sign-up trigger.</p></section>
+<div class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function
+that you specify for the pre sign-up trigger.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3423,9 +3425,9 @@ def client_metadata(self) -&gt; Optional[Dict[str, str]]:
     return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventRequest.password"><code class="name">var <span class="ident">password</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventRequest.password"><code class="name">var <span class="ident">password</span> : str</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3435,9 +3437,9 @@ def password(self) -&gt; str:
     return self[&#34;request&#34;][&#34;password&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventRequest.validation_data"><code class="name">var <span class="ident">validation_data</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventRequest.validation_data"><code class="name">var <span class="ident">validation_data</span> : Union[Dict[str, str], NoneType]</code></dt>
 <dd>
-<section class="desc"><p>One or more name-value pairs containing the validation data in the request to register a user.</p></section>
+<div class="desc"><p>One or more name-value pairs containing the validation data in the request to register a user.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3460,10 +3462,10 @@ def validation_data(self) -&gt; Optional[Dict[str, str]]:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventResponse"><code class="flex name class">
 <span>class <span class="ident">UserMigrationTriggerEventResponse</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3537,9 +3539,9 @@ def validation_data(self) -&gt; Optional[Dict[str, str]]:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventResponse.desired_delivery_mediums"><code class="name">var <span class="ident">desired_delivery_mediums</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventResponse.desired_delivery_mediums"><code class="name">var <span class="ident">desired_delivery_mediums</span> : Union[List[str], NoneType]</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3549,9 +3551,9 @@ def desired_delivery_mediums(self) -&gt; Optional[List[str]]:
     return self[&#34;response&#34;].get(&#34;desiredDeliveryMediums&#34;)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventResponse.final_user_status"><code class="name">var <span class="ident">final_user_status</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventResponse.final_user_status"><code class="name">var <span class="ident">final_user_status</span> : Union[str, NoneType]</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3561,9 +3563,9 @@ def final_user_status(self) -&gt; Optional[str]:
     return self[&#34;response&#34;].get(&#34;finalUserStatus&#34;)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventResponse.force_alias_creation"><code class="name">var <span class="ident">force_alias_creation</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventResponse.force_alias_creation"><code class="name">var <span class="ident">force_alias_creation</span> : Union[bool, NoneType]</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3573,9 +3575,9 @@ def force_alias_creation(self) -&gt; Optional[bool]:
     return self[&#34;response&#34;].get(&#34;forceAliasCreation&#34;)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventResponse.message_action"><code class="name">var <span class="ident">message_action</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventResponse.message_action"><code class="name">var <span class="ident">message_action</span> : Union[str, NoneType]</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3585,9 +3587,9 @@ def message_action(self) -&gt; Optional[str]:
     return self[&#34;response&#34;].get(&#34;messageAction&#34;)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventResponse.user_attributes"><code class="name">var <span class="ident">user_attributes</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.UserMigrationTriggerEventResponse.user_attributes"><code class="name">var <span class="ident">user_attributes</span> : Dict[str, str]</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3609,10 +3611,10 @@ def user_attributes(self) -&gt; Dict[str, str]:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEvent"><code class="flex name class">
 <span>class <span class="ident">VerifyAuthChallengeResponseTriggerEvent</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Verify Auth Challenge Response Lambda Trigger</p>
+<div class="desc"><p>Verify Auth Challenge Response Lambda Trigger</p>
 <p>Amazon Cognito invokes this trigger to verify if the response from the end user for a custom
 Auth Challenge is valid or not.
 It is part of a user pool custom authentication flow.</p>
@@ -3624,7 +3626,7 @@ It is part of a user pool custom authentication flow.</p>
 <h2 id="documentation">Documentation:</h2>
 <ul>
 <li><a href="https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-verify-auth-challenge-response.html">https://docs.aws.amazon.com/cognito/latest/developerguide/user-pool-lambda-verify-auth-challenge-response.html</a></li>
-</ul></section>
+</ul></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3664,9 +3666,9 @@ It is part of a user pool custom authentication flow.</p>
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEvent.request"><code class="name">var <span class="ident">request</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEvent.request"><code class="name">var <span class="ident">request</span> : <a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest">VerifyAuthChallengeResponseTriggerEventRequest</a></code></dt>
 <dd>
-<section class="desc"><p>Verify Auth Challenge Request Parameters</p></section>
+<div class="desc"><p>Verify Auth Challenge Request Parameters</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3677,9 +3679,9 @@ def request(self) -&gt; VerifyAuthChallengeResponseTriggerEventRequest:
     return VerifyAuthChallengeResponseTriggerEventRequest(self._data)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEvent.response"><code class="name">var <span class="ident">response</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEvent.response"><code class="name">var <span class="ident">response</span> : <a title="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventResponse" href="#aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventResponse">VerifyAuthChallengeResponseTriggerEventResponse</a></code></dt>
 <dd>
-<section class="desc"><p>Verify Auth Challenge Response Parameters</p></section>
+<div class="desc"><p>Verify Auth Challenge Response Parameters</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3708,10 +3710,10 @@ def response(self) -&gt; VerifyAuthChallengeResponseTriggerEventResponse:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest"><code class="flex name class">
 <span>class <span class="ident">VerifyAuthChallengeResponseTriggerEventRequest</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3750,9 +3752,9 @@ def response(self) -&gt; VerifyAuthChallengeResponseTriggerEventResponse:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.challenge_answer"><code class="name">var <span class="ident">challenge_answer</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.challenge_answer"><code class="name">var <span class="ident">challenge_answer</span> : Any</code></dt>
 <dd>
-<section class="desc"><p>The answer from the user's response to the challenge.</p></section>
+<div class="desc"><p>The answer from the user's response to the challenge.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3763,10 +3765,10 @@ def challenge_answer(self) -&gt; Any:
     return self[&#34;request&#34;][&#34;challengeAnswer&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.client_metadata"><code class="name">var <span class="ident">client_metadata</span> : Union[Dict[str, str], NoneType]</code></dt>
 <dd>
-<section class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function that
-you specify for the verify auth challenge trigger.</p></section>
+<div class="desc"><p>One or more key-value pairs that you can provide as custom input to the Lambda function that
+you specify for the verify auth challenge trigger.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3778,10 +3780,10 @@ def client_metadata(self) -&gt; Optional[Dict[str, str]]:
     return self[&#34;request&#34;].get(&#34;clientMetadata&#34;)</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.private_challenge_parameters"><code class="name">var <span class="ident">private_challenge_parameters</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.private_challenge_parameters"><code class="name">var <span class="ident">private_challenge_parameters</span> : Dict[str, str]</code></dt>
 <dd>
-<section class="desc"><p>This parameter comes from the Create Auth Challenge trigger, and is
-compared against a user’s challengeAnswer to determine whether the user passed the challenge.</p></section>
+<div class="desc"><p>This parameter comes from the Create Auth Challenge trigger, and is
+compared against a user’s challengeAnswer to determine whether the user passed the challenge.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3793,9 +3795,9 @@ def private_challenge_parameters(self) -&gt; Dict[str, str]:
     return self[&#34;request&#34;][&#34;privateChallengeParameters&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.user_attributes"><code class="name">var <span class="ident">user_attributes</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.user_attributes"><code class="name">var <span class="ident">user_attributes</span> : Dict[str, str]</code></dt>
 <dd>
-<section class="desc"><p>One or more name-value pairs representing user attributes. The attribute names are the keys.</p></section>
+<div class="desc"><p>One or more name-value pairs representing user attributes. The attribute names are the keys.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3806,9 +3808,9 @@ def user_attributes(self) -&gt; Dict[str, str]:
     return self[&#34;request&#34;][&#34;userAttributes&#34;]</code></pre>
 </details>
 </dd>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.user_not_found"><code class="name">var <span class="ident">user_not_found</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventRequest.user_not_found"><code class="name">var <span class="ident">user_not_found</span> : Union[bool, NoneType]</code></dt>
 <dd>
-<section class="desc"><p>This boolean is populated when PreventUserExistenceErrors is set to ENABLED for your User Pool client.</p></section>
+<div class="desc"><p>This boolean is populated when PreventUserExistenceErrors is set to ENABLED for your User Pool client.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3831,10 +3833,10 @@ def user_not_found(self) -&gt; Optional[bool]:
 </dd>
 <dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventResponse"><code class="flex name class">
 <span>class <span class="ident">VerifyAuthChallengeResponseTriggerEventResponse</span></span>
-<span>(</span><span>data)</span>
+<span>(</span><span>data: Dict[str, Any])</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Provides a single read only access to a wrapper dict</p></section>
+<div class="desc"><p>Provides a single read only access to a wrapper dict</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3855,9 +3857,9 @@ def user_not_found(self) -&gt; Optional[bool]:
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventResponse.answer_correct"><code class="name">var <span class="ident">answer_correct</span></code></dt>
+<dt id="aws_lambda_powertools.utilities.data_classes.cognito_user_pool_event.VerifyAuthChallengeResponseTriggerEventResponse.answer_correct"><code class="name">var <span class="ident">answer_correct</span> : bool</code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -4150,9 +4152,7 @@ def answer_correct(self) -&gt; bool:
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.5</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.2</a>.</p>
 </footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad()</script>
 </body>
 </html>
