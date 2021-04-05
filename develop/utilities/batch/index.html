@@ -782,7 +782,7 @@ are returned to the queue.</p>
 </div>
 </div>
 <h3 id="processing-messages-from-sqs">Processing messages from SQS<a class="headerlink" href="#processing-messages-from-sqs" title="Permanent link">&para;</a></h3>
-<p>You can use either <strong><a href="#sqs_batch_processor-decorator">sqs_batch_processor</a></strong> decorator, or <strong><a href="#partialsqsprocessor-context-manager">PartialSQSProcessor</a></strong> as a context manager if you'd like access to the processed results.</p>
+<p>You can use either <code>sqs_batch_processor</code> decorator, or <code>PartialSQSProcessor</code> as a context manager if you'd like access to the processed results.</p>
 <p>You need to create a function to handle each record from the batch - We call it <code>record_handler</code> from here on.</p>
 <div class="tabbed-set" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><label for="__tabbed_2_1">Decorator</label><div class="tabbed-content">
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
@@ -1175,7 +1175,7 @@ the <code>sqs_batch_processor</code> decorator:</p>
 <div class="md-source-date">
   <small>
     
-      Last update: 2021-03-04
+      Last update: 2021-04-05
     
   </small>
 </div>

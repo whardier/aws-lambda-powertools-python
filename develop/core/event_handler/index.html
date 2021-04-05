@@ -573,7 +573,7 @@
                   <h1>Event Handler</h1>
                 
                 <p>Event handler decorators for common Lambda events</p>
-<h3 id="appsync-resolver-decorator">AppSync Resolver Decorator<a class="headerlink" href="#appsync-resolver-decorator" title="Permanent link">&para;</a></h3>
+<h2 id="appsync-resolver-decorator">AppSync Resolver Decorator<a class="headerlink" href="#appsync-resolver-decorator" title="Permanent link">&para;</a></h2>
 <blockquote>
 <p>New in 1.14.0</p>
 </blockquote>
@@ -581,7 +581,7 @@
 <code>typeName</code> and <code>fieldName</code> declarations. This decorator builds on top of the
 <a href="/utilities/data_classes#appsync-resolver">AppSync Resolver </a> data class and therefore works with <a href="https://docs.amplify.aws/cli/graphql-transformer/function" target="_blank">Amplify GraphQL Transform Library</a> (<code>@function</code>),
 and <a href="https://aws.amazon.com/blogs/mobile/appsync-direct-lambda/" target="_blank">AppSync Direct Lambda Resolvers</a></p>
-<h4 id="key-features">Key Features<a class="headerlink" href="#key-features" title="Permanent link">&para;</a></h4>
+<h3 id="key-features">Key Features<a class="headerlink" href="#key-features" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Works with any of the existing Powertools utilities by allow you to create your own <code>lambda_handler</code> function</li>
 <li>Supports an implicit handler where in <code>app = AppSyncResolver()</code> can be invoked directly as <code>app(event, context)</code></li>
@@ -590,7 +590,7 @@ and <a href="https://aws.amazon.com/blogs/mobile/appsync-direct-lambda/" target=
 <li>AppSyncResolver includes <code>current_event</code> and <code>lambda_cotext</code> fields can be used to pass in the original <code>AppSyncResolver</code> or <code>LambdaContext</code>
  objects</li>
 </ul>
-<h4 id="amplify-graphql-example">Amplify GraphQL Example<a class="headerlink" href="#amplify-graphql-example" title="Permanent link">&para;</a></h4>
+<h3 id="amplify-graphql-example">Amplify GraphQL Example<a class="headerlink" href="#amplify-graphql-example" title="Permanent link">&para;</a></h3>
 <p>Create a new GraphQL api via <code>amplify add api</code> and add the following to the new <code>schema.graphql</code></p>
 <div class="tabbed-set" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">schema.graphql</label><div class="tabbed-content">
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
@@ -937,7 +937,7 @@ add Powertools as a dependency. Add the following example lambda implementation<
 <div class="md-source-date">
   <small>
     
-      Last update: 2021-03-31
+      Last update: 2021-04-05
     
   </small>
 </div>

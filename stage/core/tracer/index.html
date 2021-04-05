@@ -835,9 +835,9 @@
 <span class="hll"><span class="n">tracer</span> <span class="o">=</span> <span class="n">Tracer</span><span class="p">()</span> <span class="c1"># Sets service via env var</span>
 </span><span class="c1"># OR tracer = Tracer(service=&quot;example&quot;)</span>
 
-<span class="nd">@tracer</span><span class="o">.</span><span class="n">capture_lambda_handler</span>
-<span class="hll"><span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
-</span>    <span class="n">charge_id</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;charge_id&#39;</span><span class="p">)</span>
+<span class="hll"><span class="nd">@tracer</span><span class="o">.</span><span class="n">capture_lambda_handler</span>
+</span><span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+    <span class="n">charge_id</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;charge_id&#39;</span><span class="p">)</span>
     <span class="n">payment</span> <span class="o">=</span> <span class="n">collect_payment</span><span class="p">(</span><span class="n">charge_id</span><span class="p">)</span>
     <span class="o">...</span>
 </code></pre></div>
@@ -1273,7 +1273,7 @@ decorated function response contains a file-like object or a <a href="https://bo
 <div class="md-source-date">
   <small>
     
-      Last update: 2021-02-12
+      Last update: 2021-04-05
     
   </small>
 </div>
