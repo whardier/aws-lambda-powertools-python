@@ -1111,10 +1111,11 @@ decorated function response contains a file-like object or a <a href="https://bo
 </blockquote>
 <p>Use <strong><code>capture_response=False</code></strong> parameter in both <code>capture_lambda_handler</code> and <code>capture_method</code> decorators to instruct Tracer <strong>not</strong> to serialize function responses as metadata.</p>
 <div class="admonition info">
-<p class="admonition-title">This is commonly useful in two scenarios</p>
+<p class="admonition-title">This is commonly useful in three scenarios</p>
 <ol>
 <li>You might <strong>return sensitive</strong> information you don't want it to be added to your traces</li>
 <li>You might manipulate <strong>streaming objects that can be read only once</strong>; this prevents subsequent calls from being empty</li>
+<li>You might return <strong>more than 64K</strong> of data <em>e.g., <code>message too long</code> error</em></li>
 </ol>
 </div>
 <div class="tabbed-set" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><label for="__tabbed_5_1">sensitive_data_scenario.py</label><div class="tabbed-content">
@@ -1354,7 +1355,7 @@ decorated function response contains a file-like object or a <a href="https://bo
 <div class="md-source-date">
   <small>
     
-      Last update: 2021-04-19
+      Last update: 2021-07-02
     
   </small>
 </div>
