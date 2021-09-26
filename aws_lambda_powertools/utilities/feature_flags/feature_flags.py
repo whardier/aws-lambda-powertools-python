@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, List, Optional, Union, cast
+from typing import Any, Callable, Dict, List, Optional, Union, cast
 
 from . import schema
 from .base import StoreProvider
@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 class FeatureFlags:
-    def __init__(self, store: StoreProvider):
+    def __init__(self, store: StoreProvider, user_mapping_by_action: Optional[Dict[str, Callable]] = None):
         """Evaluates whether feature flags should be enabled based on a given context.
 
         It uses the provided store to fetch feature flag rules before evaluating them.
@@ -35,20 +35,32 @@ class FeatureFlags:
         ----------
         store: StoreProvider
             Store to use to fetch feature flag schema configuration.
+        user_mapping_by_action: Dict[str, Callable]
+            User mapping of actions to a callable (context_value, condition_value)
         """
         self._store = store
+        self._user_mapping_by_action = user_mapping_by_action
 
     @staticmethod
-    def _match_by_action(action: str, condition_value: Any, context_value: Any) -> bool:
+    def _match_by_action(
+        action: str,
+        condition_value: Any,
+        context_value: Any,
+        user_mapping_by_action: Optional[Dict[str, Callable]] = None,
+    ) -> bool:
         if not context_value:
             return False
-        mapping_by_action = {
+        _mapping_by_action = {
             schema.RuleAction.EQUALS.value: lambda a, b: a == b,
             schema.RuleAction.STARTSWITH.value: lambda a, b: a.startswith(b),
             schema.RuleAction.ENDSWITH.value: lambda a, b: a.endswith(b),
             schema.RuleAction.IN.value: lambda a, b: a in b,
             schema.RuleAction.NOT_IN.value: lambda a, b: a not in b,
         }
+        mapping_by_action = {}
+        if user_mapping_by_action:
+            mapping_by_action.update(user_mapping_by_action)
+        mapping_by_action.update(_mapping_by_action)
 
         try:
             func = mapping_by_action.get(action, lambda a, b: False)
@@ -76,7 +88,12 @@ class FeatureFlags:
             cond_action = condition.get(schema.CONDITION_ACTION, "")
             cond_value = condition.get(schema.CONDITION_VALUE)
 
-            if not self._match_by_action(action=cond_action, condition_value=cond_value, context_value=context_value):
+            if not self._match_by_action(
+                action=cond_action,
+                condition_value=cond_value,
+                context_value=context_value,
+                user_mapping_by_action=self._user_mapping_by_action,
+            ):
                 logger.debug(
                     f"rule did not match action, rule_name={rule_name}, rule_value={rule_match_value}, "
                     f"name={feature_name}, context_value={str(context_value)} "
