@@ -14,7 +14,7 @@
       
       
       <link rel="icon" href="../../media/aws-logo-light.svg">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.10">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.6">
     
     
       
@@ -22,10 +22,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.1fe995fd.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.a57b2b03.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.f1a3b89f.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
         
       
     
@@ -34,8 +34,8 @@
       
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
-        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,400i,700%7C&display=fallback">
+        <style>:root{--md-text-font-family:"Ubuntu";--md-code-font-family:""}</style>
       
     
     
@@ -80,7 +80,9 @@
       
     </div>
     
-      <header class="md-header" data-md-component="header">
+      
+
+<header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="../.." title="Lambda Powertools Python" class="md-header__button md-logo" aria-label="Lambda Powertools Python" data-md-component="logo">
       
@@ -114,7 +116,7 @@
           <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
           
             <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m10-3a5 5 0 0 1 5 5 5 5 0 0 1-5 5H7a5 5 0 0 1-5-5 5 5 0 0 1 5-5h10M7 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3h10a3 3 0 0 0 3-3 3 3 0 0 0-3-3H7z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
             </label>
           
         
@@ -139,14 +141,18 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
       </label>
-      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
-      </button>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" data-md-scrollfix>
@@ -176,11 +182,14 @@
       </div>
     
   </nav>
+  
 </header>
     
     <div class="md-container" data-md-component="container">
       
       
+        
+          
         
       
       <main class="md-main" data-md-component="main">
@@ -294,10 +303,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" data-md-state="indeterminate" type="checkbox" id="__nav_5" checked>
       
-      <label class="md-nav__link" for="__nav_5">
-        Core utilities
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Core utilities
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Core utilities" data-md-level="1">
         <label class="md-nav__title" for="__nav_5">
           <span class="md-nav__icon md-icon"></span>
@@ -306,6 +319,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -316,8 +330,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -328,8 +344,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -340,8 +358,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -351,10 +371,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4" data-md-state="indeterminate" type="checkbox" id="__nav_5_4" checked>
       
-      <label class="md-nav__link" for="__nav_5_4">
-        Event Handler
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4">
+          Event Handler
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Event Handler" data-md-level="2">
         <label class="md-nav__title" for="__nav_5_4">
           <span class="md-nav__icon md-icon"></span>
@@ -363,6 +387,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -373,8 +398,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -385,12 +412,14 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -415,10 +444,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" checked>
       
-      <label class="md-nav__link" for="__nav_6">
-        Utilities
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Utilities
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Utilities" data-md-level="1">
         <label class="md-nav__title" for="__nav_6">
           <span class="md-nav__icon md-icon"></span>
@@ -427,6 +460,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -437,8 +471,10 @@
     </li>
   
 
+            
           
             
+              
   
   
     
@@ -460,6 +496,8 @@
       </a>
       
         
+
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -604,6 +642,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#auto-transform-values-on-suffix" class="md-nav__link">
+    Auto-transform values on suffix
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -612,6 +657,13 @@
           <li class="md-nav__item">
   <a href="#passing-additional-sdk-arguments" class="md-nav__link">
     Passing additional SDK arguments
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#customizing-boto-configuration" class="md-nav__link">
+    Customizing boto configuration
   </a>
   
 </li>
@@ -628,8 +680,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -640,8 +694,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -652,8 +708,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -664,8 +722,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -676,8 +736,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -688,8 +750,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -700,6 +764,35 @@
     </li>
   
 
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../feature_flags/" class="md-nav__link">
+        Feature flags
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jmespath_functions/" class="md-nav__link">
+        JMESPath Functions
+      </a>
+    </li>
+  
+
+            
           
         </ul>
       </nav>
@@ -719,6 +812,8 @@
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
+
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -863,6 +958,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#auto-transform-values-on-suffix" class="md-nav__link">
+    Auto-transform values on suffix
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -871,6 +973,13 @@
           <li class="md-nav__item">
   <a href="#passing-additional-sdk-arguments" class="md-nav__link">
     Passing additional SDK arguments
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#customizing-boto-configuration" class="md-nav__link">
+    Customizing boto configuration
   </a>
   
 </li>
@@ -1574,9 +1683,60 @@
 </td></tr></table>
 </div>
 </div>
+<h4 id="auto-transform-values-on-suffix">Auto-transform values on suffix<a class="headerlink" href="#auto-transform-values-on-suffix" title="Permanent link">&para;</a></h4>
+<p>If you use <code>transform</code> with <code>get_multiple()</code>, you might want to retrieve and transform parameters encoded in different formats.</p>
+<p>You can do this with a single request by using <code>transform="auto"</code>. This will instruct any Parameter to to infer its type based on the suffix and transform it accordingly.</p>
+<div class="admonition info">
+<p class="admonition-title"><code>transform="auto"</code> feature is available across all providers, including the high level functions</p>
+</div>
+<div class="tabbed-set" data-tabs="17:1"><input checked="checked" id="__tabbed_17_1" name="__tabbed_17" type="radio" /><label for="__tabbed_17_1">transform_auto.py</label><div class="tabbed-content">
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">aws_lambda_powertools.utilities</span> <span class="kn">import</span> <span class="n">parameters</span>
+
+<span class="n">ssm_provider</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">SSMProvider</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+<span class="hll">    <span class="n">values</span> <span class="o">=</span> <span class="n">ssm_provider</span><span class="o">.</span><span class="n">get_multiple</span><span class="p">(</span><span class="s2">&quot;/param&quot;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+</td></tr></table>
+</div>
+</div>
+<p>For example, if you have two parameters with the following suffixes <code>.json</code> and <code>.binary</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter name</th>
+<th>Parameter value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/param/a.json</td>
+<td>[some encoded value]</td>
+</tr>
+<tr>
+<td>/param/a.binary</td>
+<td>[some encoded value]</td>
+</tr>
+</tbody>
+</table>
+<p>The return of <code>ssm_provider.get_multiple("/param", transform="auto")</code> call will be a dictionary like:</p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="p">{</span>
+    <span class="nt">&quot;a.json&quot;</span><span class="p">:</span> <span class="p">[</span><span class="err">some</span> <span class="err">value</span><span class="p">],</span>
+    <span class="nt">&quot;b.binary&quot;</span><span class="p">:</span> <span class="p">[</span><span class="err">some</span> <span class="err">value</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+</td></tr></table>
 <h3 id="passing-additional-sdk-arguments">Passing additional SDK arguments<a class="headerlink" href="#passing-additional-sdk-arguments" title="Permanent link">&para;</a></h3>
 <p>You can use arbitrary keyword arguments to pass it directly to the underlying SDK method.</p>
-<div class="tabbed-set" data-tabs="17:1"><input checked="checked" id="__tabbed_17_1" name="__tabbed_17" type="radio" /><label for="__tabbed_17_1">ssm_parameter_store.py</label><div class="tabbed-content">
+<div class="tabbed-set" data-tabs="18:1"><input checked="checked" id="__tabbed_18_1" name="__tabbed_18" type="radio" /><label for="__tabbed_18_1">ssm_parameter_store.py</label><div class="tabbed-content">
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1661,6 +1821,58 @@
 </tr>
 </tbody>
 </table>
+<h3 id="customizing-boto-configuration">Customizing boto configuration<a class="headerlink" href="#customizing-boto-configuration" title="Permanent link">&para;</a></h3>
+<p>The <strong><code>config</code></strong> and <strong><code>boto3_session</code></strong> parameters enable you to pass in a custom <a href="https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html">botocore config object</a> or a custom <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/reference/core/session.html">boto3 session</a> when constructing any of the built-in provider classes.</p>
+<blockquote>
+<p><strong>Example</strong></p>
+</blockquote>
+<div class="tabbed-set" data-tabs="19:2"><input checked="checked" id="__tabbed_19_1" name="__tabbed_19" type="radio" /><label for="__tabbed_19_1">Custom session</label><div class="tabbed-content">
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">aws_lambda_powertools.utilities</span> <span class="kn">import</span> <span class="n">parameters</span>
+<span class="hll"><span class="kn">import</span> <span class="nn">boto3</span>
+</span>
+<span class="hll"><span class="n">boto3_session</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+</span><span class="hll"><span class="n">ssm_provider</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">SSMProvider</span><span class="p">(</span><span class="n">boto3_session</span><span class="o">=</span><span class="n">boto3_session</span><span class="p">)</span>
+</span>
+<span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+    <span class="c1"># Retrieve a single parameter</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">ssm_provider</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/my/parameter&quot;</span><span class="p">)</span>
+    <span class="o">...</span>
+</code></pre></div>
+</td></tr></table>
+</div>
+<input id="__tabbed_19_2" name="__tabbed_19" type="radio" /><label for="__tabbed_19_2">Custom config</label><div class="tabbed-content">
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">aws_lambda_powertools.utilities</span> <span class="kn">import</span> <span class="n">parameters</span>
+<span class="hll"><span class="kn">from</span> <span class="nn">botocore.config</span> <span class="kn">import</span> <span class="n">Config</span>
+</span>
+<span class="hll"><span class="n">boto_config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span>
+</span><span class="hll"><span class="n">ssm_provider</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">SSMProvider</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">boto_config</span><span class="p">)</span>
+</span>
+<span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+    <span class="c1"># Retrieve a single parameter</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">ssm_provider</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/my/parameter&quot;</span><span class="p">)</span>
+    <span class="o">...</span>
+</code></pre></div>
+</td></tr></table>
+</div>
+</div>
                 
                   
                     
@@ -1669,7 +1881,7 @@
 <div class="md-source-date">
   <small>
     
-      Last update: 2021-04-05
+      Last update: 2021-10-01
     
   </small>
 </div>
@@ -1738,10 +1950,12 @@
             Copyright &copy; 2021 Amazon Web Services
           </div>
         
-        Made with
-        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-          Material for MkDocs
-        </a>
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
         
       </div>
       
@@ -1753,10 +1967,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.477d984a.min.js", "version": {"provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.fcfe8b6d.min.js", "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.ddd52ceb.min.js"></script>
+      <script src="../../assets/javascripts/bundle.b1047164.min.js"></script>
       
         <script src="../../javascript/aws-amplify.min.js"></script>
       

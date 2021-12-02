@@ -14,7 +14,7 @@
       
       
       <link rel="icon" href="../../media/aws-logo-light.svg">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.10">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.6">
     
     
       
@@ -22,10 +22,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.1fe995fd.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.a57b2b03.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.f1a3b89f.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.3f5d1f46.min.css">
         
       
     
@@ -34,8 +34,8 @@
       
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
-        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,400i,700%7C&display=fallback">
+        <style>:root{--md-text-font-family:"Ubuntu";--md-code-font-family:""}</style>
       
     
     
@@ -80,7 +80,9 @@
       
     </div>
     
-      <header class="md-header" data-md-component="header">
+      
+
+<header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="../.." title="Lambda Powertools Python" class="md-header__button md-logo" aria-label="Lambda Powertools Python" data-md-component="logo">
       
@@ -114,7 +116,7 @@
           <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
           
             <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m10-3a5 5 0 0 1 5 5 5 5 0 0 1-5 5H7a5 5 0 0 1-5-5 5 5 0 0 1 5-5h10M7 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3h10a3 3 0 0 0 3-3 3 3 0 0 0-3-3H7z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
             </label>
           
         
@@ -139,14 +141,18 @@
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
-      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
       </label>
-      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
-      </button>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" data-md-scrollfix>
@@ -176,11 +182,14 @@
       </div>
     
   </nav>
+  
 </header>
     
     <div class="md-container" data-md-component="container">
       
       
+        
+          
         
       
       <main class="md-main" data-md-component="main">
@@ -296,10 +305,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" checked>
       
-      <label class="md-nav__link" for="__nav_5">
-        Core utilities
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5">
+          Core utilities
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Core utilities" data-md-level="1">
         <label class="md-nav__title" for="__nav_5">
           <span class="md-nav__icon md-icon"></span>
@@ -308,6 +321,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
     
@@ -329,6 +343,8 @@
       </a>
       
         
+
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -478,8 +494,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -490,8 +508,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -502,8 +522,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -513,10 +535,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_4" data-md-state="indeterminate" type="checkbox" id="__nav_5_4" checked>
       
-      <label class="md-nav__link" for="__nav_5_4">
-        Event Handler
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_4">
+          Event Handler
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Event Handler" data-md-level="2">
         <label class="md-nav__title" for="__nav_5_4">
           <span class="md-nav__icon md-icon"></span>
@@ -525,6 +551,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -535,8 +562,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -547,12 +576,14 @@
     </li>
   
 
+            
           
         </ul>
       </nav>
     </li>
   
 
+            
           
         </ul>
       </nav>
@@ -575,10 +606,14 @@
       
         <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" data-md-state="indeterminate" type="checkbox" id="__nav_6" checked>
       
-      <label class="md-nav__link" for="__nav_6">
-        Utilities
-        <span class="md-nav__icon md-icon"></span>
-      </label>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          Utilities
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <nav class="md-nav" aria-label="Utilities" data-md-level="1">
         <label class="md-nav__title" for="__nav_6">
           <span class="md-nav__icon md-icon"></span>
@@ -587,6 +622,7 @@
         <ul class="md-nav__list" data-md-scrollfix>
           
             
+              
   
   
   
@@ -597,8 +633,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -609,8 +647,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -621,8 +661,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -633,8 +675,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -645,8 +689,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -657,8 +703,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -669,8 +717,10 @@
     </li>
   
 
+            
           
             
+              
   
   
   
@@ -681,6 +731,35 @@
     </li>
   
 
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../utilities/feature_flags/" class="md-nav__link">
+        Feature flags
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../utilities/jmespath_functions/" class="md-nav__link">
+        JMESPath Functions
+      </a>
+    </li>
+  
+
+            
           
         </ul>
       </nav>
@@ -700,6 +779,8 @@
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
+
+
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
@@ -866,8 +947,7 @@
 <h2 id="key-features">Key features<a class="headerlink" href="#key-features" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Auto capture cold start as annotation, and responses or full exceptions as metadata</li>
-<li>Run functions locally with SAM CLI without code change to disable tracing</li>
-<li>Explicitly disable tracing via env var <code>POWERTOOLS_TRACE_DISABLED="true"</code></li>
+<li>Auto-disable when not running in AWS Lambda environment</li>
 <li>Support tracing async methods, generators, and context managers</li>
 <li>Auto patch supported modules by AWS X-Ray</li>
 </ul>
@@ -928,6 +1008,7 @@
 <p>When using this <code>capture_lambda_handler</code> decorator, Tracer performs these additional tasks to ease operations:</p>
 <ul>
 <li>Creates a <code>ColdStart</code> annotation to easily filter traces that have had an initialization overhead</li>
+<li>Creates a <code>Service</code> annotation if <code>service</code> parameter or <code>POWERTOOLS_SERVICE_NAME</code> is set</li>
 <li>Captures any response, or full exceptions generated by the handler, and include as tracing metadata</li>
 </ul>
 <h3 id="annotations-metadata">Annotations &amp; Metadata<a class="headerlink" href="#annotations-metadata" title="Permanent link">&para;</a></h3>
@@ -980,7 +1061,6 @@
 <p>The serialization is performed by the aws-xray-sdk which uses the <code>jsonpickle</code> module. This can cause
 unintended consequences if there are side effects to recursively reading the returned value, for example if the
 decorated function response contains a file-like object or a <a href="https://botocore.amazonaws.com/v1/documentation/api/latest/reference/response.html#botocore.response.StreamingBody"><code>StreamingBody</code></a> for S3 objects.</p>
-</div>
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -992,6 +1072,7 @@ decorated function response contains a file-like object or a <a href="https://bo
     <span class="k">return</span> <span class="n">ret</span>
 </code></pre></div>
 </td></tr></table>
+</div>
 <h3 id="asynchronous-and-generator-functions">Asynchronous and generator functions<a class="headerlink" href="#asynchronous-and-generator-functions" title="Permanent link">&para;</a></h3>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -1069,6 +1150,7 @@ decorated function response contains a file-like object or a <a href="https://bo
 </div>
 </div>
 <p>The decorator will detect whether your function is asynchronous, a generator, or a  context manager and adapt its behaviour accordingly.</p>
+<div class="tabbed-set" data-tabs="5:1"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><label for="__tabbed_5_1">app.py</label><div class="tabbed-content">
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1086,10 +1168,13 @@ decorated function response contains a file-like object or a <a href="https://bo
     <span class="n">another_result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">collect_payment_gen</span><span class="p">())</span>
 </code></pre></div>
 </td></tr></table>
+</div>
+</div>
 <h2 id="advanced">Advanced<a class="headerlink" href="#advanced" title="Permanent link">&para;</a></h2>
 <h3 id="patching-modules">Patching modules<a class="headerlink" href="#patching-modules" title="Permanent link">&para;</a></h3>
 <p>Tracer automatically patches all <a href="https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-python-patching.html">supported libraries by X-Ray</a> during initialization, by default. Underneath, AWS X-Ray SDK checks whether a supported library has been imported before patching.</p>
 <p>If you're looking to shave a few microseconds, or milliseconds depending on your function memory configuration, you can patch specific modules using <code>patch_modules</code> param:</p>
+<div class="tabbed-set" data-tabs="6:1"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><label for="__tabbed_6_1">app.py</label><div class="tabbed-content">
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1105,6 +1190,8 @@ decorated function response contains a file-like object or a <a href="https://bo
 <span class="hll"><span class="n">tracer</span> <span class="o">=</span> <span class="n">Tracer</span><span class="p">(</span><span class="n">patch_modules</span><span class="o">=</span><span class="n">modules_to_be_patched</span><span class="p">)</span>
 </span></code></pre></div>
 </td></tr></table>
+</div>
+</div>
 <h3 id="disabling-response-auto-capture">Disabling response auto-capture<a class="headerlink" href="#disabling-response-auto-capture" title="Permanent link">&para;</a></h3>
 <blockquote>
 <p>New in 1.9.0</p>
@@ -1118,7 +1205,7 @@ decorated function response contains a file-like object or a <a href="https://bo
 <li>You might return <strong>more than 64K</strong> of data <em>e.g., <code>message too long</code> error</em></li>
 </ol>
 </div>
-<div class="tabbed-set" data-tabs="5:2"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><label for="__tabbed_5_1">sensitive_data_scenario.py</label><div class="tabbed-content">
+<div class="tabbed-set" data-tabs="7:2"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><label for="__tabbed_7_1">sensitive_data_scenario.py</label><div class="tabbed-content">
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1139,7 +1226,7 @@ decorated function response contains a file-like object or a <a href="https://bo
 </code></pre></div>
 </td></tr></table>
 </div>
-<input id="__tabbed_5_2" name="__tabbed_5" type="radio" /><label for="__tabbed_5_2">streaming_object_scenario.py</label><div class="tabbed-content">
+<input id="__tabbed_7_2" name="__tabbed_7" type="radio" /><label for="__tabbed_7_2">streaming_object_scenario.py</label><div class="tabbed-content">
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1168,7 +1255,7 @@ decorated function response contains a file-like object or a <a href="https://bo
 <li>You might <strong>return sensitive</strong> information from exceptions, stack traces you might not control</li>
 </ol>
 </div>
-<div class="tabbed-set" data-tabs="6:1"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><label for="__tabbed_6_1">sensitive_data_exception.py</label><div class="tabbed-content">
+<div class="tabbed-set" data-tabs="8:1"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><label for="__tabbed_8_1">sensitive_data_exception.py</label><div class="tabbed-content">
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1188,7 +1275,7 @@ decorated function response contains a file-like object or a <a href="https://bo
 <p>This snippet assumes you have <strong>aiohttp</strong> as a dependency</p>
 </div>
 <p>You can use <code>aiohttp_trace_config</code> function to create a valid <a href="https://docs.aiohttp.org/en/stable/tracing_reference.html">aiohttp trace_config object</a>. This is necessary since X-Ray utilizes aiohttp trace hooks to capture requests end-to-end.</p>
-<div class="tabbed-set" data-tabs="7:1"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><label for="__tabbed_7_1">aiohttp_example.py</label><div class="tabbed-content">
+<div class="tabbed-set" data-tabs="9:1"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><label for="__tabbed_9_1">aiohttp_example.py</label><div class="tabbed-content">
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1221,7 +1308,7 @@ decorated function response contains a file-like object or a <a href="https://bo
 <h3 id="escape-hatch-mechanism">Escape hatch mechanism<a class="headerlink" href="#escape-hatch-mechanism" title="Permanent link">&para;</a></h3>
 <p>You can use <code>tracer.provider</code> attribute to access all methods provided by AWS X-Ray <code>xray_recorder</code> object.</p>
 <p>This is useful when you need a feature available in X-Ray that is not available in the Tracer utility, for example <a href="https://github.com/aws/aws-xray-sdk-python/#user-content-trace-threadpoolexecutor">thread-safe</a>, or <a href="https://github.com/aws/aws-xray-sdk-python/#user-content-start-a-custom-segmentsubsegment">context managers</a>.</p>
-<div class="tabbed-set" data-tabs="8:1"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><label for="__tabbed_8_1">escape_hatch_context_manager_example.py</label><div class="tabbed-content">
+<div class="tabbed-set" data-tabs="10:1"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio" /><label for="__tabbed_10_1">escape_hatch_context_manager_example.py</label><div class="tabbed-content">
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1249,7 +1336,7 @@ decorated function response contains a file-like object or a <a href="https://bo
 <p><a href="https://github.com/aws/aws-xray-sdk-python/issues/164">As of now, X-Ray SDK will raise an exception when async functions are run and traced concurrently</a></p>
 </div>
 <p>A safe workaround mechanism is to use <code>in_subsegment_async</code> available via Tracer escape hatch (<code>tracer.provider</code>).</p>
-<div class="tabbed-set" data-tabs="9:1"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><label for="__tabbed_9_1">concurrent_async_workaround.py</label><div class="tabbed-content">
+<div class="tabbed-set" data-tabs="11:1"><input checked="checked" id="__tabbed_11_1" name="__tabbed_11" type="radio" /><label for="__tabbed_11_1">concurrent_async_workaround.py</label><div class="tabbed-content">
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -1296,7 +1383,7 @@ decorated function response contains a file-like object or a <a href="https://bo
 <p>When reusing Tracer in Lambda Layers, or in multiple modules, <strong>do not set <code>auto_patch=False</code></strong>, because import order matters.</p>
 <p>This can result in the first Tracer config being inherited by new instances, and their modules not being patched.</p>
 </div>
-<div class="tabbed-set" data-tabs="10:2"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio" /><label for="__tabbed_10_1">handler.py</label><div class="tabbed-content">
+<div class="tabbed-set" data-tabs="12:2"><input checked="checked" id="__tabbed_12_1" name="__tabbed_12" type="radio" /><label for="__tabbed_12_1">handler.py</label><div class="tabbed-content">
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
 <span class="normal">3</span>
@@ -1317,7 +1404,7 @@ decorated function response contains a file-like object or a <a href="https://bo
 </span></code></pre></div>
 </td></tr></table>
 </div>
-<input id="__tabbed_10_2" name="__tabbed_10" type="radio" /><label for="__tabbed_10_2">payment.py</label><div class="tabbed-content">
+<input id="__tabbed_12_2" name="__tabbed_12" type="radio" /><label for="__tabbed_12_2">payment.py</label><div class="tabbed-content">
 <p>A new instance of Tracer will be created but will reuse the previous Tracer instance configuration, similar to a Singleton.</p>
 <table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
 <span class="normal">2</span>
@@ -1337,10 +1424,7 @@ decorated function response contains a file-like object or a <a href="https://bo
 </div>
 </div>
 <h2 id="testing-your-code">Testing your code<a class="headerlink" href="#testing-your-code" title="Permanent link">&para;</a></h2>
-<p>You can safely disable Tracer when unit testing your code using <code>POWERTOOLS_TRACE_DISABLED</code> environment variable.</p>
-<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div class="highlight"><pre><span></span><code><span class="nv">POWERTOOLS_TRACE_DISABLED</span><span class="o">=</span><span class="m">1</span> python -m pytest
-</code></pre></div>
-</td></tr></table>
+<p>Tracer is disabled by default when not running in the AWS Lambda environment - This means no code changes or environment variables to be set.</p>
 <h2 id="tips">Tips<a class="headerlink" href="#tips" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Use annotations on key operations to slice and dice traces, create unique views, and create metrics from it via Trace Groups</li>
@@ -1355,7 +1439,7 @@ decorated function response contains a file-like object or a <a href="https://bo
 <div class="md-source-date">
   <small>
     
-      Last update: 2021-07-02
+      Last update: 2021-11-30
     
   </small>
 </div>
@@ -1424,10 +1508,12 @@ decorated function response contains a file-like object or a <a href="https://bo
             Copyright &copy; 2021 Amazon Web Services
           </div>
         
-        Made with
-        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
-          Material for MkDocs
-        </a>
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
         
       </div>
       
@@ -1439,10 +1525,10 @@ decorated function response contains a file-like object or a <a href="https://bo
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.477d984a.min.js", "version": {"provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.fcfe8b6d.min.js", "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.ddd52ceb.min.js"></script>
+      <script src="../../assets/javascripts/bundle.b1047164.min.js"></script>
       
         <script src="../../javascript/aws-amplify.min.js"></script>
       
